@@ -1,6 +1,6 @@
 const express = require('express');
-var routes = require("./routes");
-let app = express();
+const routes = require("./routes/routes");
+const app = express();
 
 app.use(express.static('public'))
 app.use('/js', express.static(__dirname + 'public/js'))
@@ -10,7 +10,7 @@ app.set('view engine', 'ejs');
 
 app.use(routes);
 
-const port = process.env.PORT || 1338;
+const port = process.env.PORT || 1337;
 
 app.listen(port, () => {
     console.log(`Server running on http://localhost:${port}`);

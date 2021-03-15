@@ -2,38 +2,48 @@
 <html lang="en">
 
 <head>
-    <%- include('../partials/head'); %>
+    <%- include('../partials/head', {tabTitle:'Katleen Lapaige'}); %>
+    <link rel="stylesheet" type="text/css" href="css/index.css">
+    <link rel="icon" href="/images/logo.jpg">
 </head>
 
 <body class="container">
 
     <header>
-        <%- include('../partials/header'); %>
+        <link rel="stylesheet" type="text/css" href="css/partials/header.css">
+        <%- include('../partials/header', {title:'Overview', subtitle: true}); %>
     </header>
 
     <main>
-        <div class="jumbotron">
-            <h1>Top Mascots</h1>
-            <p>
-                <%= tagline %>
-            </p>
-            <ul>
-                <% mascots.forEach(function(mascot) { %>
-                    <li>
-                        <strong>
-                            <%= mascot.name %>
-                        </strong>
-                        representing <%= mascot.organization %>, born <%= mascot.birth_year %>
-                    </li>
-                    <% }); %>
-            </ul>
-        </div>
+        <section class="categories">
+            <div class="container-black-white">
+                <a class="image-container fade" href="cat-minim.html">
+                    <img src="images/categories/cat-minimalisme.png" alt="">
+                    <p class="p-text">Minimalism</p>
+                </a>
+                <a class="image-container fade">
+                    <img src="images/categories/cat-abstract.png" alt="">
+                    <p>Abstract</p>
+                </a>
+                <a class="image-container fade">
+                    <img src="images/categories/cat-experimenteel.png" alt="">
+                    <p>Experimental</p>
+                </a>
+            </div>
+            <div class="container-color">
+                <a class="image-container fade">
+                    <img src="images/categories/cat-camera-painting.png" alt="">
+                    <p>Camera Painting</p>
+                </a>
+            </div>
+        </section>
     </main>
 
     <footer>
+        <link rel="stylesheet" href="css/partials/footer.css">
         <%- include('../partials/footer'); %>
     </footer>
-    <script src= "js/home.js"> </script>
+    <script src= "js/index.js"> </script>
 </body>
 
 </html>

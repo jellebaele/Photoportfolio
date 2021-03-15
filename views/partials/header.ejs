@@ -1,14 +1,20 @@
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <a class="navbar-brand" href="/">EJS Is Fun</a>
-    <ul class="navbar-nav mr-auto">
-        <li class="nav-item">
-            <a class="nav-link" href="/">Home</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" href="/about">About</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link">Variant: <%= typeof variant !='undefined' ? variant : 'default' %></a>
-        </li>
-    </ul>
-</nav>
+<div class="title">
+    <div class="title-text">
+        <a class="title-top" href="index.ejs">
+            <h1 class="left">Katleen</h1>
+            <h1 class="right">Lapaige</h1>
+        </a>
+        <div class="title-sub">
+            <% if (subtitle) { %>
+                <p>We don't see the things as they are,</p><br>
+                <p>but as we are.</p>
+            <% } %>
+        </div>
+    </div>
+
+</div>
+<span class="head-title">
+    <p>
+        <%= typeof title !='undefined' ? title : '' %>
+    </p>
+</span>
