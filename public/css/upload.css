@@ -85,7 +85,7 @@ main {
 }
 
 .submit-button {
-  margin: 3rem 0 0 50%;
+  margin: 50px 0 70px 50%;
   transform: translateX(-50%);
   font-size: larger;
 }
