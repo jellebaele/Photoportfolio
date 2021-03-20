@@ -76,7 +76,7 @@ main {
   object-fit: cover;
 }
 
-.image-gallery .img-title {
+.image-container {
   color: black;
 }
 

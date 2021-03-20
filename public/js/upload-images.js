@@ -41,15 +41,18 @@ let drawImagesOnScreen = (images) => {
     imageContainer.setAttribute("class", "image-container");
 
     let image = document.createElement("img");
-    let title = document.createElement("p");
-    title.setAttribute("class", "img-title");
-    title.innerHTML = currImage.name;
+    let titleTag = document.createElement("p");
+    titleTag.setAttribute("class", "img-title");
+    titleTag.innerHTML = currImage.name;
+    let sizeTag = document.createElement("small");
+    sizeTag.innerHTML = `<i>Size: ${convertBytesToKiloBytes(currImage.size)} KB</i>`;
 
     let reader = new FileReader();
     reader.onload = (event) => {
       image.src = event.target.result;
       imageContainer.appendChild(image);
-      imageContainer.appendChild(title);
+      imageContainer.appendChild(titleTag);
+      imageContainer.appendChild(sizeTag)
       container.appendChild(imageContainer);
     };
 
@@ -61,6 +64,10 @@ let deleteImagesOnScreen = () => {
   let container = document.getElementsByClassName("container")[0];
   container.innerHTML = "";
 };
+
+let convertBytesToKiloBytes = (bytes) => {
+  return Math.round(bytes * 0.001).toFixed(2);
+} 
 
 document.getElementById("submit").addEventListener("click", () => {
   if (selectedFilesTag.value === "") {
