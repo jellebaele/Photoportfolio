@@ -1,71 +1,124 @@
 * {
-    padding: 0;
-    margin: 0;
-    border: 0;
-  }
-  
-  .upload {
-    padding-bottom: 70px;
-  }
-  
-  .container-black-white {
-    max-width: 90%;
-    display: grid;
-    margin: 300px auto 70px auto;
-    grid-template-columns: 1fr 1fr 1fr;
-    grid-gap: 3%;
-    max-height: 30%;
-  }
-  
-  .container-color {
-    max-width: 90%;
-    display: grid;
-    margin: 0 auto 0 auto;
-    grid-template-columns: 1fr 1fr 1fr;
-    grid-gap: 3%;
-    max-height: 30%;
-  }
-  
-  .categories img {
-    width: 100%;
-    height: 100%;
-  }
-  
-  .image-container {
-    cursor: pointer;
-    position: relative;
-  }
-  
-  .image-container p {
-    color: white;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    opacity: 0;
-    transition: opacity 1s ease;
-    font-size: 2vw;
-    z-index: 2;
-    text-align: center;
-  }
-  
-  .image-container:hover > p {
-    opacity: 1;
-  }
-  
-  .fade::after {
-    content: "";
-    background: black;
-    width: 100%;
-    height: 100%;
-    position: absolute;
-    top: 0;
-    left: 0;
-    opacity: 0;
-    transition: opacity 0.5s ease;
-  }
-  
-  .fade:hover::after {
-    opacity: 0.5;
-  }
-  
+  padding: 0;
+  margin: 0;
+  border: 0;
+}
+
+.upload {
+  max-width: 90%;
+  padding: 0 5%;
+  margin: 300px auto 70px auto;
+  color: rgba(54, 54, 54);
+}
+
+.field {
+  margin: 0 0 20px 0;
+}
+
+.fa {
+  cursor: help;
+  transition: transform 0.5s ease-out;
+}
+
+.fa:hover {
+  transform: translateY(-3px);
+}
+
+.field input {
+  margin-top: 5px;
+  width: 30%;
+  padding: 5px;
+}
+
+.field .file-button {
+  display: none;
+  position: absolute;
+}
+
+.button {
+  text-decoration: none;
+  color: rgba(54, 54, 54);
+  border: solid rgba(54, 54, 54) 3px;
+  padding: 5px 10px;
+  margin: 0 0 10px;
+  display: inline-block;
+  transform: translateY(0);
+  transition: background-color 0.75s ease, color 0.75s ease;
+  cursor: pointer;
+}
+
+.submit-button {
+  margin-top: 15px;
+  font-size: larger;
+}
+
+.button:hover {
+  background-color: rgba(54, 54, 54);
+  color: rgba(255, 255, 255, 0.75);
+}
+
+#fileNames {
+  font-size: smaller;
+}
+
+/*
+.container-black-white {
+  max-width: 90%;
+  display: grid;
+  margin: 300px auto 70px auto;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-gap: 3%;
+  max-height: 30%;
+}
+
+.container-color {
+  max-width: 90%;
+  display: grid;
+  margin: 0 auto 0 auto;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-gap: 3%;
+  max-height: 30%;
+}
+
+.categories img {
+  width: 100%;
+  height: 100%;
+}
+
+.image-container {
+  cursor: pointer;
+  position: relative;
+}
+
+.image-container p {
+  color: white;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  opacity: 0;
+  transition: opacity 1s ease;
+  font-size: 2vw;
+  z-index: 2;
+  text-align: center;
+}
+
+.image-container:hover > p {
+  opacity: 1;
+}
+
+.fade::after {
+  content: "";
+  background: black;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+
+.fade:hover::after {
+  opacity: 0.5;
+}*/

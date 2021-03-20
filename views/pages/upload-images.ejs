@@ -3,8 +3,8 @@
 
 <head>
     <%- include('../partials/head', {tabTitle:'Katleen Lapaige'}); %>
-    <link rel="stylesheet" type="text/css" href="../css/upload.css">
-    <link rel="icon" href="../images/logo.jpg">
+        <link rel="stylesheet" type="text/css" href="../css/upload.css">
+        <link rel="icon" href="../images/logo.jpg">
 </head>
 
 <body class="container">
@@ -15,11 +15,27 @@
     </header>
 
     <main>
-        <form class="upload">
-            <label for="category">Categorie</label>
-            <input type="text" name="category">
-        </form>
-        
+        <div class="upload">
+            <div class="field">
+                <label for="category">Categorie:</label><br>
+                <input type="text" name="category" placeholder="Vul een categorie in">
+                <span data-toggle='tooltip' title='Indien dit veld leeg is, wordt deze waarde "default"'>
+                    <i class="fa fa-question-circle-o" aria-hidden="true"></i>
+                </span>
+
+            </div>
+            <div class="field">
+                <label for="selectedFilesTag">Kies één of meerdere bestanden:</label><br>
+                <input class="file-button" type="file" name="selectedFilesTag" id="selectedFilesTag" multiple><br>
+                <button class="button" type="button" id="uploadButton">Selecteer</button>
+                <div class="selected-files">
+                    Geselecteerde bestanden:
+                    <span id="fileNames"></span>
+                </div>
+            </div>
+            <button id="submit" class="button submit-button">Submit</button>
+        </div>
+
         <!--<section class="categories">
             <div class="container-black-white">
                 <a class="image-container fade" href="cat-minim.html">
@@ -48,4 +64,5 @@
         <link rel="stylesheet" href="../css/partials/footer.css">
         <%- include('../partials/footer'); %>
     </footer>
+    <script src="../js/upload-images.js"></script>
 </body>
