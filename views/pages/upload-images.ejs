@@ -7,18 +7,18 @@
         <link rel="icon" href="../images/logo.jpg">
 </head>
 
-<body class="container">
+<body>
 
     <header>
         <link rel="stylesheet" type="text/css" href="../css/partials/header.css">
-        <%- include('../partials/header', {title:'Upload', subtitle: false}); %>
+        <%- include('../partials/header', {title:"Upload foto\'s", subtitle: false}); %>
     </header>
 
     <main>
         <div class="upload">
             <div class="field">
                 <label for="category">Categorie:</label><br>
-                <input type="text" name="category" placeholder="Vul een categorie in">
+                <input id="inputText" type="text" name="category" placeholder="Vul een categorie in">
                 <span data-toggle='tooltip' title='Indien dit veld leeg is, wordt deze waarde "default"'>
                     <i class="fa fa-question-circle-o" aria-hidden="true"></i>
                 </span>
@@ -33,9 +33,37 @@
                     <span id="fileNames"></span>
                 </div>
             </div>
-            <button id="submit" class="button submit-button">Submit</button>
         </div>
 
+        <section class="image-gallery">
+            <div class="container">
+                <div class="image-container" href="cat-minim.html">
+                    <img src="../images/categories/cat-minimalisme.png" alt="">
+                    <p class="img-title">Test</p>
+                </div>
+
+                <div class="image-container" href="cat-minim.html">
+                    <img src="../images/categories/cat-minimalisme.png" alt="">
+                    <p class="img-title">Test</p>
+                </div>
+
+                <div class="image-container" href="cat-minim.html">
+                    <img src="../images/categories/cat-minimalisme.png" alt="">
+                    <p class="img-title">Test</p>
+                </div>
+
+                <div class="image-container" href="cat-minim.html">
+                    <img src="../images/categories/cat-minimalisme.png" alt="">
+                    <p class="img-title">Test</p>
+                </div>
+
+                <div class="image-container" href="cat-minim.html">
+                    <img src="../images/categories/cat-minimalisme.png" alt="">
+                    <p class="img-title">Test</p>
+                </div>
+            </div>
+        </section>
+        <button id="submit" class="button submit-button">Submit</button>
         <!--<section class="categories">
             <div class="container-black-white">
                 <a class="image-container fade" href="cat-minim.html">

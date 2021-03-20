@@ -37,6 +37,10 @@ let drawImagesOnScreen = (images) => {
     }
 }
 
+let deleteImagesOnScreen = () => {
+  
+}
+
 document.getElementById("submit").addEventListener("click", () => {
   if (selectedFilesTag.value === "") {
     console.log("Leeg");
