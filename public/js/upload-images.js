@@ -37,20 +37,39 @@ let drawImagesOnScreen = (images) => {
   for (let i = 0; i < images.length; i++) {
     let currImage = images[i];
     
-    let imageContainer = document.createElement("div");
-    imageContainer.setAttribute("class", "image-container");
+    const imageContainer = document.createElement("div");
+    imageContainer.setAttribute("class", "image-container fade");
 
-    let image = document.createElement("img");
-    let titleTag = document.createElement("p");
+    const image = document.createElement("img");
+
+    const containerText = document.createElement("p");
+    containerText.setAttribute("class", "container-text");
+    
+    const containerEditButton = document.createElement("button");
+    containerEditButton.setAttribute("class", "container-button");
+    containerEditButton.innerHTML = "Edit";
+    
+    const containerDeleteButton = document.createElement("button");
+    containerDeleteButton.setAttribute("class", "container-button");
+    const deleteIcon = document.createElement("i");
+    deleteIcon.setAttribute("class", "fa fa-times-circle");
+    deleteIcon.setAttribute("aria-hidden", "true");
+
+    containerDeleteButton.appendChild(deleteIcon);
+    containerText.appendChild(containerEditButton);
+    containerText.appendChild(containerDeleteButton);
+
+    const titleTag = document.createElement("p");
     titleTag.setAttribute("class", "img-title");
     titleTag.innerHTML = currImage.name;
-    let sizeTag = document.createElement("small");
+    const sizeTag = document.createElement("small");
     sizeTag.innerHTML = `<i>Size: ${convertBytesToKiloBytes(currImage.size)} KB</i>`;
 
     let reader = new FileReader();
     reader.onload = (event) => {
       image.src = event.target.result;
       imageContainer.appendChild(image);
+      imageContainer.appendChild(containerText);
       imageContainer.appendChild(titleTag);
       imageContainer.appendChild(sizeTag)
       container.appendChild(imageContainer);
