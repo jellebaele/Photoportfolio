@@ -35,6 +35,7 @@ let addImagesToImagesToUpload = (selectedImages) => {
 let drawImagesOnScreen = (images) => {
   let container = document.getElementsByClassName("container")[0];
   for (let i = 0; i < images.length; i++) {
+    // TODO Make seperate class for this
     let currImage = images[i];
     
     const imageContainer = document.createElement("div");
