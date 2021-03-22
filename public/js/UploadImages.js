@@ -1,3 +1,5 @@
+import ImageContainerCreator from "./UploadImages/ImageContainerCreator.js";
+
 const limitAmountUploadFiles = 10;
 let imagesToUpload = []; 
 let numberOfImagesToUpload = 0;
@@ -34,49 +36,11 @@ let addImagesToImagesToUpload = (selectedImages) => {
 
 let drawImagesOnScreen = (images) => {
   let container = document.getElementsByClassName("container")[0];
+  let imageContainerCreator = new ImageContainerCreator(container);
+
   for (let i = 0; i < images.length; i++) {
-    // TODO Make seperate class for this
     let currImage = images[i];
-    
-    const imageContainer = document.createElement("div");
-    imageContainer.setAttribute("class", "image-container fade");
-
-    const image = document.createElement("img");
-
-    const containerText = document.createElement("p");
-    containerText.setAttribute("class", "container-text");
-    
-    const containerEditButton = document.createElement("button");
-    containerEditButton.setAttribute("class", "container-button");
-    containerEditButton.innerHTML = "Edit";
-    
-    const containerDeleteButton = document.createElement("button");
-    containerDeleteButton.setAttribute("class", "container-button");
-    const deleteIcon = document.createElement("i");
-    deleteIcon.setAttribute("class", "fa fa-times-circle");
-    deleteIcon.setAttribute("aria-hidden", "true");
-
-    containerDeleteButton.appendChild(deleteIcon);
-    containerText.appendChild(containerEditButton);
-    containerText.appendChild(containerDeleteButton);
-
-    const titleTag = document.createElement("p");
-    titleTag.setAttribute("class", "img-title");
-    titleTag.innerHTML = currImage.name;
-    const sizeTag = document.createElement("small");
-    sizeTag.innerHTML = `<i>Size: ${convertBytesToKiloBytes(currImage.size)} KB</i>`;
-
-    let reader = new FileReader();
-    reader.onload = (event) => {
-      image.src = event.target.result;
-      imageContainer.appendChild(image);
-      imageContainer.appendChild(containerText);
-      imageContainer.appendChild(titleTag);
-      imageContainer.appendChild(sizeTag)
-      container.appendChild(imageContainer);
-    };
-
-    reader.readAsDataURL(currImage);
+    imageContainerCreator.createImageContainer(currImage)
   }
 };
 
@@ -84,10 +48,6 @@ let deleteImagesOnScreen = () => {
   let container = document.getElementsByClassName("container")[0];
   container.innerHTML = "";
 };
-
-let convertBytesToKiloBytes = (bytes) => {
-  return Math.round(bytes * 0.001).toFixed(2);
-} 
 
 document.getElementById("submit").addEventListener("click", () => {
   if (selectedFilesTag.value === "") {
