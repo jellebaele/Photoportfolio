@@ -101,7 +101,6 @@ main {
   text-align: center;
 }
 
-
 .container-button {
   cursor: pointer;
   padding: 5px 10px;
@@ -130,6 +129,11 @@ main {
   width: 100%;
   height: 100%;
   object-fit: cover;
+}
+
+.img-title {
+  max-height: 15px;
+  background-color: #f4f5f5;
 }
 
 .submit-button {

@@ -22,7 +22,7 @@ selectedFilesTag.addEventListener("change", () => {
   }
 });
 
-let addImagesToImagesToUpload = (selectedImages) => {
+function addImagesToImagesToUpload(selectedImages) {
   if (selectedImages.length + imagesToUpload.length > 10) {
     throw "Too many images selected, maximum 10 are allowed";
   }
@@ -32,7 +32,7 @@ let addImagesToImagesToUpload = (selectedImages) => {
     imagesToUpload.push(selectedImages[i]);
   }
   numberOfImagesToUpload = imagesToUpload.length;
-};
+}
 
 async function drawImagesOnScreen(images) {
   let container = document.getElementsByClassName("container")[0];
@@ -45,21 +45,17 @@ async function drawImagesOnScreen(images) {
       imagesToUpload
     );
 
-    let titleTag = img.children[2];
-
-    let editButton = img.children[1].children[0];
-    editButton.addEventListener("click", () =>
-      editHandler(titleTag, currImage)
-    );
-
-    let deleteButton = img.children[1].children[1];
-    deleteButton.addEventListener("click", () => deleteHandler(currImage.id));
-
     container.appendChild(img);
+
+    let titleTag = img.children[2];
+    titleTag.style.width = `${document.querySelector(".image-container").clientWidth.toString()}px`;
+
+    let deleteButton = img.children[1].children[0];
+    deleteButton.addEventListener("click", () => deleteHandler(currImage.id));
   }
 }
 
-let deleteHandler = (index) => {
+function deleteHandler(index) {
   imagesToUpload.splice(index, 1);
   for (let i = 0; i < imagesToUpload.length; i++) {
     imagesToUpload[i].id = i;
@@ -68,22 +64,16 @@ let deleteHandler = (index) => {
   drawImagesOnScreen(imagesToUpload);
   numberOfImagesToUpload = imagesToUpload.length;
   selectedFileNames.innerHTML = selectedFileNames.innerHTML = `${numberOfImagesToUpload} bestand(en) geselecteerd`;
-};
+}
 
-let editHandler = (titleTag, image) => {
-  titleTag.setAttribute("contenteditable", "true");
-  titleTag.focus();
-  // TODO titleTag on enter -> save  
-};
-
-let deleteImagesOnScreen = () => {
+function deleteImagesOnScreen() {
   let container = document.getElementsByClassName("container")[0];
   container.innerHTML = "";
-};
+}
 
 document.getElementById("submit").addEventListener("click", () => {
   if (imagesToUpload.length < 1) {
-    console.log("Leeg");
+    alert("Geen bestanden geselecteerd!");
   } else {
     console.log(imagesToUpload);
   }
