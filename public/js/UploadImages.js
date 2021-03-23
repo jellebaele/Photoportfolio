@@ -75,6 +75,6 @@ document.getElementById("submit").addEventListener("click", () => {
   if (imagesToUpload.length < 1) {
     alert("Geen bestanden geselecteerd!");
   } else {
-    console.log(imagesToUpload);
+    fetch
   }
 });
