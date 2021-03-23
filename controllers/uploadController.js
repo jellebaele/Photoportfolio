@@ -3,7 +3,8 @@ const getIndex = (req, res) => {
 }
 
 const postImages = (req, res) => {
-    console.log(req);
+    // Use multer to upload -> req.file will work with right name!
+    console.log(req.file);
 }
 
 module.exports = {

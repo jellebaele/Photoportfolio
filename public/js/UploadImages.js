@@ -48,7 +48,9 @@ async function drawImagesOnScreen(images) {
     container.appendChild(img);
 
     let titleTag = img.children[2];
-    titleTag.style.width = `${document.querySelector(".image-container").clientWidth.toString()}px`;
+    titleTag.style.width = `${document
+      .querySelector(".image-container")
+      .clientWidth.toString()}px`;
 
     let deleteButton = img.children[1].children[0];
     deleteButton.addEventListener("click", () => deleteHandler(currImage.id));
@@ -75,6 +77,9 @@ document.getElementById("submit").addEventListener("click", () => {
   if (imagesToUpload.length < 1) {
     alert("Geen bestanden geselecteerd!");
   } else {
-    fetch
+    fetch("/api/upload", {
+      method: "POST",
+      body: imagesToUpload,
+    });
   }
 });
