@@ -7,7 +7,7 @@ app.use('/js', express.static(__dirname + 'public/js'))
 app.use('/css', express.static(__dirname + 'public/css'))
 
 app.set('view engine', 'ejs');
-
+app.use(express.json());
 app.use(routes);
 
 const port = process.env.PORT || 1337;
