@@ -77,9 +77,13 @@ document.getElementById("submit").addEventListener("click", () => {
   if (imagesToUpload.length < 1) {
     alert("Geen bestanden geselecteerd!");
   } else {
+    console.log("Trying to fetch...");
+    var form = document.getElementById("uploadImagesForm");
+    console.log(form);
+    var formData = new FormData(form);
     fetch("/api/upload", {
       method: "POST",
-      body: imagesToUpload,
-    });
+      body: formData,
+    }).then((data) => console.log(data));
   }
 });

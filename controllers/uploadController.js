@@ -4,6 +4,7 @@ const util = require("util");
 
 const storageThumbnail = multer.diskStorage({
   destination: (req, file, callback) => {
+    console.log("Test");
     callback(null, path.join(`${__dirname}/../uploads/thumbnail`));
   },
   filename: (req, file, callback) => {
@@ -18,7 +19,7 @@ const storageThumbnail = multer.diskStorage({
   },
 });
 
-let uploadFiles = multer({ storage: storageThumbnail }).array("myfile", 10);
+let uploadFiles = multer({ storage: storageThumbnail }).array("selectedFilesTag", 10);
 
 const getIndex = (req, res) => {
   res.render("pages/upload-images");
