@@ -78,9 +78,13 @@ document.getElementById("submit").addEventListener("click", () => {
     alert("Geen bestanden geselecteerd!");
   } else {
     console.log("Trying to fetch...");
-    var form = document.getElementById("uploadImagesForm");
-    console.log(form);
-    var formData = new FormData(form);
+
+    var formData = new FormData();
+    
+    for(let i=0; i < imagesToUpload.length; i++) {
+      formData.append("files", imagesToUpload[i]);
+    }
+
     fetch("/api/upload", {
       method: "POST",
       body: formData,

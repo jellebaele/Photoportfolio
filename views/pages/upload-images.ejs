@@ -18,13 +18,13 @@
         <form id="uploadImagesForm" class="upload" enctype="multipart/form-data">
             <div class="field">
                 <label for="category">Categorie:</label><br>
-                <input id="inputText" type="text" name="category" placeholder="Vul een categorie in">
+                <input id="inputText" type="text" name="category" value="Test" placeholder="Vul een categorie in">
                 <span data-toggle='tooltip' title='Indien dit veld leeg is, wordt deze waarde "default"'>
                     <i class="fa fa-question-circle-o" aria-hidden="true"></i>
                 </span>
 
             </div>
-            <div class="field">
+            <div id="selectedFilesField" class="field">
                 <label for="selectedFilesTag">Kies één of meerdere bestanden:</label><br>
                 <input class="file-button" type="file" name="selectedFilesTag" id="selectedFilesTag" multiple><br>
                 <button class="button" type="button" id="uploadButton">Selecteer</button>
@@ -104,3 +104,5 @@
     </footer>
     <script async src="../js/UploadImages.js" type="module"></script>
 </body>
+
+</html>
