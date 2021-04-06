@@ -13,7 +13,7 @@ document.getElementById("uploadButton").addEventListener("click", () => {
 selectedFilesTag.addEventListener("change", () => {
   try {
     addImagesToImagesToUpload(selectedFilesTag.files);
-    selectedFileNames.innerHTML = selectedFileNames.innerHTML = `${numberOfImagesToUpload} bestand(en) geselecteerd`;
+    selectedFileNames.innerHTML = `${numberOfImagesToUpload} bestand(en) geselecteerd`;
     drawImagesOnScreen(selectedFilesTag.files);
   } catch (error) {
     selectedFileNames.innerHTML = `<i>Opgelet!</i> Er kunnen slechts ${limitAmountUploadFiles} bestanden tegelijk ge-upload worden, er kunnen nog ${
@@ -70,6 +70,7 @@ function deleteHandler(index) {
 
 function deleteImagesOnScreen() {
   let container = document.getElementsByClassName("container")[0];
+  console.log("Test");
   container.innerHTML = "";
 }
 
@@ -90,6 +91,12 @@ document.getElementById("submit").addEventListener("click", () => {
     fetch("/api/upload", {
       method: "POST",
       body: formData,
-    }).then((data) => console.log(data));
+    }).then((data) => {
+      //console.log(data);
+      deleteImagesOnScreen();
+      imagesToUpload = [];
+      numberOfImagesToUpload = 0;
+      selectedFileNames.innerHTML = `${numberOfImagesToUpload} bestand(en) geselecteerd`;
+    });
   }
 });
