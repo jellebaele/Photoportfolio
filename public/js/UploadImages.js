@@ -18,7 +18,7 @@ selectedFilesTag.addEventListener("change", () => {
   } catch (error) {
     selectedFileNames.innerHTML = `<i>Opgelet!</i> Er kunnen slechts ${limitAmountUploadFiles} bestanden tegelijk ge-upload worden, er kunnen nog ${
       limitAmountUploadFiles - numberOfImagesToUpload
-    } bestand(en) gekozen worden!`;
+    } bestand(en) gekozen worden.`;
   }
 });
 
@@ -77,13 +77,15 @@ document.getElementById("submit").addEventListener("click", () => {
   if (imagesToUpload.length < 1) {
     alert("Geen bestanden geselecteerd!");
   } else {
-    console.log("Trying to fetch...");
+    let formData = new FormData();
 
-    var formData = new FormData();
-    
-    for(let i=0; i < imagesToUpload.length; i++) {
+    let category = document.getElementById("inputTextCategory")
+    formData.append("category", category.value);
+
+    for (let i = 0; i < imagesToUpload.length; i++) {
       formData.append("files", imagesToUpload[i]);
     }
+    
 
     fetch("/api/upload", {
       method: "POST",
