@@ -5,7 +5,7 @@ const util = require("util");
 const storageThumbnail = multer.diskStorage({
   destination: (req, file, callback) => {
     // If req.body.category ... set destination ...
-    callback(null, path.join(`${__dirname}/../uploads/thumbnail`));
+    callback(null, path.join(`${__dirname}/../uploads`));
   },
   filename: (req, file, callback) => {
     const match = ["image/png", "image/jpeg"];
@@ -14,7 +14,7 @@ const storageThumbnail = multer.diskStorage({
       return callback(message, null);
     }
 
-    let filename = file.originalname.replace(/[*$µ£`´#^¨]/g, "");
+    let filename = file.originalname.replace(/[*$µ£`´#^¨|]/g, "");
     callback(null, filename);
   },
 });
