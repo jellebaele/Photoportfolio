@@ -6,7 +6,13 @@ const ImageSchema = new Schema({
     type: String,
   },
   img: {
-    path: String,
+    path: {
+        type: String,
+        default: "Not found"
+    },
+    mimetype: String,
+    size: Number,
+    encoding: String
   },
   category: {
     type: String,
