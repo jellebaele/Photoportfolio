@@ -1,8 +1,8 @@
 const mongoose = require("mongoose");
 require('dotenv').config();
 
-function setup() {
-  mongoose.connect(
+async function setupDatabase() {
+  await mongoose.connect(
     process.env.DATABASE_URL,
     {
       useUnifiedTopology: true,
@@ -14,4 +14,4 @@ function setup() {
   );
 }
 
-module.exports = { setup };
+module.exports = { setupDatabase };
