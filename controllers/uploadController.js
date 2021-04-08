@@ -27,18 +27,13 @@ const getIndex = (req, res) => {
 };
 
 const postImages = (req, res) => {
-  console.log(req.body.category);
-
   const newImages = CreateNewImages(req);
-
   res.json({ images: newImages });
   res.status(200);
   res.send();
 };
 
 async function CreateNewImages(req) {
-  console.log(req.files);
-  //console.log(req.files.path);
   let newImages = await req.files.forEach((image) => {
     const newImage = new Image({
       title: image.originalname,

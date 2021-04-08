@@ -1,8 +1,15 @@
 const express = require('express');
+const helmet = require('helmet');
+const morgan = require('morgan');
 const routes = require("./routes/routes");
 const database = require("./configuration/database");
 require('dotenv').config();
+
 const app = express();
+app.use(helmet());
+app.use(morgan('combined'))
+
+database.setup();
 
 app.use(express.static('public'))
 app.use('/js', express.static(__dirname + 'public/js'))
@@ -13,7 +20,7 @@ app.use(express.json());
 app.use("/uploads", express.static("uploads"));
 app.use(routes);
 
-database.setup();
+
 
 const port = process.env.PORT || 3000;
 
