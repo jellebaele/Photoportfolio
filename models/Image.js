@@ -17,7 +17,8 @@ const ImageSchema = new Schema({
   category: {
     type: String,
     default: 'uncategorised'
-  }
+  },
+  index: Number
 });
 
 const image = mongoose.model("Image", ImageSchema);
