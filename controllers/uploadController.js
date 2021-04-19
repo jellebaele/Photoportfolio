@@ -80,16 +80,6 @@ async function getNewIndex() {
   });
 }
 
-/*async function getNewImageIndex() {
-  return new Promise((resolve, reject) => {
-    let amountImagesStored = await Image.count();
-    if (amountImagesStored === 0) resolve(0);
-
-    lastAddedImage = Image.find().sort({ $natural: -1}).limit(1);
-    return resolve(lastAddedImage.index + 1);
-  })
-}*/
-
 function getNewImageIndex() {
   return new Promise((resolve, reject) => {
     lastAddedImage = Image.find()
