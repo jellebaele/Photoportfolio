@@ -2,7 +2,7 @@ const ImageModel = require("../../models/Image");
 const CategoryModel = require("../../models/Category");
 
 class uploadControllerHelper {
-   async SaveNewImage(image, category, newImages) {
+   async SaveNewImage(image, category, newImages, description) {
       const newImage = new ImageModel({
          title: image.originalname,
          img: {
@@ -12,6 +12,7 @@ class uploadControllerHelper {
             encoding: image.encoding,
          },
          category: await this.UpdateOrCreateCategory(category),
+         description: description,
          index: await this.GetNewIndex(),
       });
       newImages.push(newImage);
@@ -24,6 +25,8 @@ class uploadControllerHelper {
             .limit(1)
             .then((result) => {
                if (result.length < 1) {
+                  if (category === "") category = "undefined";
+
                   const newCategory = this.CreateNewCategory(category);
                   resolve(newCategory.title);
                } else {

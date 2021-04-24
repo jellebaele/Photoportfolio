@@ -44,8 +44,18 @@ async function SaveNewImages(req) {
       let newImages = [];
       let uploadHelper = new UploadControllerHelper();
 
-      for (const image of req.files) {
-         await uploadHelper.SaveNewImage(image, req.body.category, newImages);
+      let descriptions = req.body.descriptions.split(",");
+      console.log(descriptions);
+
+      for (let i = 0; i < req.files.length; i++) {
+         const image = req.files[i];
+
+         await uploadHelper.SaveNewImage(
+            image,
+            req.body.category,
+            newImages,
+            descriptions[i]
+         );
       }
 
       return newImages;

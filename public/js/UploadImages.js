@@ -77,14 +77,14 @@ document.getElementById("submit").addEventListener("click", () => {
    if (imagesToUpload.length < 1) {
       alert("Geen bestanden geselecteerd!");
    } else {
-      appendDescriptionToImages();
+      const descriptions = appendDescriptionToImages();
       let formData = new FormData();
 
       let category = document.getElementById("inputTextCategory");
       formData.append("category", category.value);
+      formData.append("descriptions", descriptions);
 
       for (let i = 0; i < imagesToUpload.length; i++) {
-         console.log(imagesToUpload[i]);
          formData.append("files", imagesToUpload[i]);
       }
 
@@ -101,9 +101,10 @@ document.getElementById("submit").addEventListener("click", () => {
 });
 
 function appendDescriptionToImages() {
-   console.log("Test");
-   let descriptions = document.getElementsByClassName("image-description");
-   for (let i = 0; i < descriptions.length; i++) {
-      imagesToUpload[i].description = descriptions[i].value;
+   let descriptions = [];
+   const descriptionTags = document.getElementsByClassName("image-description");
+   for (let i = 0; i < descriptionTags.length; i++) {
+      descriptions.push(descriptionTags[i].value);
    }
+   return descriptions;
 }

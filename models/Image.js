@@ -2,23 +2,27 @@ const mongoose = require("mongoose");
 const { Schema } = mongoose;
 
 const ImageSchema = new Schema({
-  title: {
-    type: String,
-  },
-  img: {
-    path: {
-        type: String,
-        default: "Not found"
-    },
-    mimetype: String,
-    size: Number,
-    encoding: String
-  },
-  category: {
-    type: String,
-    default: 'uncategorised'
-  },
-  index: Number
+   title: {
+      type: String,
+   },
+   img: {
+      path: {
+         type: String,
+         default: "Not found",
+      },
+      mimetype: String,
+      size: Number,
+      encoding: String,
+   },
+   category: {
+      type: String,
+      default: "uncategorised",
+   },
+   description: {
+      type: String,
+      default: "",
+   },
+   index: Number,
 });
 
 const image = mongoose.model("Image", ImageSchema);
