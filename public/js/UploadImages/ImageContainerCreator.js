@@ -1,7 +1,6 @@
 export default class createImageContainer {
-   async CreateImageContainer(image, description) {
-      console.log(description)
-      const imageContainer = this.CreateImageContainerTag();
+   async createImageContainer(image, description) {
+      const imageContainer = this.createImageContainerTag();
 
       let reader = new FileReader();
       return new Promise((resolve, reject) => {
@@ -11,15 +10,17 @@ export default class createImageContainer {
          };
 
          reader.onload = (event) => {
-            const imageTag = this.CreateImageTag();
+            const imageTag = this.createImageTag();
             imageTag.src = event.target.result;
             imageContainer.appendChild(imageTag);
-            imageContainer.appendChild(this.CreateContainerTag());
-            imageContainer.appendChild(this.CreateTitleTag(image));
-            imageContainer.appendChild(this.CreateBreakTag());
-            imageContainer.appendChild(this.CreateSizeTag(image));
-            imageContainer.appendChild(this.CreateBreakTag());
-            imageContainer.appendChild(this.CreateImageDescriptionTag(image));
+            imageContainer.appendChild(this.createContainerTag());
+            imageContainer.appendChild(this.createTitleTag(image));
+            imageContainer.appendChild(this.createBreakTag());
+            imageContainer.appendChild(this.createSizeTag(image));
+            imageContainer.appendChild(this.createBreakTag());
+            imageContainer.appendChild(
+               this.createImageDescriptionTag(image, description)
+            );
 
             resolve(imageContainer);
          };
@@ -27,17 +28,17 @@ export default class createImageContainer {
       });
    }
 
-   CreateImageContainerTag() {
+   createImageContainerTag() {
       const imageContainer = document.createElement("div");
       imageContainer.setAttribute("class", "image-container fade");
       return imageContainer;
    }
 
-   CreateImageTag() {
+   createImageTag() {
       return document.createElement("img");
    }
 
-   CreateContainerTag() {
+   createContainerTag() {
       const containerTag = document.createElement("p");
       containerTag.setAttribute("class", "container-text");
 
@@ -54,7 +55,7 @@ export default class createImageContainer {
       return containerTag;
    }
 
-   CreateTitleTag(image) {
+   createTitleTag(image) {
       const titleTag = document.createElement("input");
       titleTag.setAttribute("class", "img-title");
       titleTag.setAttribute("type", "text");
@@ -63,23 +64,23 @@ export default class createImageContainer {
       return titleTag;
    }
 
-   CreateBreakTag() {
+   createBreakTag() {
       return document.createElement("br");
    }
 
-   CreateSizeTag(image) {
+   createSizeTag(image) {
       const sizeTag = document.createElement("small");
-      sizeTag.innerHTML = `<i>Size: ${this.ConvertBytesToKiloBytes(
+      sizeTag.innerHTML = `<i>Size: ${this.convertBytesToKiloBytes(
          image.size
       )} KB</i>`;
       return sizeTag;
    }
 
-   ConvertBytesToKiloBytes = (bytes) => {
+   convertBytesToKiloBytes = (bytes) => {
       return Math.round(bytes * 0.001).toFixed(2);
    };
 
-   CreateImageDescriptionTag(image) {
+   createImageDescriptionTag(image, description) {
       const imageDescriptionTag = document.createElement("input");
       imageDescriptionTag.setAttribute("class", "image-description");
       imageDescriptionTag.setAttribute("id", image.id);
@@ -89,7 +90,10 @@ export default class createImageContainer {
          "placeholder",
          "Beschrijving (optioneel)"
       );
-      imageDescriptionTag.setAttribute("value", "");
+      if (description !== undefined)
+         imageDescriptionTag.setAttribute("value", description);
+      else imageDescriptionTag.setAttribute("value", "");
+
       return imageDescriptionTag;
    }
 }
