@@ -1,102 +1,122 @@
 import ImageContainerCreator from "./UploadImages/ImageContainerCreator.js";
+import ImageRemover from "./UploadImages/ImageRemover.js";
 
-const limitAmountUploadFiles = 10;
+const MAX_AMOUNT_IMAGES = 10;
 let imagesToUpload = [];
 let numberOfImagesToUpload = 0;
 let selectedFilesTag = document.getElementById("selectedFilesTag");
-const selectedFileNames = document.getElementById("fileNames");
+let selectedFileNames = document.getElementById("fileNames");
 
 document.getElementById("uploadButton").addEventListener("click", () => {
-  selectedFilesTag.click();
+   selectedFilesTag.click();
 });
 
 selectedFilesTag.addEventListener("change", () => {
-  try {
-    addImagesToImagesToUpload(selectedFilesTag.files);
-    selectedFileNames.innerHTML = `${numberOfImagesToUpload} bestand(en) geselecteerd`;
-    drawImagesOnScreen(selectedFilesTag.files);
-  } catch (error) {
-    selectedFileNames.innerHTML = `<i>Opgelet!</i> Er kunnen slechts ${limitAmountUploadFiles} bestanden tegelijk ge-upload worden, er kunnen nog ${
-      limitAmountUploadFiles - numberOfImagesToUpload
-    } bestand(en) gekozen worden.`;
-  }
+   try {
+      addImagesToListImagesToUpload(selectedFilesTag.files);
+      selectedFileNames.innerHTML = `${numberOfImagesToUpload} bestand(en) geselecteerd`;
+      drawImagesOnScreen(selectedFilesTag.files);
+   } catch (error) {
+      selectedFileNames.innerHTML = `<i>Opgelet!</i> Er kunnen slechts ${MAX_AMOUNT_IMAGES} bestanden tegelijk ge-upload worden, er kunnen nog ${
+         MAX_AMOUNT_IMAGES - numberOfImagesToUpload
+      } bestand(en) gekozen worden.`;
+   }
 });
 
-function addImagesToImagesToUpload(selectedImages) {
-  if (selectedImages.length + imagesToUpload.length > 10) {
-    throw "Too many images selected, maximum 10 are allowed";
-  }
+function addImagesToListImagesToUpload(selectedImages) {
+   if (selectedImages.length + imagesToUpload.length > 10) {
+      throw "Too many images selected, maximum 10 are allowed";
+   }
 
-  for (let i = 0; i < selectedImages.length; i++) {
-    selectedImages[i].id = imagesToUpload.length;
-    imagesToUpload.push(selectedImages[i]);
-  }
-  numberOfImagesToUpload = imagesToUpload.length;
+   for (let i = 0; i < selectedImages.length; i++) {
+      selectedImages[i].id = imagesToUpload.length;
+      imagesToUpload.push(selectedImages[i]);
+   }
+   numberOfImagesToUpload = imagesToUpload.length;
 }
 
-async function drawImagesOnScreen(images) {
-  let container = document.getElementsByClassName("container")[0];
-  let imageContainerCreator = new ImageContainerCreator();
+async function drawImagesOnScreen(images, descriptions) {
+   let container = document.getElementsByClassName("container")[0];
+   let imageContainerCreator = new ImageContainerCreator();
 
-  for (let i = 0; i < images.length; i++) {
-    let currImage = images[i];
-    let img = await imageContainerCreator.createImageContainer(
-      currImage,
-      imagesToUpload
-    );
+   for (let i = 0; i < images.length; i++) {
+      let currImage = images[i];
+      let img;
+      if (descriptions !== undefined) {
+         img = await imageContainerCreator.createImageContainer(images[i], descriptions[i]);
+      } else {
+         img = await imageContainerCreator.createImageContainer(currImage);
+      }
 
-    container.appendChild(img);
+      container.appendChild(img);
 
-    let titleTag = img.children[2];
-    titleTag.style.width = `${document
-      .querySelector(".image-container")
-      .clientWidth.toString()}px`;
+      let titleTag = img.children[2];
+      titleTag.style.width = `${document
+         .querySelector(".image-container")
+         .clientWidth.toString()}px`;
 
-    let deleteButton = img.children[1].children[0];
-    deleteButton.addEventListener("click", () => deleteHandler(currImage.id));
-  }
+      let deleteButton = img.children[1].children[0];
+      deleteButton.addEventListener("click", () => deleteHandler(currImage.id));
+   }
 }
 
 function deleteHandler(index) {
-  imagesToUpload.splice(index, 1);
-  for (let i = 0; i < imagesToUpload.length; i++) {
-    imagesToUpload[i].id = i;
-  }
-  deleteImagesOnScreen();
-  drawImagesOnScreen(imagesToUpload);
-  numberOfImagesToUpload = imagesToUpload.length;
-  selectedFileNames.innerHTML = selectedFileNames.innerHTML = `${numberOfImagesToUpload} bestand(en) geselecteerd`;
+   let imageRemover = new ImageRemover();
+   imagesToUpload = imageRemover.deleteImage(imagesToUpload, index);
+   let imageDescriptionTags = document.getElementsByClassName("image-description");
+   let imageDescriptions = imageRemover.getNewImageDescriptions(imageDescriptionTags, index);
+   
+   imageRemover.deleteAllImages(document.getElementsByClassName("container")[0]);
+
+   drawImagesOnScreen(imagesToUpload, imageDescriptions);
+   numberOfImagesToUpload = imagesToUpload.length;
+   selectedFileNames.innerHTML = selectedFileNames.innerHTML = `${numberOfImagesToUpload} bestand(en) geselecteerd`;
 }
 
-function deleteImagesOnScreen() {
-  let container = document.getElementsByClassName("container")[0];
-  console.log("Test");
-  container.innerHTML = "";
+function getNewImageDescriptions(index) {
+   let imageDescriptions = [];
+
+   let imageDescriptionTags = document.getElementsByClassName("image-description");
+   imageDescriptionTags[index].parentNode.removeChild(imageDescriptionTags[index]);
+
+   for (let i = 0; i < imageDescriptionTags.length; i++) {
+      imageDescriptions.push(imageDescriptionTags[i].value);
+   }
+   return imageDescriptions;
 }
 
 document.getElementById("submit").addEventListener("click", () => {
-  if (imagesToUpload.length < 1) {
-    alert("Geen bestanden geselecteerd!");
-  } else {
-    let formData = new FormData();
+   if (imagesToUpload.length < 1) {
+      alert("Geen bestanden geselecteerd!");
+   } else {
+      appendDescriptionToImages();
+      let formData = new FormData();
 
-    let category = document.getElementById("inputTextCategory")
-    formData.append("category", category.value);
+      let category = document.getElementById("inputTextCategory");
+      formData.append("category", category.value);
 
-    for (let i = 0; i < imagesToUpload.length; i++) {
-      formData.append("files", imagesToUpload[i]);
-    }
-    
+      for (let i = 0; i < imagesToUpload.length; i++) {
+         console.log(imagesToUpload[i]);
+         formData.append("files", imagesToUpload[i]);
+      }
 
-    fetch("/api/upload", {
-      method: "POST",
-      body: formData,
-    }).then((data) => {
-      //console.log(data);
-      deleteImagesOnScreen();
-      imagesToUpload = [];
-      numberOfImagesToUpload = 0;
-      selectedFileNames.innerHTML = `${numberOfImagesToUpload} bestand(en) geselecteerd`;
-    });
-  }
+      /*
+      fetch("/api/upload", {
+        method: "POST",
+        body: formData,
+      }).then((data) => {
+        deleteImagesOnScreen();
+        imagesToUpload = [];
+        numberOfImagesToUpload = 0;
+        selectedFileNames.innerHTML = `${numberOfImagesToUpload} bestand(en) geselecteerd`;
+      });*/
+   }
 });
+
+function appendDescriptionToImages() {
+   console.log("Test");
+   let descriptions = document.getElementsByClassName("image-description");
+   for (let i = 0; i < descriptions.length; i++) {
+      imagesToUpload[i].description = descriptions[i].value;
+   }
+}
