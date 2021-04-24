@@ -27,8 +27,9 @@ class uploadControllerHelper {
                if (result.length < 1) {
                   if (category === "") category = "undefined";
 
-                  const newCategory = this.CreateNewCategory(category);
-                  resolve(newCategory.title);
+                  this.CreateNewCategory(category).then((newCategory) => {
+                     resolve(newCategory.title);
+                  });
                } else {
                   this.UpdateCategory(category, result[0].amountOfPictures)
                      .then(() => resolve(result[0].title))
@@ -40,12 +41,13 @@ class uploadControllerHelper {
    }
 
    async CreateNewCategory(category) {
-      const newCategory = new CategoryModel({
-         title: category,
-         amountOfPictures: 1,
+      return new Promise((resolve) => {
+         const newCategory = new CategoryModel({
+            title: category,
+            amountOfPictures: 1,
+         });
+         newCategory.save().then((newCategory) => resolve(newCategory));
       });
-      await newCategory.save();
-      return newCategory;
    }
 
    async UpdateCategory(category, amountOfPictures) {
