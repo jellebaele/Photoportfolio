@@ -6,6 +6,8 @@ let imagesToUpload = [];
 let numberOfImagesToUpload = 0;
 let selectedFilesTag = document.getElementById("selectedFilesTag");
 let selectedFileNames = document.getElementById("fileNames");
+const imageContainerCreator = new ImageContainerCreator();
+const imageRemover = new ImageRemover();
 
 document.getElementById("uploadButton").addEventListener("click", () => {
    selectedFilesTag.click();
@@ -37,7 +39,6 @@ function addImagesToListImagesToUpload(selectedImages) {
 
 async function drawImagesOnScreen(images, descriptions) {
    let container = document.getElementsByClassName("container")[0];
-   let imageContainerCreator = new ImageContainerCreator();
 
    for (let i = 0; i < images.length; i++) {
       let currImage = images[i];
@@ -61,11 +62,10 @@ async function drawImagesOnScreen(images, descriptions) {
 }
 
 function deleteHandler(index) {
-   let imageRemover = new ImageRemover();
    imagesToUpload = imageRemover.deleteImage(imagesToUpload, index);
    let imageDescriptionTags = document.getElementsByClassName("image-description");
    let imageDescriptions = imageRemover.getNewImageDescriptions(imageDescriptionTags, index);
-   
+
    imageRemover.deleteAllImages(document.getElementsByClassName("container")[0]);
 
    drawImagesOnScreen(imagesToUpload, imageDescriptions);
@@ -100,16 +100,15 @@ document.getElementById("submit").addEventListener("click", () => {
          formData.append("files", imagesToUpload[i]);
       }
 
-      /*
       fetch("/api/upload", {
-        method: "POST",
-        body: formData,
+         method: "POST",
+         body: formData,
       }).then((data) => {
-        deleteImagesOnScreen();
-        imagesToUpload = [];
-        numberOfImagesToUpload = 0;
-        selectedFileNames.innerHTML = `${numberOfImagesToUpload} bestand(en) geselecteerd`;
-      });*/
+         imageRemover.deleteAllImages(document.getElementsByClassName("container")[0]);
+         imagesToUpload = [];
+         numberOfImagesToUpload = 0;
+         selectedFileNames.innerHTML = `${numberOfImagesToUpload} bestand(en) geselecteerd`;
+      });
    }
 });
 
