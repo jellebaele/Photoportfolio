@@ -6,7 +6,7 @@ class uploadControllerHelper {
       const newImage = new ImageModel({
          title: image.originalname,
          img: {
-            path: image.path,
+            path: "uploads" + image.path.split("uploads")[1],
             mimetype: image.mimetype,
             size: image.size,
             encoding: image.encoding,
