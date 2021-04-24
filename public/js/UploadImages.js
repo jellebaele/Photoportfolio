@@ -73,18 +73,6 @@ function deleteHandler(index) {
    selectedFileNames.innerHTML = selectedFileNames.innerHTML = `${numberOfImagesToUpload} bestand(en) geselecteerd`;
 }
 
-function getNewImageDescriptions(index) {
-   let imageDescriptions = [];
-
-   let imageDescriptionTags = document.getElementsByClassName("image-description");
-   imageDescriptionTags[index].parentNode.removeChild(imageDescriptionTags[index]);
-
-   for (let i = 0; i < imageDescriptionTags.length; i++) {
-      imageDescriptions.push(imageDescriptionTags[i].value);
-   }
-   return imageDescriptions;
-}
-
 document.getElementById("submit").addEventListener("click", () => {
    if (imagesToUpload.length < 1) {
       alert("Geen bestanden geselecteerd!");
