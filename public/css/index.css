@@ -9,6 +9,10 @@
    --scale: 1;
 }
 
+body {
+  overflow: hidden;
+}
+
 .preload {
    position: fixed;
    top: 0;
@@ -16,6 +20,12 @@
    height: 100vh;
    background: #333;
    z-index: 5;
+   transition: opacity 1s ease;
+}
+
+.preload-finish {
+  opacity: 0;
+  pointer-events: none;
 }
 
 .animation-container {
@@ -47,7 +57,7 @@
 .line-horizontal::before,
 .line-horizontal::after {
    position: absolute;
-   width: 10rem;
+   width: 8rem;
    color: white;
    content: "";
 }
@@ -55,33 +65,33 @@
 .line-vertical::before,
 .line-vertical::after {
    position: absolute;
-   height: 10rem;
+   height: 8rem;
    color: white;
    content: "";
 }
 
 .line-horizontal::before {
    border-top: 1px solid;
-   top: -5rem;
-   left: -5rem;
+   top: -4rem;
+   left: -4rem;
 }
 
 .line-horizontal::after {
    border-bottom: 1px solid;
-   bottom: -5rem;
-   right: -5rem;
+   bottom: -4rem;
+   right: -4rem;
 }
 
 .line-vertical::before {
    border-left: 1px solid;
-   top: -5rem;
-   left: -5rem;
+   top: -4rem;
+   left: -4rem;
 }
 
 .line-vertical::after {
    border-right: 1px solid;
-   bottom: -5rem;
-   right: -5rem;
+   bottom: -4rem;
+   right: -4rem;
 }
 
 @keyframes rotate-horizontal {
