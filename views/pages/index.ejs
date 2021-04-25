@@ -8,31 +8,39 @@
 </head>
 
 <body class="container">
-
-    <header>
-        <link rel="stylesheet" type="text/css" href="css/partials/header.css">
-        <%- include('../partials/header', {title:'Overview', subtitle: true}); %>
-    </header>
-
-    <main>
-        <section class="categories">
-            <div class="container-black-white">
-                <% images.forEach(image=> { %>
-                    <a class="image-container fade" href="cat-minim.html">
-                        <img src=<%=image.img.path %> alt="">
-                        <p class="p-text">
-                            <%=image.description %>
-                        </p>
-                    </a>
-                    <% }); %>
+    <div class="preload">
+        <div class="animation-container">
+            <div class="square">
+                <div class="line-horizontal"></div>
+                <div class="line-vertical"></div>
             </div>
-        </section>
-    </main>
+        </div>
 
-    <footer>
-        <link rel="stylesheet" href="css/partials/footer.css">
-        <%- include('../partials/footer'); %>
-    </footer>
+    </div>
+    <section>
+        <header>
+            <link rel="stylesheet" type="text/css" href="css/partials/header.css">
+            <%- include('../partials/header', {title:'Overview', subtitle: true}); %>
+        </header>
+        <main>
+            <section class="categories">
+                <div class="container-black-white">
+                    <% images.forEach(image=> { %>
+                        <a class="image-container fade" href="cat-minim.html">
+                            <img src=<%=image.img.path %> alt="">
+                            <p class="p-text">
+                                <%=image.description %>
+                            </p>
+                        </a>
+                        <% }); %>
+                </div>
+            </section>
+        </main>
+        <footer>
+            <link rel="stylesheet" href="css/partials/footer.css">
+            <%- include('../partials/footer'); %>
+        </footer>
+    </section>
     <script src="js/index.js"> </script>
 </body>
 
