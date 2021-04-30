@@ -1,5 +1,5 @@
 const router = require("express").Router();
-const uploadRoutes = require("./subroutes/uploadRoutes");
+const apiRoute = require("./subroutes/apiRoute");
 const overviewRoute = require("./subroutes/overviewRoute");
 
 router.get("/about", function (req, res) {
@@ -7,6 +7,6 @@ router.get("/about", function (req, res) {
 });
 
 router.use("/home", overviewRoute);
-router.use("/api/upload", uploadRoutes);
+router.use("/api", apiRoute);
 
 module.exports = router;
