@@ -1,13 +1,21 @@
 import ImageContainerCreator from "./UploadImages/ImageContainerCreator.js";
 import ImageRemover from "./UploadImages/ImageRemover.js";
+import CategorySeacher from "./UploadImages/CategorySearcher.js";
+import CategorySearcher from "./UploadImages/CategorySearcher.js";
 
 const MAX_AMOUNT_IMAGES = 10;
 let imagesToUpload = [];
 let numberOfImagesToUpload = 0;
+
 let selectedFilesTag = document.getElementById("selectedFilesTag");
 let selectedFileNames = document.getElementById("fileNames");
+let searchCategories = document.getElementById("searchCategories");
+
 const imageContainerCreator = new ImageContainerCreator();
 const imageRemover = new ImageRemover();
+const searchUrl = "/api/categories";
+const categorySearcher = new CategorySearcher(searchCategories, searchUrl);
+console.log(categorySearcher);
 
 document.getElementById("uploadButton").addEventListener("click", () => {
    selectedFilesTag.click();

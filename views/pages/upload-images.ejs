@@ -18,10 +18,35 @@
         <form id="uploadImagesForm" class="upload" enctype="multipart/form-data">
             <div class="field">
                 <label for="category">Categorie:</label><br>
-                <input id="inputTextCategory" type="text" name="category" placeholder="Vul een categorie in">
-                <span data-toggle='tooltip' title='Indien dit veld leeg is, wordt deze waarde "default"'>
+                
+                <div class="category-search" id="searchCategories">
+                    <div class="search-container">
+                        <input class="search-input" type="text" placeholder="Zoek een categorie">
+                        <i class="fa fa-search" aria-hidden="true"></i>
+                    </div>
+                    <!-- <div class="result-container">
+                        <div class="search-result">
+                            <div class="title">Category A</div>
+                            <p class="amount">Amount of images: 1</p>
+                        </div>
+                        <div class="search-result">
+                            <div class="title">Category B</div>
+                            <p class="amount">Amount of images: 2</p>
+                        </div>
+                    </div> -->
+                </div>
+
+                <!-- <span data-toggle='tooltip' title='Indien dit veld leeg is, wordt deze waarde "default"'>
                     <i class="fa fa-question-circle-o" aria-hidden="true"></i>
-                </span>
+                </span> -->
+
+                
+
+                <ul class="custom-select-options">
+                    <!-- <% categories.forEach(category => { %>
+                        <li><%= category.title %><br>Amount of images: <%= category.amountOfPictures %> </li>
+                    <% }); %> -->
+                  </ul>
 
             </div>
             <div id="selectedFilesField" class="field">
