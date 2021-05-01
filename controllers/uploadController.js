@@ -1,8 +1,6 @@
 const multer = require("multer");
 const path = require("path");
-const ImageModel = require("../models/Image");
 const CategoryModel = require("../models/Category");
-const { resolve } = require("path");
 const UploadControllerHelper = require("./Upload/UploadControllerHelper");
 
 const storageThumbnail = multer.diskStorage({
@@ -26,7 +24,16 @@ const storageThumbnail = multer.diskStorage({
 let uploadFiles = multer({ storage: storageThumbnail }).array("files", 10);
 
 const getIndex = (req, res) => {
-   res.render("pages/upload-images");
+   CategoryModel.find({})
+      .sort({ title: 1 })
+      .limit(5)
+      .then((categories) => {
+         console.log(categories);
+         res.render("pages/upload-images", { categories: categories });
+      })
+      .catch((error) => {
+         res.status(501).render("pages/upload-images");
+      });
 };
 
 const postImages = (req, res) => {
@@ -45,19 +52,11 @@ async function SaveNewImages(req) {
       let uploadHelper = new UploadControllerHelper();
 
       let descriptions = req.body.descriptions.split(",");
-      console.log(descriptions);
 
       for (let i = 0; i < req.files.length; i++) {
          const image = req.files[i];
-
-         await uploadHelper.SaveNewImage(
-            image,
-            req.body.category,
-            newImages,
-            descriptions[i]
-         );
+         await uploadHelper.SaveNewImage(image, req.body.category, newImages, descriptions[i]);
       }
-
       return newImages;
    } catch (error) {
       console.log("Something went wrong " + error);

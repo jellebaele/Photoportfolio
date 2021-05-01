@@ -3,8 +3,7 @@ const CategoryModel = require("../models/Category");
 const getCategories = (req, res) => {};
 
 const searchCategories = (req, res) => {
-   const query = req.body.searchQuery;
-   console.log(query);
+   const query = req.query.search
    CategoryModel.find({ title: new RegExp('^' + query, "i") })
       .limit(5)
       .then((categories) => {
