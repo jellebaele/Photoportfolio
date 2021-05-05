@@ -16,8 +16,8 @@ function getIndex(req, res) {
       })
       .catch((error) => {
          console.log(error);
-         res.status(200);
-         res.render("pages/index");
+         res.status(500);
+         res.render("pages/index", { images: [] });
       });
 }
 
