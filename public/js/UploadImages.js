@@ -88,7 +88,7 @@ document.getElementById("submit").addEventListener("click", () => {
       const descriptions = appendDescriptionToImages();
       let formData = new FormData();
 
-      let category = document.getElementById("inputTextCategory");
+      let category = document.getElementById("categoriesInput");
       formData.append("category", category.value);
       formData.append("descriptions", descriptions);
 
