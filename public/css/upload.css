@@ -124,6 +124,10 @@ main {
    background: #fff;
 }
 
+.search-result:first-of-type {
+   margin-top: 2px;
+}
+
 .search-result:not(:last-of-type) {
    border-bottom: 1px solid gray;
 }
