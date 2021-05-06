@@ -25,14 +25,15 @@
         <main>
             <section class="categories">
                 <div class="container-black-white">
-                    <% images.forEach(image=> { %>
+                    <% if(images) {  images.forEach(image=> { %>
                         <a class="image-container fade" href="cat-minim.html">
                             <img src=<%=image.img.path %> alt="">
                             <p class="p-text">
                                 <%=image.description %>
                             </p>
                         </a>
-                        <% }); %>
+                        <% });
+                    } %>
                 </div>
             </section>
         </main>
