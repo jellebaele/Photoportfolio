@@ -33,30 +33,27 @@ main {
    padding: 5px;
 }
 
-.category-search {
+.search-category {
    position: relative;
-   max-width: 250px;
+   max-width: 300px;
+   margin-top: 5px;
 }
 
-.category-search,
-.category-search + {
-   transition: background 0.15s, box-shadow 0.15s;
+.search-category,
+.search-container {
+   border-radius: 5px;
 }
 
-.category-search:focus-within {
-   box-shadow: 0 0 3px rgba(0, 0, 0, 0.2);
-}
-
-.category-search--loading::after {
+.search-category--loading::after {
    content: "";
    position: absolute;
    top: 0;
    left: 0;
    height: 2px;
-   background: #009578;
+   background: rgba(54, 54, 54);
    border-radius: 5px;
    width: 50%;
-   animation: searchIndicator 1s ease-in infinite;
+   animation: searchIndicator 1.3s ease-in infinite;
 }
 
 @keyframes searchIndicator {
@@ -71,16 +68,11 @@ main {
    }
 }
 
-.category-search,
 .search-container {
-   border-radius: 5px;
-}
-
-.search-container {
-   display: inline-flex;
-   box-sizing: border-box;
+   display: flex;
+   align-items: center;
    width: 100%;
-   padding: 6px;
+   padding: 7px;
    background: #eee;
 }
 
@@ -97,15 +89,24 @@ main {
    background: transparent;
 }
 
-.result-container {
-   max-height: 200px;
+.search-icon {
+   padding: 1px 5px 1px 1px;
+}
+
+.search-result-container {
+   width: 100%;
+   max-height: 120px;
    overflow-y: auto;
+   position: absolute;
+   background-color: #eee;
+   padding: 0 7px;
+   z-index: 2;
    visibility: hidden;
    opacity: 0;
    transition: visibility 0.1s, opacity 0.1s;
 }
 
-.result-container--visible {
+.search-result-container--visible {
    visibility: visible;
    opacity: 1;
 }
@@ -120,20 +121,28 @@ main {
 }
 
 .search-result:hover {
-   background: #eee;
+   background: #fff;
 }
 
 .search-result:not(:last-of-type) {
-   border-bottom: 1px solid #eee;
+   border-bottom: 1px solid gray;
 }
 
-.search-result.title {
+.search-result.search-title {
    font-weight: bold;
 }
 
-.search-result.amount {
+.search-result.search-amount {
    line-height: 1.5;
    margin: 8px 0;
+}
+
+
+
+
+
+.select-files-field {
+   margin-top: 20px;
 }
 
 .field .file-button {

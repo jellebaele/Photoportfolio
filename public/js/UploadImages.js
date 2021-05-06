@@ -1,6 +1,5 @@
 import ImageContainerCreator from "./UploadImages/ImageContainerCreator.js";
 import ImageRemover from "./UploadImages/ImageRemover.js";
-import CategorySeacher from "./UploadImages/CategorySearcher.js";
 import CategorySearcher from "./UploadImages/CategorySearcher.js";
 
 const MAX_AMOUNT_IMAGES = 10;
@@ -13,8 +12,8 @@ let searchCategories = document.getElementById("searchCategories");
 
 const imageContainerCreator = new ImageContainerCreator();
 const imageRemover = new ImageRemover();
-const searchUrl = "/api/categories";
-const categorySearcher = new CategorySearcher(searchCategories, searchUrl);
+const searchUrl = "/api/category-search";
+const categorySearcher = new CategorySearcher(searchCategories, searchUrl, 5);
 console.log(categorySearcher);
 
 document.getElementById("uploadButton").addEventListener("click", () => {

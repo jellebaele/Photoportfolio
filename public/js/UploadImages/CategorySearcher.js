@@ -1,5 +1,5 @@
 class CategorySearcher {
-   constructor(searchCategories, searchUrl) {
+   constructor(searchCategories, searchUrl, queryLimit = 5) {
       this.elements = {
          main: searchCategories,
          input: searchCategories.querySelector(".search-input"),
@@ -7,8 +7,10 @@ class CategorySearcher {
       };
       this.searchUrl = searchUrl;
 
-      this.elements.resultsContainer.classList.add("result-container");
+      this.elements.resultsContainer.classList.add("search-result-container");
       this.elements.main.appendChild(this.elements.resultsContainer);
+
+      this.queryLimit = queryLimit;
 
       this.addListeners();
    }
@@ -27,21 +29,23 @@ class CategorySearcher {
                return;
             }
 
-            this.performSearch(query);
+            this.performSearch(query, this.queryLimit);
          }, 500);
       });
 
       this.elements.input.addEventListener("focus", () => {
-         this.elements.resultsContainer.classList.add("result-container--visible");
+         this.elements.resultsContainer.classList.add("search-result-container--visible");
+         this.getTopCategories();
       });
 
       this.elements.input.addEventListener("blur", () => {
-         this.elements.resultsContainer.classList.remove("result-container--visible");
+         this.elements.resultsContainer.classList.remove("search-result-container--visible");
       });
    }
 
-   async performSearch(query) {
-      await fetch("/api/category-search?search=" + query, {
+   async performSearch(query, limit = this.queryLimit) {
+
+      await fetch(`/api/category-search?limit=${limit}&search=${query}`, {
          method: "GET",
       })
          .then((response) => {
@@ -52,6 +56,7 @@ class CategorySearcher {
          })
          .then((response) => {
             this.populateResults(response);
+
          })
          .catch((error) => {
             console.error(error);
@@ -62,8 +67,12 @@ class CategorySearcher {
          });
    }
 
+   async getTopCategories() {
+      this.performSearch("", this.queryLimit);
+   }
+
    setLoading(isLoading) {
-      this.elements.main.classList.toggle("category-search--loading", isLoading);
+      this.elements.main.classList.toggle("search-category--loading", isLoading);
    }
 
    populateResults(results) {
@@ -73,14 +82,17 @@ class CategorySearcher {
          this.elements.resultsContainer.removeChild(this.elements.resultsContainer.firstChild);
       }
 
+      console.log("populating...");
       for (const result of results) {
-         this.elements.resultsContainer.appendChild(this.createResultElement(result));
+         let resultElement = this.createResultElement(result);
+         this.elements.resultsContainer.appendChild(resultElement);
       }
    }
 
    createResultElement(result) {
-      const anchorElement = document.createElement("a");
+      const anchorElement = document.createElement("div");
       anchorElement.classList.add("search-result");
+      // anchorElement.addEventListener("click", () => alert('click'));
       anchorElement.insertAdjacentHTML("afterbegin", this.createAnchorElement(result));
 
       // if ("href" in result) {
@@ -91,9 +103,8 @@ class CategorySearcher {
    }
 
    createAnchorElement(result) {
-      return `
-      <div class="title">${result.title}</div>
-      <p class="amount">Amount of images: ${result.amountOfPictures}</p>
+      return `<div class="search-title">${result.title}</div>
+      <p class="search-amount">Amount of images: ${result.amountOfPictures}</p>
       `;
    }
 }
