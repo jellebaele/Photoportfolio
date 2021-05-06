@@ -3,9 +3,10 @@ const CategoryModel = require("../models/Category");
 const getCategories = (req, res) => {};
 
 const searchCategories = (req, res) => {
-   const query = req.query.search
+   const query = req.query.search;
+   const limit = parseInt(req.query.limit);
    CategoryModel.find({ title: new RegExp('^' + query, "i") })
-      .limit(5)
+      .limit(limit)
       .then((categories) => {
          res.send(categories);
       })
