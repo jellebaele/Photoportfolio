@@ -20,13 +20,12 @@ class uploadControllerHelper {
    }
 
    async UpdateOrCreateCategory(category) {
+      if (category === "") category = "undefined";
       return new Promise((resolve, reject) => {
          CategoryModel.find({ title: category })
             .limit(1)
             .then((result) => {
                if (result.length < 1) {
-                  if (category === "") category = "undefined";
-
                   this.CreateNewCategory(category).then((newCategory) => {
                      resolve(newCategory.title);
                   });
