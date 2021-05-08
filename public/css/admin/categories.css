@@ -1,0 +1,126 @@
+* {
+  padding: 0;
+  margin: 0;
+  border: 0;
+}
+
+main {
+  max-width: 90%;
+  margin: 300px auto 70px auto;
+}
+
+.overview-categories {
+  color: rgba(54, 54, 54);
+}
+
+.overview-categories h2 {
+  font-weight: normal;
+}
+
+.table {
+    position: relative;
+}
+
+.table-categories {
+  width: 100%;
+  text-align: left;
+  border-collapse: collapse;
+  border-spacing: 10px 10px;
+  margin-top: 50px;
+}
+
+.table-categories th {
+  text-transform: uppercase;
+}
+
+.tr-head {
+  border-bottom: 15px #f4f5f5 solid;
+}
+
+.th-checkbox {
+  width: 2.5%;
+  text-align: center;
+}
+
+.th-edit,
+.th-delete {
+  width: 2.5%;
+}
+
+.td-checkbox {
+  text-align: center;
+}
+
+tbody {
+  background: #fff;
+}
+
+.table-categories td {
+  padding: 10px 0px;
+  border-bottom: 3px #f4f5f5 solid;
+  border-top: 3px #f4f5f5 solid;
+}
+
+.table-delete-spacer {
+  padding-right: 5px;
+  padding-left: 5px;
+}
+
+.table-categories button {
+  color: rgba(54, 54, 54);
+  background: rgba(54, 54, 54);
+  cursor: pointer;
+  transition: background-color 0.75s ease, color 0.75s ease;
+}
+
+.table-categories button:hover {
+  background: #f4f5f5;
+  color: #f4f5f5;
+}
+
+.fa-pencil,
+.fa-trash {
+  color: #f4f5f5;
+  transition: color 0.5s ease;
+}
+
+.table-categories button:hover > .fa-pencil {
+  color: rgba(54, 54, 54);
+}
+
+.table-categories button:hover > .fa-trash {
+  color: rgba(54, 54, 54);
+}
+
+.table-edit,
+.table-delete {
+  padding: 10px;
+  border-radius: 50%;
+}
+
+.add-items {
+    position: absolute;
+    top: -7.5px;
+    right: 0;
+}
+
+.button-add-items {
+  text-decoration: none;
+  color: rgba(54, 54, 54);
+  border: solid rgba(54, 54, 54) 3px;
+  padding: 5px 10px;
+  margin: 0 0 10px;
+  display: inline-block;
+  transform: translateY(0);
+  transition: background-color 0.75s ease, color 0.75s ease;
+  cursor: pointer;
+}
+
+.button-add-items:hover {
+    background-color: rgba(54, 54, 54);
+    color: #f4f5f5;
+ }
+
+.fa-plus {
+    margin-right: 3px;
+}

@@ -1,12 +1,77 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <%- include('../../partials/head.ejs', {tabTitle:'Katleen Lapaige'}); %>
+        <link rel="stylesheet" type="text/css" href="../../css/admin/categories.css">
+        <link rel="icon" href="../../images/logo.jpg">
 </head>
+
 <body>
-    <h1>Hello!!</h1>
+
+    <header>
+        <link rel="stylesheet" type="text/css" href="../../css/partials/header.css">
+        <%- include('../../partials/header', {title:"Manage categories", subtitle: false}); %>
+    </header>
+
+    <main>
+        <section class="overview-categories">
+            <h2>Categoriën</h2>
+            <div class="table">
+                <table class="table-categories" cellspacing="0">
+                    <thead>
+                        <tr class="tr-head">
+                            <th class="th-checkbox"><input class="table-checkbox" type="checkbox" id="selectAll"
+                                    name="selectAll" value="all"></th>
+                            <th class="th-name">Naam</th>
+                            <th class="th-amount">Aantal foto's</th>
+                            <th class="th-edit"></th>
+                            <th class="th-delete"></th>
+                        </tr>
+                        <div class="add-items">
+                            <button class="button-add-items"><i class="fa fa-plus" aria-hidden="true"></i>Voeg
+                                toe</button>
+                        </div>
+                    </thead>
+                    <tbody>
+                        <tr class="tr-body">
+                            <td class="td-checkbox"><input class="table-checkbox" type="checkbox"
+                                    id="selectCategoryThumbnail" name="selectCategoryThumbnail"
+                                    value="categoryThumbnail">
+                                </th>
+                            <td>Thumbnail</td>
+                            <td>5</td>
+                            <td><button class="table-edit"><i class="fa fa-pencil" aria-hidden="true"></i></button></td>
+                            <td>
+                                <div class="table-delete-spacer"><button class="table-delete"><i class="fa fa-trash"
+                                            aria-hidden="true"></i></button></div>
+                            </td>
+                        </tr>
+                        <tr class="tr-body">
+                            <td class="td-checkbox"><input class="table-checkbox" type="checkbox"
+                                    id="selectCategoryThumbnail" name="selectCategoryThumbnail"
+                                    value="categoryThumbnail">
+                                </th>
+                            <td>Thumbnail</td>
+                            <td>5</td>
+                            <td><button class="table-edit"><i class="fa fa-pencil" aria-hidden="true"></i></button></td>
+                            <td>
+                                <div class="table-delete-spacer"><button class="table-delete"><i class="fa fa-trash"
+                                            aria-hidden="true"></i></button></div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+    </main>
+
+    <footer>
+        <link rel="stylesheet" href="../css/partials/footer.css">
+        <%- include('../../partials/footer'); %>
+    </footer>
+    <script async src="../../js/admin/Categories.js" type="module"></script>
 </body>
+
 </html>
