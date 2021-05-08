@@ -1,10 +1,8 @@
 const CategoryModel = require("../models/Category");
 
-const getCategories = (req, res) => {};
-
 const searchCategories = (req, res) => {
    const query = req.query.search;
-   const limit = parseInt(req.query.limit);
+   let limit = parseInt(req.query.limit);
    if (limit > 50) limit = 50;
    CategoryModel.find({ title: new RegExp('^' + query, "i") })
       .limit(limit)
@@ -17,6 +15,5 @@ const searchCategories = (req, res) => {
 };
 
 module.exports = {
-   getCategories,
    searchCategories,
 };
