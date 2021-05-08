@@ -12,9 +12,10 @@ let searchCategories = document.getElementById("searchCategories");
 
 const imageContainerCreator = new ImageContainerCreator();
 const imageRemover = new ImageRemover();
+
 const searchUrl = "/api/category-search";
 const categorySearcher = new CategorySearcher(searchCategories, searchUrl, 5);
-console.log(categorySearcher);
+categorySearcher.addListeners();
 
 document.getElementById("uploadButton").addEventListener("click", () => {
    selectedFilesTag.click();
