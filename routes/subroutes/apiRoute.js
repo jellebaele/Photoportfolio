@@ -5,7 +5,7 @@ const categoryController = require("../../controllers/categoryController");
 router.get("/upload", uploadController.getIndex);
 router.post("/upload", uploadController.uploadFiles, uploadController.postImages);
 
-// router.get("/category", categoryController.getCategories);
-router.get("/category-search", categoryController.searchCategories);
+router.get("/categories", categoryController.searchCategories);
+router.delete("/categories", categoryController.deleteCategory);
 
 module.exports = router;

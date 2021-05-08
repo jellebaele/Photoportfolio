@@ -106,7 +106,7 @@ class TableCreator {
         spacer.classList.add("table-delete-spacer");
 
         const button = this.createTdButton("table-delete", "fa fa-trash", id);
-        button.addEventListener("click", () => console.log(id));
+        button.addEventListener("click", () => this.deleteHandler(id));
 
         spacer.appendChild(button);
         tdButton.appendChild(spacer);
@@ -122,13 +122,21 @@ class TableCreator {
     }
 
     deleteHandler(id) {
-        deleteCategory(id).then((response) => {
+        this.deleteCategory(id).then((response) => {
 
         }).catch(error => console.error(error))
     }
 
     async deleteCategory(id) {
-        return await fetch()
+        return await fetch(`${this.searchUrl}?id=${id}`, {
+            method: "DELETE"
+        })
+            .then(response => response.json())
+            .then(response => {
+                console.log(response.status);
+                this.GenerateTable();
+            })
+            .catch(error => console.error(error))
     }
 }
 

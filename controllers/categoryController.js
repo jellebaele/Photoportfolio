@@ -14,6 +14,13 @@ const searchCategories = (req, res) => {
       });
 };
 
+async function deleteCategory (req, res) {
+   await CategoryModel.deleteOne({ _id: req.query.id })
+   .then(deletedCategory => res.status(200).send(deletedCategory))
+   .catch(error => res.status(500).send("Failed: " + error));
+}
+
 module.exports = {
    searchCategories,
+   deleteCategory
 };

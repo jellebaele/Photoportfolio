@@ -3,7 +3,7 @@ import TableCreator from "./Categories/TableCreator.js";
 
 // const tableBody = document.getElementById("tableBody");
 const table = document.querySelector(".table-categories")
-const searchUrl = "/api/category-search";
+const searchUrl = "/api/categories";
 
 
 function init() {

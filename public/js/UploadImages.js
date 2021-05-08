@@ -13,7 +13,7 @@ let searchCategories = document.getElementById("searchCategories");
 const imageContainerCreator = new ImageContainerCreator();
 const imageRemover = new ImageRemover();
 
-const searchUrl = "/api/category-search";
+const searchUrl = "/api/categories";
 const categorySearcher = new CategorySearcher(searchCategories, searchUrl, 5);
 categorySearcher.addListeners();
 
