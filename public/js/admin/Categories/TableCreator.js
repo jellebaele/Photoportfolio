@@ -122,9 +122,14 @@ class TableCreator {
     }
 
     deleteHandler(id) {
-        this.deleteCategory(id).then((response) => {
-
-        }).catch(error => console.error(error))
+        if (confirm(`Wil je category ${'test'} verwijderen?`)) {
+            this.deleteCategory(id).then((response) => {
+                console.log("Category deleted succesfully");
+            }).catch(error => console.error(error))
+        } else {
+            console.log("Category not deleted");
+        }
+        
     }
 
     async deleteCategory(id) {
