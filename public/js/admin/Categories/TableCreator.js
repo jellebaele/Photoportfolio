@@ -5,6 +5,7 @@ class TableCreator {
         }
 
         this.searchUrl = searchUrl;
+        this.title = '';
     }
 
     GenerateTable() {
@@ -53,9 +54,9 @@ class TableCreator {
 
         const tdCheckbox = this.createTdCheckbox();
         const tdTitle = this.createTdTitle(result.title);
-        const tdAmount = this.createTdAmount(result.title);
+        const tdAmount = this.createTdAmount(result.amountOfPictures);
         const tdEditButton = this.createTdEditButton(result._id);
-        const tdDeleteButton = this.createTdDeleteButton(result._id);
+        const tdDeleteButton = this.createTdDeleteButton(result._id, result.title);
 
         rowTag.appendChild(tdCheckbox)
         rowTag.appendChild(tdTitle)
@@ -80,7 +81,17 @@ class TableCreator {
 
     createTdTitle(title) {
         const tdTitle = document.createElement("td");
-        tdTitle.innerText = title;
+
+        const inputText = document.createElement("input");
+        inputText.classList.add("td-title-input");
+        inputText.classList.add("td-title-input--uneditable");
+        inputText.type = "text";
+        inputText.value = title;
+
+        this.title = title;
+        inputText.addEventListener('keyup', e => this.titleKeyUphandler(e, inputText));
+
+        tdTitle.appendChild(inputText);
         return tdTitle;
     }
 
@@ -93,20 +104,20 @@ class TableCreator {
     createTdEditButton(id) {
         const tdButton = document.createElement("td");
         const editButton = this.createTdButton("table-edit", "fa fa-pencil", id);
-        editButton.addEventListener("click", () => console.log(id));
+        editButton.addEventListener("click", () => this.editHandler(id));
 
         tdButton.appendChild(editButton);
         return tdButton;
     }
 
-    createTdDeleteButton(id) {
+    createTdDeleteButton(id, title) {
         const tdButton = document.createElement("td");
 
         const spacer = document.createElement("div");
         spacer.classList.add("table-delete-spacer");
 
         const button = this.createTdButton("table-delete", "fa fa-trash", id);
-        button.addEventListener("click", () => this.deleteHandler(id));
+        button.addEventListener("click", () => this.deleteHandler(id, title));
 
         spacer.appendChild(button);
         tdButton.appendChild(spacer);
@@ -121,15 +132,32 @@ class TableCreator {
         return button;
     }
 
-    deleteHandler(id) {
-        if (confirm(`Wil je category ${'test'} verwijderen?`)) {
+    titleKeyUphandler(e, inputElement) {
+        console.log(e);
+        if (e.key === 'Escape') {
+            inputElement.value = this.title;
+            inputElement.blur();
+            inputElement.classList.add("td-title-input--uneditable");
+        } else if (e.key === 'Enter') {
+            // Update category
+        }
+    }
+
+    editHandler(id) {
+        const tdTitle = this.elements.tableBody.querySelector('.td-title-input');
+        tdTitle.classList.remove("td-title-input--uneditable");
+        tdTitle.select();
+    }
+
+    deleteHandler(id, title) {
+        if (confirm(`Wil je categorie '${title}' verwijderen?`)) {
             this.deleteCategory(id).then((response) => {
                 console.log("Category deleted succesfully");
             }).catch(error => console.error(error))
         } else {
             console.log("Category not deleted");
         }
-        
+
     }
 
     async deleteCategory(id) {

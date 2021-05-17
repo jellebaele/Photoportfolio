@@ -38,6 +38,7 @@ main {
 }
 
 .th-checkbox {
+  min-width: 30px;
   width: 2.5%;
   text-align: center;
 }
@@ -61,6 +62,15 @@ tbody {
   border-top: 3px #f4f5f5 solid;
 }
 
+.td-title-input {
+  pointer-events: all;
+  font-size: inherit;
+}
+
+.td-title-input--uneditable {
+  pointer-events: none;
+}
+
 .table-delete-spacer {
   padding-right: 5px;
   padding-left: 5px;
@@ -78,10 +88,20 @@ tbody {
   color: #f4f5f5;
 }
 
+.fa-check,
+.fa-times,
 .fa-pencil,
 .fa-trash {
   color: #f4f5f5;
   transition: color 0.5s ease;
+}
+
+.table-categories button:hover > .fa-check {
+  color: rgba(54, 54, 54);
+}
+
+.table-categories button:hover > .fa-times {
+  color: rgba(54, 54, 54);
 }
 
 .table-categories button:hover > .fa-pencil {
