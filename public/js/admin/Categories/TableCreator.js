@@ -118,9 +118,10 @@ class TableCreator {
         return tdButton;
     }
 
-    createTdButton(className, classIcon) {
+    createTdButton(className, classIcon, id) {
         const button = document.createElement("button");
         button.classList.add(className);
+        button.id = `editButton_${id}`
         button.innerHTML = `<i class=\"${classIcon}\" aria-hidden=\"true\"></i>`;
 
         return button;
@@ -129,7 +130,11 @@ class TableCreator {
     titleKeyUpHandler(e, titleInputTag) {
         console.log(e);
         if (e.key === 'Escape') {
-            this.cancelEdit(titleInputTag);
+            const id = titleInputTag.parentElement.parentElement.id;
+            console.log(id);
+            const cancelEditButton = this.elements.tableBody.querySelector(`#editButton_${id}`);
+            console.log(cancelEditButton);
+            this.cancelEdit(titleInputTag, cancelEditButton, titleInputTag.parentElement);
         } else if (e.key === 'Enter') {
             // Update category
         }
@@ -149,13 +154,13 @@ class TableCreator {
         const editCancelButton = this.createTdButton('table-edit', 'fa fa-times');
         editCancelButton.addEventListener('click', () => this.cancelEdit(titleInputTag, editButton, tdTitle));
 
-        console.log(titleInputTag.nextSibling);
-        
         tdTitle.appendChild(editAcceptButton);
         tdTitle.appendChild(editCancelButton);
     }
 
     cancelEdit(titleInputTag, editButton, tdTitle) {
+        
+
         titleInputTag.value = this.title;
         titleInputTag.blur();
         titleInputTag.classList.add("td-title-input--uneditable");
