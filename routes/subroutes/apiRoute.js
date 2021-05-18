@@ -7,5 +7,6 @@ router.post("/upload", uploadController.uploadFiles, uploadController.postImages
 
 router.get("/categories", categoryController.searchCategories);
 router.delete("/categories", categoryController.deleteCategory);
+router.patch("/categories/title", categoryController.patchCategoryTitle)
 
 module.exports = router;

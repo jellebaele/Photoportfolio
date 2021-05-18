@@ -14,13 +14,24 @@ const searchCategories = (req, res) => {
       });
 };
 
-async function deleteCategory (req, res) {
+async function deleteCategory(req, res) {
    await CategoryModel.deleteOne({ _id: req.query.id })
-   .then(deletedCategory => res.status(200).send(deletedCategory))
-   .catch(error => res.status(500).send("Failed: " + error));
+      .then(deletedCategory => res.status(200).send(deletedCategory))
+      .catch(error => res.status(500).send("Failed: " + error));
+}
+
+async function patchCategoryTitle(req, res) {
+   await CategoryModel.updateOne({
+      _id: req.query.id,
+      $set: { title: req.query.newTitle }
+   })
+      .then(updatedCategory => res.status(200).json({ updatedCategory: updatedCategory }))
+      // TODO Change error code
+      .catch(error => res.status(500).json({ message: error }))
 }
 
 module.exports = {
    searchCategories,
-   deleteCategory
+   deleteCategory,
+   patchCategoryTitle
 };
