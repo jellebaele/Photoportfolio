@@ -52,17 +52,11 @@ class TableCreator {
         rowTag.classList.add("tr-body");
         rowTag.id = result._id;
 
-        const tdCheckbox = this.createTdCheckbox();
-        const tdTitle = this.createTdTitle(result.title);
-        const tdAmount = this.createTdAmount(result.amountOfPictures);
-        const tdEditButton = this.createTdEditButton(result._id);
-        const tdDeleteButton = this.createTdDeleteButton(result._id, result.title);
-
-        rowTag.appendChild(tdCheckbox)
-        rowTag.appendChild(tdTitle)
-        rowTag.appendChild(tdAmount);
-        rowTag.appendChild(tdEditButton);
-        rowTag.appendChild(tdDeleteButton);
+        rowTag.appendChild(this.createTdCheckbox())
+        rowTag.appendChild(this.createTdTitle(result.title, result._id))
+        rowTag.appendChild(this.createTdAmount(result.amountOfPictures));
+        rowTag.appendChild(this.createTdEditButton(result._id));
+        rowTag.appendChild(this.createTdDeleteButton(result._id, result.title));
 
         return rowTag;
     }
@@ -79,9 +73,9 @@ class TableCreator {
         return tdCheckbox;
     }
 
-    createTdTitle(title) {
+    createTdTitle(title, id) {
         const tdTitle = document.createElement("td");
-
+        tdTitle.id = `tdTableTitle_${id}`
         const inputText = document.createElement("input");
         inputText.classList.add("td-title-input");
         inputText.classList.add("td-title-input--uneditable");
@@ -89,7 +83,7 @@ class TableCreator {
         inputText.value = title;
 
         this.title = title;
-        inputText.addEventListener('keyup', e => this.titleKeyUphandler(e, inputText));
+        inputText.addEventListener('keyup', e => this.titleKeyUpHandler(e, inputText));
 
         tdTitle.appendChild(inputText);
         return tdTitle;
@@ -104,7 +98,7 @@ class TableCreator {
     createTdEditButton(id) {
         const tdButton = document.createElement("td");
         const editButton = this.createTdButton("table-edit", "fa fa-pencil", id);
-        editButton.addEventListener("click", () => this.editHandler(id));
+        editButton.addEventListener("click", () => this.editHandler(id, editButton));
 
         tdButton.appendChild(editButton);
         return tdButton;
@@ -132,21 +126,46 @@ class TableCreator {
         return button;
     }
 
-    titleKeyUphandler(e, inputElement) {
+    titleKeyUpHandler(e, titleInputTag) {
         console.log(e);
         if (e.key === 'Escape') {
-            inputElement.value = this.title;
-            inputElement.blur();
-            inputElement.classList.add("td-title-input--uneditable");
+            this.cancelEdit(titleInputTag);
         } else if (e.key === 'Enter') {
             // Update category
         }
     }
 
-    editHandler(id) {
-        const tdTitle = this.elements.tableBody.querySelector('.td-title-input');
-        tdTitle.classList.remove("td-title-input--uneditable");
-        tdTitle.select();
+    editHandler(id, editButton) {
+        const titleInputTag = this.elements.tableBody.querySelector('.td-title-input');
+        const tdTitle = this.elements.tableBody.querySelector(`#tdTableTitle_${id}`);
+
+        editButton.disabled = true;
+        titleInputTag.classList.remove("td-title-input--uneditable");
+        titleInputTag.select();
+
+        const editAcceptButton = this.createTdButton('table-edit', 'fa fa-check');
+        editAcceptButton.addEventListener('click', () => console.log('Accept'));
+
+        const editCancelButton = this.createTdButton('table-edit', 'fa fa-times');
+        editCancelButton.addEventListener('click', () => this.cancelEdit(titleInputTag, editButton, tdTitle));
+
+        console.log(titleInputTag.nextSibling);
+        
+        tdTitle.appendChild(editAcceptButton);
+        tdTitle.appendChild(editCancelButton);
+    }
+
+    cancelEdit(titleInputTag, editButton, tdTitle) {
+        titleInputTag.value = this.title;
+        titleInputTag.blur();
+        titleInputTag.classList.add("td-title-input--uneditable");
+        
+
+        while (titleInputTag.nextSibling) {
+            tdTitle.removeChild(titleInputTag.nextSibling);
+        }
+
+        editButton.disabled = false;
     }
 
     deleteHandler(id, title) {
