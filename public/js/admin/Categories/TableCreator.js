@@ -1,7 +1,7 @@
 class TableCreator {
     constructor(tableTag, searchUrl) {
         this.elements = {
-            tableBody: tableTag.querySelector("#tableBody")
+            tableBody: tableTag.querySelector("#tableBody"),
         }
 
         this.searchUrl = searchUrl;
@@ -127,16 +127,13 @@ class TableCreator {
         return button;
     }
 
-    titleKeyUpHandler(e, titleInputTag) {
-        console.log(e);
+    titleKeyUpHandler(e, titleInputTag) {        
         if (e.key === 'Escape') {
             const id = titleInputTag.parentElement.parentElement.id;
-            console.log(id);
-            const cancelEditButton = this.elements.tableBody.querySelector(`#editButton_${id}`);
-            console.log(cancelEditButton);
-            this.cancelEdit(titleInputTag, cancelEditButton, titleInputTag.parentElement);
+            this.cancelEdit(id);
         } else if (e.key === 'Enter') {
-            // Update category
+            const id = titleInputTag.parentElement.parentElement.id;
+            this.saveNewTitle(id, this.title, titleInputTag.value);
         }
     }
 
@@ -149,22 +146,23 @@ class TableCreator {
         titleInputTag.select();
 
         const editAcceptButton = this.createTdButton('table-edit', 'fa fa-check');
-        editAcceptButton.addEventListener('click', () => console.log('Accept'));
+        editAcceptButton.addEventListener('click', () => this.saveNewTitle(id, this.title, titleInputTag.value));
 
         const editCancelButton = this.createTdButton('table-edit', 'fa fa-times');
-        editCancelButton.addEventListener('click', () => this.cancelEdit(titleInputTag, editButton, tdTitle));
+        editCancelButton.addEventListener('click', () => this.cancelEdit(id));
 
         tdTitle.appendChild(editAcceptButton);
         tdTitle.appendChild(editCancelButton);
     }
 
-    cancelEdit(titleInputTag, editButton, tdTitle) {
-        
+    cancelEdit(id) {
+        const titleInputTag = this.elements.tableBody.querySelector('.td-title-input');
+        const editButton = this.elements.tableBody.querySelector(`#editButton_${id}`);
+        const tdTitle = this.elements.tableBody.querySelector(`#tdTableTitle_${id}`);
 
         titleInputTag.value = this.title;
         titleInputTag.blur();
         titleInputTag.classList.add("td-title-input--uneditable");
-        
 
         while (titleInputTag.nextSibling) {
             tdTitle.removeChild(titleInputTag.nextSibling);
@@ -194,6 +192,30 @@ class TableCreator {
                 this.GenerateTable();
             })
             .catch(error => console.error(error))
+    }
+
+    saveNewTitle(id, oldTitle, newTitle) {
+        if (confirm(`Wil je categorie ${oldTitle} hernoemen naar ${newTitle}?`)) {
+            this.updateTitle(id, newTitle).then(response => {
+                console.log('Category updated succesfully');
+                this.title = newTitle;
+                this.cancelEdit(id);
+            })
+        } else {
+            this.cancelEdit(id);
+        }
+    }
+
+    async updateTitle(id, newTitle) {
+        return await fetch(`${this.searchUrl}/title?id=${id}&newTitle=${newTitle}`, {
+            method: "PATCH"
+        })
+            .then(response => response.json())
+            .then(response => {
+                console.log(response.status);
+                this.GenerateTable();
+            })
+            .catch(error => console.error(error));
     }
 }
 
