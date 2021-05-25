@@ -1,8 +1,6 @@
 import TableCreator from "./Categories/TableCreator.js";
 
-
-// const tableBody = document.getElementById("tableBody");
-const table = document.querySelector(".table-categories")
+const table = document.querySelector(".table")
 const searchUrl = "/api/categories";
 
 
