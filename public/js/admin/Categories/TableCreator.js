@@ -2,6 +2,8 @@ class TableCreator {
     constructor(tableTag, searchUrl) {
         this.elements = {
             tableBody: tableTag.querySelector("#tableBody"),
+            addButton: tableTag.querySelector("#createCategory"),
+            deleteMultipleCategories: tableTag.querySelector("#deleteCategories")
         }
 
         this.searchUrl = searchUrl;
@@ -13,13 +15,22 @@ class TableCreator {
             this.clearTableContent();
             this.populateResults(categories);
         })
-
+        this.addEventListeners();
     }
 
     clearTableContent() {
         while (this.elements.tableBody.firstChild) {
             this.elements.tableBody.removeChild(this.elements.tableBody.firstChild);
         }
+    }
+
+    addEventListeners() {
+        this.elements.addButton.addEventListener('click', () => {
+            let answ = window.prompt('Naam nieuwe categorie:');
+            if (answ !== null) {
+
+            }
+        })
     }
 
     async getAllCategories(query, limit) {
@@ -45,6 +56,10 @@ class TableCreator {
             const newRow = this.createRowElement(result);
             this.elements.tableBody.appendChild(newRow);
         }
+    }
+
+    createNewCategory(title) {
+        
     }
 
     createRowElement(result) {
@@ -127,7 +142,7 @@ class TableCreator {
         return button;
     }
 
-    titleKeyUpHandler(e, titleInputTag) {        
+    titleKeyUpHandler(e, titleInputTag) {
         if (e.key === 'Escape') {
             const id = titleInputTag.parentElement.parentElement.id;
             this.cancelEdit(id);
