@@ -16,7 +16,7 @@ const storageThumbnail = multer.diskStorage({
          return callback(message, null);
       }
 
-      let filename = file.originalname.replace(/[*$µ£`´#^¨|]/g, "");
+      let filename = file.originalname.replace(/[{}><*$µ£`()\´#^¨|\[\]]/gi, "");
       callback(null, filename);
    },
 });
