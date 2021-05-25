@@ -27,8 +27,8 @@ class TableCreator {
     addEventListeners() {
         this.elements.addButton.addEventListener('click', () => {
             let answ = window.prompt('Naam nieuwe categorie:');
-            if (answ !== null) {
-
+            if (answ !== null && answ.length > 0) {
+                this.createNewCategory(answ);
             }
         })
     }
@@ -51,15 +51,23 @@ class TableCreator {
             })
     }
 
+    async createNewCategory(title) {
+        return await fetch(`${this.searchUrl}?category=${title}`, {
+            method: "POST"
+        })
+            .then(response => response.json())
+            .then(response => {
+                console.log(response.status);
+                this.GenerateTable();
+            })
+            .catch(error => console.error(error))
+    }
+
     populateResults(results) {
         for (const result of results) {
             const newRow = this.createRowElement(result);
             this.elements.tableBody.appendChild(newRow);
         }
-    }
-
-    createNewCategory(title) {
-        
     }
 
     createRowElement(result) {
@@ -197,18 +205,6 @@ class TableCreator {
 
     }
 
-    async deleteCategory(id) {
-        return await fetch(`${this.searchUrl}?id=${id}`, {
-            method: "DELETE"
-        })
-            .then(response => response.json())
-            .then(response => {
-                console.log(response.status);
-                this.GenerateTable();
-            })
-            .catch(error => console.error(error))
-    }
-
     saveNewTitle(id, oldTitle, newTitle) {
         if (confirm(`Wil je categorie ${oldTitle} hernoemen naar ${newTitle}?`)) {
             this.updateTitle(id, newTitle).then(response => {
@@ -219,6 +215,18 @@ class TableCreator {
         } else {
             this.cancelEdit(id);
         }
+    }
+
+    async deleteCategory(id) {
+        return await fetch(`${this.searchUrl}?id=${id}`, {
+            method: "DELETE"
+        })
+            .then(response => response.json())
+            .then(response => {
+                console.log(response.status);
+                this.GenerateTable();
+            })
+            .catch(error => console.error(error))
     }
 
     async updateTitle(id, newTitle) {

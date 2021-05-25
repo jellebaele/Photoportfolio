@@ -14,6 +14,17 @@ const searchCategories = (req, res) => {
       });
 };
 
+async function createCategory(req, res) {
+   console.log('Check');
+   const newCategory = new CategoryModel({
+      title: req.query.category,
+      amountOfPictures: 0,
+   });
+   await newCategory.save()
+      .then(newCategory => res.status(200).send(newCategory))
+      .catch(error => res.status(500).send("Failed: " + error));
+}
+
 async function deleteCategory(req, res) {
    await CategoryModel.deleteOne({ _id: req.query.id })
       .then(deletedCategory => res.status(200).send(deletedCategory))
@@ -32,6 +43,7 @@ async function patchCategoryTitle(req, res) {
 
 module.exports = {
    searchCategories,
+   createCategory,
    deleteCategory,
    patchCategoryTitle
 };
