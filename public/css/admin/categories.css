@@ -15,6 +15,7 @@ main {
 
 .overview-categories h2 {
   font-weight: normal;
+  margin-bottom: 10px;
 }
 
 .table {
@@ -26,7 +27,6 @@ main {
   text-align: left;
   border-collapse: collapse;
   border-spacing: 10px 10px;
-  margin-top: 50px;
 }
 
 .table-categories th {
@@ -96,6 +96,11 @@ tbody {
   transition: color 0.5s ease;
 }
 
+.fa-trash-top-button {
+  color: rgba(54, 54, 54);
+  transition: color 0.5s ease;
+}
+
 .table-categories button:hover > .fa-check {
   color: rgba(54, 54, 54);
 }
@@ -112,6 +117,10 @@ tbody {
   color: rgba(54, 54, 54);
 }
 
+.table-button-section button:hover > .fa-trash {
+  color: #f4f5f5;
+}
+
 .table-edit,
 .table-delete {
   padding: 10px;
@@ -119,13 +128,12 @@ tbody {
   margin-left: 5px;
 }
 
-.add-items {
-    position: absolute;
-    top: -7.5px;
-    right: 0;
+.table-button-section {
+    display: flex;
+    justify-content: flex-end;
 }
 
-.button-add-items {
+.table-top-button {
   text-decoration: none;
   color: rgba(54, 54, 54);
   border: solid rgba(54, 54, 54) 3px;
@@ -135,13 +143,14 @@ tbody {
   transform: translateY(0);
   transition: background-color 0.75s ease, color 0.75s ease;
   cursor: pointer;
+  margin-left: 5px;
 }
 
-.button-add-items:hover {
+.table-top-button:hover {
     background-color: rgba(54, 54, 54);
     color: #f4f5f5;
  }
 
-.fa-plus {
+.fa-plus, .fa-trash {
     margin-right: 3px;
 }
