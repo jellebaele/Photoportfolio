@@ -9,7 +9,6 @@ function getIndexOverviewCategory(req, res) {
          if (result.length > 0) {
             imageRepository.findImagesByCategory(result[0].title)
                .then(images => {
-                  console.log(images);
                   res.send(images);
                })
                .catch(error => res.status(500).send(error))
