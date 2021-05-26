@@ -52,12 +52,16 @@ class TableCreator {
     }
 
     async createNewCategory(title) {
-        return await fetch(`${this.searchUrl}?category=${title}`, {
+        return await fetch(`${this.searchUrl}?categoryTitle=${title}`, {
             method: "POST"
         })
-            .then(response => response.json())
             .then(response => {
-                console.log(response.status);
+                console.log(response);
+                response.json()
+            })
+            .then(response => {
+                console.log(response);
+                // console.log(response.status);
                 this.GenerateTable();
             })
             .catch(error => console.error(error))
