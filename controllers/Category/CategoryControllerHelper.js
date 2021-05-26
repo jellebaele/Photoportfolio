@@ -27,11 +27,13 @@ class CategoryControllerHelper {
                 .then(result => {
                     if (result < 1) {
                         this.createNewCategory(categoryTitle, amountOfPictures)
-                            .then(newCategory => resolve(newCategory))
+                            .then(newCategory => resolve(newCategory.title))
                             .catch(error => reject(error));
                     } else {
                         this.updateCategory(categoryTitle, result[0].amountOfPictures)
-                            .then(updatedCategory => resolve(updatedCategory))
+                            .then(() => {
+                                resolve(result[0].title)
+                            })
                             .catch(error => reject(error));
                     }
                 })
@@ -49,7 +51,7 @@ class CategoryControllerHelper {
     }
 
     async createNewCategory(categoryTitle, amountOfPictures) {
-        return new Promise((resolve) => {
+        return new Promise((resolve, reject) => {
             const newCategory = new CategoryModel({
                 title: categoryTitle,
                 amountOfPictures: amountOfPictures,
@@ -61,13 +63,20 @@ class CategoryControllerHelper {
     }
 
     async updateCategory(categoryTitle, amountOfPictures) {
-        const filter = { title: categoryTitle };
-        const updateCategory = {
-            $set: {
-                amountOfPictures: ++amountOfPictures,
-            },
-        };
-        return await CategoryModel.updateOne(filter, updateCategory);
+        return new Promise((resolve, reject) => {
+            const filter = { title: categoryTitle };
+            const updateCategory = {
+                $set: {
+                    amountOfPictures: ++amountOfPictures,
+                },
+            };
+
+            CategoryModel.updateOne(filter, updateCategory)
+                .then(updatedCategory => {
+                    resolve(updatedCategory)
+                })
+                .catch(error => reject(error));
+        })
     }
 }
 
