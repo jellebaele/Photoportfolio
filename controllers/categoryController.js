@@ -1,4 +1,3 @@
-const CategoryModel = require("../models/Category");
 const CategoryRepository = require("../repository/CategoryRepository")
 const categoryRepository = new CategoryRepository();
 
