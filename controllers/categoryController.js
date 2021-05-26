@@ -36,10 +36,7 @@ async function deleteCategory(req, res) {
 }
 
 async function patchCategoryTitle(req, res) {
-   await CategoryModel.updateOne({
-      _id: req.query.id,
-      $set: { title: req.query.newTitle }
-   })
+   await categoryRepository.updateCategoryById(req.query.id, req.query.newTitle)
       .then(updatedCategory => res.status(200).json({ updatedCategory: updatedCategory }))
       // TODO Change error code
       .catch(error => res.status(500).json({ message: error }))

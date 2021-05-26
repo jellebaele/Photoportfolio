@@ -30,7 +30,7 @@ class CategoryControllerHelper {
                             .then(newCategory => resolve(newCategory.title))
                             .catch(error => reject(error));
                     } else {
-                        this.updateCategory(categoryTitle, result[0].amountOfPictures)
+                        this.updateCategoryByTitle(categoryTitle, result[0].amountOfPictures)
                             .then(() => {
                                 resolve(result[0].title)
                             })
@@ -75,7 +75,7 @@ class CategoryControllerHelper {
         });
     }
 
-    async updateCategory(categoryTitle, amountOfPictures) {
+    async updateCategoryByTitle(categoryTitle, amountOfPictures) {
         return new Promise((resolve, reject) => {
             const filter = { title: categoryTitle };
             const updateCategory = {
@@ -90,6 +90,30 @@ class CategoryControllerHelper {
                 })
                 .catch(error => reject(error));
         })
+    }
+
+    async updateCategoryById(id, newTitle) {
+        return new Promise((resolve, reject) => {
+            const filter = { _id: id };
+            const updateCategory = {
+                $set: { title: newTitle }
+            };
+
+            CategoryModel.updateOne(filter, updateCategory)
+                .then(updatedCategory => {
+                    resolve(updatedCategory)
+                })
+                .catch(error => reject(error))
+        })
+
+
+        // await CategoryModel.updateOne({
+        //     _id: req.query.id,
+        //     $set: { title: req.query.newTitle }
+        // })
+        //     .then(updatedCategory => res.status(200).json({ updatedCategory: updatedCategory }))
+        //     // TODO Change error code
+        //     .catch(error => res.status(500).json({ message: error }))
     }
 
     async deleteCategory(id) {
