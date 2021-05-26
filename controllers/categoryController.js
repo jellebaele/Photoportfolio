@@ -30,7 +30,7 @@ async function createCategory(req, res) {
 }
 
 async function deleteCategory(req, res) {
-   await CategoryModel.deleteOne({ _id: req.query.id })
+   await categoryRepository.deleteCategory(req.query.id)
       .then(deletedCategory => res.status(200).send(deletedCategory))
       .catch(error => res.status(500).send("Failed: " + error));
 }

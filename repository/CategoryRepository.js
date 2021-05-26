@@ -92,7 +92,13 @@ class CategoryControllerHelper {
         })
     }
 
-    async deleteCategory() { }
+    async deleteCategory(id) {
+        return new Promise((resolve, reject) => {
+            CategoryModel.deleteOne({ _id: id })
+                .then(deletedCategory => resolve(deletedCategory))
+                .catch(error => reject(error));
+        })
+    }
 }
 
 module.exports = CategoryControllerHelper;
