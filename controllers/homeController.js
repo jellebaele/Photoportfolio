@@ -6,7 +6,6 @@ function getIndex(req, res) {
       .then((category) => {
          ImageModel.find({ category: category })
             .then((images) => {
-               console.log(images);
                res.render("pages/index", { images: images });
             })
             .catch((error) => {
