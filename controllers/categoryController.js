@@ -1,4 +1,5 @@
 const CategoryModel = require("../models/Category");
+const CategoryControllerHelper = require("./Category/CategoryControllerHelper")
 
 const searchCategories = (req, res) => {
    const query = req.query.search;
@@ -15,14 +16,17 @@ const searchCategories = (req, res) => {
 };
 
 async function createCategory(req, res) {
-   console.log('Check');
-   const newCategory = new CategoryModel({
-      title: req.query.category,
-      amountOfPictures: 0,
-   });
-   await newCategory.save()
-      .then(newCategory => res.status(200).send(newCategory))
-      .catch(error => res.status(500).send("Failed: " + error));
+   let title = req.query.categoryTitle.replace(/[{}><*$µ£`()\´#^¨|\[\]]/gi, "");
+   if (title === "") title = "undefined";
+
+   let categoryControllerHelper = new CategoryControllerHelper();
+   await categoryControllerHelper.createCategory(title)
+      .then(result => {
+         res.send(result);
+      })
+      .catch(error => {
+         res.status(500).send(error);
+      });
 }
 
 async function deleteCategory(req, res) {
