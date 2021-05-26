@@ -1,7 +1,7 @@
 const multer = require("multer");
 const path = require("path");
 const CategoryModel = require("../models/Category");
-const UploadControllerHelper = require("./Upload/UploadControllerHelper");
+const UploadControllerHelper = require("../repository/UploadControllerHelper");
 
 const storageThumbnail = multer.diskStorage({
    destination: (req, file, callback) => {
