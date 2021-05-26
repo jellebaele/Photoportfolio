@@ -50,6 +50,19 @@ class CategoryControllerHelper {
         });
     }
 
+    async searchCategories(title, limit) {
+        return new Promise((resolve, reject) => {
+            CategoryModel.find({ title: title })
+                .limit(limit)
+                .then((categories) => {
+                    resolve(categories)
+                })
+                .catch((error) => {
+                    reject(error);
+                });
+        })
+    }
+
     async createNewCategory(categoryTitle, amountOfPictures) {
         return new Promise((resolve, reject) => {
             const newCategory = new CategoryModel({
@@ -78,6 +91,8 @@ class CategoryControllerHelper {
                 .catch(error => reject(error));
         })
     }
+
+    async deleteCategory() { }
 }
 
 module.exports = CategoryControllerHelper;

@@ -1,12 +1,13 @@
 const CategoryModel = require("../models/Category");
-const CategoryControllerHelper = require("../repository/CategoryRepository")
+const CategoryRepository = require("../repository/CategoryRepository")
+const categoryRepository = new CategoryRepository();
 
 const searchCategories = (req, res) => {
    const query = req.query.search;
    let limit = parseInt(req.query.limit);
    if (limit > 50) limit = 50;
-   CategoryModel.find({ title: new RegExp('^' + query, "i") })
-      .limit(limit)
+
+   categoryRepository.searchCategories(new RegExp('^' + query, "i"), limit)
       .then((categories) => {
          res.send(categories);
       })
@@ -19,8 +20,7 @@ async function createCategory(req, res) {
    let title = req.query.categoryTitle.replace(/[{}><*$µ£`()\´#^¨|\[\]]/gi, "");
    if (title === "") title = "undefined";
 
-   let categoryControllerHelper = new CategoryControllerHelper();
-   await categoryControllerHelper.createCategory(title)
+   await categoryRepository.createCategory(title)
       .then(result => {
          res.send(result);
       })
