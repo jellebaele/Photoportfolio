@@ -1,7 +1,7 @@
 const ImageModel = require("../../models/Image");
-const CategoryModel = require("../../models/Category");
+const CategoryControllerHelper = require("../Category/CategoryControllerHelper");
 
-class uploadControllerHelper {
+class UploadControllerHelper {
    async SaveNewImage(image, category, newImages, description) {
       const newImage = new ImageModel({
          title: image.originalname,
@@ -20,43 +20,13 @@ class uploadControllerHelper {
    }
 
    async UpdateOrCreateCategory(category) {
-      if (category === "") category = "undefined";
+      let categoryControllerHelper = new CategoryControllerHelper();
+
       return new Promise((resolve, reject) => {
-         CategoryModel.find({ title: category })
-            .limit(1)
-            .then((result) => {
-               if (result.length < 1) {
-                  this.CreateNewCategory(category).then((newCategory) => {
-                     resolve(newCategory.title);
-                  });
-               } else {
-                  this.UpdateCategory(category, result[0].amountOfPictures)
-                     .then(() => resolve(result[0].title))
-                     .catch((error) => reject(error));
-               }
-            })
-            .catch((error) => reject(error));
+         categoryControllerHelper.createOrUpdateCategory(category, 1)
+            .then(category => resolve(category.title))
+            .catch(error => reject(error))
       });
-   }
-
-   async CreateNewCategory(category) {
-      return new Promise((resolve) => {
-         const newCategory = new CategoryModel({
-            title: category,
-            amountOfPictures: 1,
-         });
-         newCategory.save().then((newCategory) => resolve(newCategory));
-      });
-   }
-
-   async UpdateCategory(category, amountOfPictures) {
-      const filter = { title: category };
-      const updateCategory = {
-         $set: {
-            amountOfPictures: ++amountOfPictures,
-         },
-      };
-      return await CategoryModel.updateOne(filter, updateCategory);
    }
 
    async GetNewIndex() {
@@ -73,4 +43,4 @@ class uploadControllerHelper {
    }
 }
 
-module.exports = uploadControllerHelper;
+module.exports = UploadControllerHelper;
