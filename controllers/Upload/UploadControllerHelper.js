@@ -1,5 +1,5 @@
 const ImageModel = require("../../models/Image");
-const CategoryControllerHelper = require("../Category/CategoryControllerHelper");
+const CategoryControllerHelper = require("../../repository/CategoryRepository");
 
 class UploadControllerHelper {
    async SaveNewImage(image, categoryTitle, newImages, description) {

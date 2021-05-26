@@ -1,6 +1,6 @@
 const router = require("express").Router();
-const overviewController = require('../../controllers/overviewController')
+const overviewController = require('../../controllers/overviewController');
 
-router.get("/", overviewController.getIndexOverviewCategory);
+router.get("/:category", overviewController.getIndexOverviewCategory);
 
 module.exports = router;

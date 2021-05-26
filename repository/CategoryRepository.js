@@ -1,4 +1,4 @@
-const CategoryModel = require("../../models/Category");
+const CategoryModel = require("../models/Category");
 
 class CategoryControllerHelper {
     async createCategory(categoryTitle, amountOfPictures = 0) {

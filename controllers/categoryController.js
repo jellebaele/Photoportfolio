@@ -1,5 +1,5 @@
 const CategoryModel = require("../models/Category");
-const CategoryControllerHelper = require("./Category/CategoryControllerHelper")
+const CategoryControllerHelper = require("../repository/CategoryRepository")
 
 const searchCategories = (req, res) => {
    const query = req.query.search;
