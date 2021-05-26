@@ -1,5 +1,7 @@
-const CategoryRepository = require("../repository/CategoryRepository")
+const CategoryRepository = require("../repository/CategoryRepository");
+const ImageRepository = require("../repository/ImageRepository");
 const categoryRepository = new CategoryRepository();
+const imageRepository = new ImageRepository();
 
 const searchCategories = (req, res) => {
    const query = req.query.search;
@@ -34,8 +36,31 @@ async function deleteCategory(req, res) {
 }
 
 async function patchCategoryTitle(req, res) {
-   await categoryRepository.updateCategoryById(req.query.id, req.query.newTitle)
-      .then(updatedCategory => res.status(200).json({ updatedCategory: updatedCategory }))
+   const id = req.query.id;
+   const newTitle = req.query.newTitle;
+   let oldCategory = await categoryRepository.searchCategoryById(id);
+
+   await categoryRepository.updateCategoryById(id, newTitle)
+      .then(updatedCategory => {
+         if (oldCategory.length > 0) {
+            imageRepository.updateImagesByCategory(oldCategory[0].title, newTitle)
+               .then(updatedImages => {
+                  res.status(200).json({
+                     updatedCategory: updatedCategory,
+                     updatedImages: updatedImages
+                  })
+               })
+               .catch(error => res.status(500).json({ message: error }))
+         } else {
+            console.log('No objects');
+            res.status(200).json({
+               updatedCategory: updatedCategory,
+               updatedImages: {
+                  ok: 0, n: 0, nModified: 0
+               }
+            })
+         }
+      })
       // TODO Change error code
       .catch(error => res.status(500).json({ message: error }))
 }

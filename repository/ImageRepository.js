@@ -56,6 +56,21 @@ class UploadControllerHelper {
             });
       })
    }
+
+   async updateImagesByCategory(categoryName, newCategoryName) {
+      return new Promise((resolve, reject) => {
+         const filter = { category: categoryName };
+         const updateImage = {
+            $set: { category: newCategoryName }
+         };
+
+         ImageModel.updateMany(filter, updateImage)
+            .then(updatedImages => {
+               resolve(updatedImages)
+            })
+            .catch(error => reject(error))
+      })
+   }
 }
 
 module.exports = UploadControllerHelper;

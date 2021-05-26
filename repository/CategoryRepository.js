@@ -5,7 +5,7 @@ class CategoryControllerHelper {
         if (categoryTitle === "") categoryTitle = "undefined";
 
         return new Promise((resolve, reject) => {
-            this.searchCategory(categoryTitle)
+            this.searchCategoryByTitle(categoryTitle)
                 .then(result => {
                     if (result < 1) {
                         this.createNewCategory(categoryTitle, amountOfPictures)
@@ -23,7 +23,7 @@ class CategoryControllerHelper {
         if (categoryTitle === "") categoryTitle = "undefined";
 
         return new Promise((resolve, reject) => {
-            this.searchCategory(categoryTitle)
+            this.searchCategoryByTitle(categoryTitle)
                 .then(result => {
                     if (result < 1) {
                         this.createNewCategory(categoryTitle, amountOfPictures)
@@ -41,9 +41,18 @@ class CategoryControllerHelper {
         });
     }
 
-    async searchCategory(title) {
+    async searchCategoryByTitle(title) {
         return new Promise((resolve, reject) => {
             CategoryModel.find({ title: title })
+                .limit(1)
+                .then((result) => resolve(result))
+                .catch((error) => reject(error))
+        });
+    }
+
+    async searchCategoryById(id) {
+        return new Promise((resolve, reject) => {
+            CategoryModel.find({ _id: id })
                 .limit(1)
                 .then((result) => resolve(result))
                 .catch((error) => reject(error))

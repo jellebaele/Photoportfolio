@@ -238,9 +238,12 @@ class TableCreator {
         return await fetch(`${this.searchUrl}/title?id=${id}&newTitle=${newTitle}`, {
             method: "PATCH"
         })
-            .then(response => response.json())
             .then(response => {
                 console.log(response.status);
+                return response.json()
+            })
+            .then(response => {
+                console.log(response);
                 this.GenerateTable();
             })
             .catch(error => console.error(error));
