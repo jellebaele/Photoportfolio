@@ -1,6 +1,5 @@
 const multer = require("multer");
 const path = require("path");
-const CategoryModel = require("../models/Category");
 const UploadControllerHelper = require("../repository/ImageRepository");
 
 const storageThumbnail = multer.diskStorage({
@@ -24,16 +23,7 @@ const storageThumbnail = multer.diskStorage({
 let uploadFiles = multer({ storage: storageThumbnail }).array("files", 10);
 
 const getIndex = (req, res) => {
-   CategoryModel.find({})
-      .sort({ title: 1 })
-      .limit(5)
-      .then((categories) => {
-         console.log(categories);
-         res.render("pages/admin/upload-images", { categories: categories });
-      })
-      .catch((error) => {
-         res.status(501).render("pages/upload-images");
-      });
+   res.render("pages/admin/upload-images");
 };
 
 const postImages = (req, res) => {
