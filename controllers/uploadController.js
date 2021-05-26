@@ -1,6 +1,7 @@
 const multer = require("multer");
 const path = require("path");
-const UploadControllerHelper = require("../repository/ImageRepository");
+const ImageRepository = require("../repository/ImageRepository");
+const imageRepository = new ImageRepository();
 
 const storageThumbnail = multer.diskStorage({
    destination: (req, file, callback) => {
@@ -39,13 +40,13 @@ const postImages = (req, res) => {
 async function SaveNewImages(req) {
    try {
       let newImages = [];
-      let uploadHelper = new UploadControllerHelper();
+      
 
       let descriptions = req.body.descriptions.split(",");
 
       for (let i = 0; i < req.files.length; i++) {
          const image = req.files[i];
-         await uploadHelper.SaveNewImage(image, req.body.category, newImages, descriptions[i]);
+         await imageRepository.SaveNewImage(image, req.body.category, newImages, descriptions[i]);
       }
       return newImages;
    } catch (error) {
