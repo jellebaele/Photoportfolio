@@ -4,7 +4,6 @@ const categoryRepository = new CategoryRepository();
 const searchCategories = (req, res) => {
    const query = req.query.search;
    let limit = parseInt(req.query.limit);
-   if (limit > 50) limit = 50;
 
    categoryRepository.searchCategories(new RegExp('^' + query, "i"), limit)
       .then((categories) => {

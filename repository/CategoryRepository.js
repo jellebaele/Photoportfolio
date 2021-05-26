@@ -50,7 +50,9 @@ class CategoryControllerHelper {
         });
     }
 
-    async searchCategories(title, limit) {
+    async searchCategories(title, limit = 50) {
+        if (limit > 50) limit = 50;
+        
         return new Promise((resolve, reject) => {
             CategoryModel.find({ title: title })
                 .limit(limit)
@@ -105,15 +107,6 @@ class CategoryControllerHelper {
                 })
                 .catch(error => reject(error))
         })
-
-
-        // await CategoryModel.updateOne({
-        //     _id: req.query.id,
-        //     $set: { title: req.query.newTitle }
-        // })
-        //     .then(updatedCategory => res.status(200).json({ updatedCategory: updatedCategory }))
-        //     // TODO Change error code
-        //     .catch(error => res.status(500).json({ message: error }))
     }
 
     async deleteCategory(id) {
