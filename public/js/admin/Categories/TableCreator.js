@@ -165,8 +165,9 @@ class TableCreator {
     }
 
     editHandler(id, editButton) {
-        const titleInputTag = this.elements.tableBody.querySelector('.td-title-input');
         const tdTitle = this.elements.tableBody.querySelector(`#tdTableTitle_${id}`);
+        const titleInputTag = tdTitle.querySelector('.td-title-input');
+        this.title = titleInputTag.value;
 
         editButton.disabled = true;
         titleInputTag.classList.remove("td-title-input--uneditable");
@@ -183,9 +184,9 @@ class TableCreator {
     }
 
     cancelEdit(id) {
-        const titleInputTag = this.elements.tableBody.querySelector('.td-title-input');
-        const editButton = this.elements.tableBody.querySelector(`#editButton_${id}`);
         const tdTitle = this.elements.tableBody.querySelector(`#tdTableTitle_${id}`);
+        const titleInputTag = tdTitle.querySelector('.td-title-input');
+        const editButton = this.elements.tableBody.querySelector(`#editButton_${id}`);
 
         titleInputTag.value = this.title;
         titleInputTag.blur();
