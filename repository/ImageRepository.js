@@ -43,6 +43,19 @@ class UploadControllerHelper {
             .catch((error) => reject(error));
       });
    }
+
+   async findImagesByCategory(categoryName, limit = 50) {
+      return new Promise((resolve, reject) => {
+         ImageModel.find({ category: categoryName })
+            .limit(limit)
+            .then((images) => {
+               resolve(images);
+            })
+            .catch((error) => {
+               reject(error);
+            });
+      })
+   }
 }
 
 module.exports = UploadControllerHelper;
