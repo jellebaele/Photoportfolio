@@ -29,7 +29,7 @@ const getIndex = (req, res) => {
       .limit(5)
       .then((categories) => {
          console.log(categories);
-         res.render("pages/upload-images", { categories: categories });
+         res.render("pages/admin/upload-images", { categories: categories });
       })
       .catch((error) => {
          res.status(501).render("pages/upload-images");
