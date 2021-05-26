@@ -26,7 +26,7 @@
             <section class="categories">
                 <div class="container-black-white">
                     <% if(images) {  images.forEach(image=> { %>
-                        <a class="image-container fade" href="cat-minim.html">
+                        <a class="image-container fade" href="/overview/<%= image.description %>">
                             <img src=<%=image.img.path %> alt="">
                             <p class="p-text">
                                 <%=image.description %>

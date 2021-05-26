@@ -1,13 +1,26 @@
-const CategoryRepository = require("../repository/CategoryRepository")
-const categoryControllerHelper = new CategoryRepository();
+const CategoryRepository = require("../repository/CategoryRepository");
+const ImageRepository = require("../repository/ImageRepository");
+const categoryRepository = new CategoryRepository();
+const imageRepository = new ImageRepository();
 
 function getIndexOverviewCategory(req, res) {
-        categoryControllerHelper.searchCategory(req.params.category)
-        .then(result => console.log(result));
+   categoryRepository.searchCategory(req.params.category)
+      .then(result => {
+         if (result.length > 0) {
+            imageRepository.findImagesByCategory(result[0].title)
+               .then(images => {
+                  console.log(images);
+                  res.send(images);
+               })
+               .catch(error => res.status(500).send(error))
+         } else {
+            //...
+         }
 
-    res.send(req.params.category)
- }
- 
- module.exports = {
-    getIndexOverviewCategory,
- };
+      })
+      .catch(error => res.status(500).send(error));
+}
+
+module.exports = {
+   getIndexOverviewCategory,
+};
