@@ -4,7 +4,7 @@ const categoryRepository = new CategoryRepository();
 const imageRepository = new ImageRepository();
 
 function getIndex(req, res) {
-   categoryRepository.searchCategory("Thumbnail")
+   categoryRepository.searchCategoryByTitle("Thumbnail")
       .then(category => {
          if (category.length > 0) {
             imageRepository.findImagesByCategory(category[0].title)

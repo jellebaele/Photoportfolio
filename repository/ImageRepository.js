@@ -1,5 +1,6 @@
 const ImageModel = require("../models/Image");
-const CategoryControllerHelper = require("./CategoryRepository");
+const CategoryRepository = require("./CategoryRepository");
+const categoryRepository = new CategoryRepository();
 
 class UploadControllerHelper {
    async SaveNewImage(image, categoryTitle, newImages, description) {
@@ -11,7 +12,7 @@ class UploadControllerHelper {
             size: image.size,
             encoding: image.encoding,
          },
-         category: await this.createOrUpdateCategoryByTitle(categoryTitle),
+         category: await this.getCategoryTitle(categoryTitle),
          description: description,
          index: await this.GetNewIndex(),
       });
@@ -19,11 +20,9 @@ class UploadControllerHelper {
       await newImage.save();
    }
 
-   async createOrUpdateCategoryByTitle(categoryTitle) {
-      let categoryControllerHelper = new CategoryControllerHelper();
-
+   async getCategoryTitle(categoryTitle) {
       return new Promise((resolve, reject) => {
-         categoryControllerHelper.createOrUpdateCategory(categoryTitle, 1)
+         categoryRepository.createOrUpdateCategory(categoryTitle, 1)
             .then(categoryTitle => {
                resolve(categoryTitle)
             })
@@ -70,6 +69,11 @@ class UploadControllerHelper {
             })
             .catch(error => reject(error))
       })
+   }
+
+   async asyncDeleteAllImagesForCategory(categoryName) {
+      let images = await this.findImagesByCategory(categoryName, 50);
+      console.log(images);
    }
 }
 
