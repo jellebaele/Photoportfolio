@@ -30,7 +30,18 @@ async function createCategory(req, res) {
 }
 
 async function deleteCategory(req, res) {
-   await categoryRepository.deleteCategory(req.query.id)
+   const id = req.query.id;
+
+   await categoryRepository.searchCategoryById(id)
+      .then(categoryToBeDeleted => {
+         if (categoryToBeDeleted.length > 0) {
+            imageRepository.deleteAllImagesForCategory(categoryToBeDeleted[0].title);
+         }
+      })
+      .catch(error => res.status(500).send("Failed: " + error));
+   
+   
+   await categoryRepository.deleteCategory(id)
       .then(deletedCategory => res.status(200).send(deletedCategory))
       .catch(error => res.status(500).send("Failed: " + error));
 }

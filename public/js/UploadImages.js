@@ -96,7 +96,7 @@ document.getElementById("submit").addEventListener("click", () => {
          formData.append("files", imagesToUpload[i]);
       }
 
-      fetch("/api/upload", {
+      fetch(`/api/upload?categoryTitle=${category.value}`, {
          method: "POST",
          body: formData,
       }).then((data) => {
@@ -104,6 +104,7 @@ document.getElementById("submit").addEventListener("click", () => {
          imagesToUpload = [];
          numberOfImagesToUpload = 0;
          selectedFileNames.innerHTML = `${numberOfImagesToUpload} bestand(en) geselecteerd`;
+         category.value = "";
       });
    }
 });

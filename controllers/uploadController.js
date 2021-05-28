@@ -1,7 +1,9 @@
 const multer = require("multer");
 const path = require("path");
 const ImageRepository = require("../repository/ImageRepository");
+const CategoryRepository = require("../repository/CategoryRepository");
 const imageRepository = new ImageRepository();
+const categoryRepository = new CategoryRepository();
 
 const storageThumbnail = multer.diskStorage({
    destination: (req, file, callback) => {
@@ -40,8 +42,6 @@ const postImages = (req, res) => {
 async function SaveNewImages(req) {
    try {
       let newImages = [];
-      
-
       let descriptions = req.body.descriptions.split(",");
 
       for (let i = 0; i < req.files.length; i++) {
@@ -55,8 +55,18 @@ async function SaveNewImages(req) {
    }
 }
 
+async function createNewCategoryIfNeeded(req, res, next) {
+   await categoryRepository.createCategory(req.query.categoryTitle)
+      .then(() => next())
+      .catch(error => {
+         console.log(error);
+         res.send(error)
+      })
+}
+
 module.exports = {
    getIndex,
    postImages,
    uploadFiles,
+   createNewCategoryIfNeeded
 };

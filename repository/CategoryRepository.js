@@ -1,6 +1,6 @@
 const CategoryModel = require("../models/Category");
 
-class CategoryControllerHelper {
+class CategoryRepository {
     async createCategory(categoryTitle, amountOfPictures = 0) {
         if (categoryTitle === "") categoryTitle = "undefined";
 
@@ -9,35 +9,21 @@ class CategoryControllerHelper {
                 .then(result => {
                     if (result < 1) {
                         this.createNewCategory(categoryTitle, amountOfPictures)
-                            .then(newCategory => resolve(newCategory))
+                            .then(newCategory => resolve({
+                                created: true, 
+                                newCategory: newCategory,
+                                existingCategory: undefined,
+                            }))
                             .catch(error => reject(error));
                     } else {
-                        reject("Category already exists");
+                        resolve({ 
+                            created: false,
+                            newCategory: undefined,
+                            existingCategory: result[0]
+                        });
                     }
                 })
-                .catch(error => console.log(error))
-        });
-    }
-
-    async createOrUpdateCategory(categoryTitle, amountOfPictures = 0) {
-        if (categoryTitle === "") categoryTitle = "undefined";
-
-        return new Promise((resolve, reject) => {
-            this.searchCategoryByTitle(categoryTitle)
-                .then(result => {
-                    if (result < 1) {
-                        this.createNewCategory(categoryTitle, amountOfPictures)
-                            .then(newCategory => resolve(newCategory.title))
-                            .catch(error => reject(error));
-                    } else {
-                        this.updateCategoryByTitle(categoryTitle, result[0].amountOfPictures)
-                            .then(() => {
-                                resolve(result[0].title)
-                            })
-                            .catch(error => reject(error));
-                    }
-                })
-                .catch(error => reject(error));
+                .catch(error => reject(error))
         });
     }
 
@@ -61,7 +47,7 @@ class CategoryControllerHelper {
 
     async searchCategories(title, limit = 50) {
         if (limit > 50) limit = 50;
-        
+
         return new Promise((resolve, reject) => {
             CategoryModel.find({ title: title })
                 .limit(limit)
@@ -86,20 +72,29 @@ class CategoryControllerHelper {
         });
     }
 
-    async updateCategoryByTitle(categoryTitle, amountOfPictures) {
+    async updateCategoryAmountOfPicturesByTitle(categoryTitle, amountOfPictures) {
         return new Promise((resolve, reject) => {
-            const filter = { title: categoryTitle };
-            const updateCategory = {
-                $set: {
-                    amountOfPictures: ++amountOfPictures,
-                },
-            };
+            this.searchCategoryByTitle(categoryTitle)
+                .then(result => {
+                    if (result.length > 0) {
+                        const filter = { title: result[0].title };
+                        const updateCategory = {
+                            $set: {
+                                amountOfPictures: ++result[0].amountOfPictures,
+                            },
+                        };
 
-            CategoryModel.updateOne(filter, updateCategory)
-                .then(updatedCategory => {
-                    resolve(updatedCategory)
+                        CategoryModel.updateOne(filter, updateCategory)
+                            .then(updatedCategory => {
+                                resolve({
+                                    status: updatedCategory,
+                                    updatedCategory: result[0]
+                                })
+                            })
+                            .catch(error => reject(error));
+                    }
                 })
-                .catch(error => reject(error));
+                .catch(error => reject(error))
         })
     }
 
@@ -127,4 +122,4 @@ class CategoryControllerHelper {
     }
 }
 
-module.exports = CategoryControllerHelper;
+module.exports = CategoryRepository;
