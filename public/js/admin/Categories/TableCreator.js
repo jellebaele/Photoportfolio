@@ -8,6 +8,7 @@ class TableCreator {
 
         this.searchUrl = searchUrl;
         this.title = '';
+        this.addEventListeners();
     }
 
     GenerateTable() {
@@ -15,7 +16,6 @@ class TableCreator {
             this.clearTableContent();
             this.populateResults(categories);
         })
-        this.addEventListeners();
     }
 
     clearTableContent() {
@@ -30,7 +30,7 @@ class TableCreator {
             if (answ !== null && answ.length > 0) {
                 this.createNewCategory(answ);
             }
-        })
+        });
     }
 
     async getAllCategories(query, limit) {
@@ -60,7 +60,7 @@ class TableCreator {
                 response.json()
             })
             .then(response => {
-                console.log(response);
+                // console.log(response);
                 // console.log(response.status);
                 this.GenerateTable();
             })
@@ -203,11 +203,11 @@ class TableCreator {
         if (confirm(`Wil je categorie '${title}' verwijderen?`)) {
             this.deleteCategory(id).then((response) => {
                 console.log("Category deleted succesfully");
+                return;
             }).catch(error => console.error(error))
         } else {
             console.log("Category not deleted");
         }
-
     }
 
     saveNewTitle(id, oldTitle, newTitle) {
