@@ -1,3 +1,5 @@
+const fs = require('fs');
+const path = require("path");
 const CategoryModel = require("../models/Category");
 
 class CategoryRepository {
@@ -10,13 +12,13 @@ class CategoryRepository {
                     if (result < 1) {
                         this.createNewCategory(categoryTitle, amountOfPictures)
                             .then(newCategory => resolve({
-                                created: true, 
+                                created: true,
                                 newCategory: newCategory,
                                 existingCategory: undefined,
                             }))
                             .catch(error => reject(error));
                     } else {
-                        resolve({ 
+                        resolve({
                             created: false,
                             newCategory: undefined,
                             existingCategory: result[0]
@@ -67,9 +69,32 @@ class CategoryRepository {
                 amountOfPictures: amountOfPictures,
             });
             newCategory.save()
-                .then((newCategory) => resolve(newCategory))
+                .then((newCategory) => {
+                    this.createDirectory(categoryTitle)
+                        .then(() => resolve(newCategory))
+                        .catch(error => reject(error));
+                })
                 .catch(error => reject(error));
         });
+    }
+
+    createDirectory(categoryTitle) {
+        return new Promise((resolve, reject) => {
+            fs.mkdir(path.join(`${__dirname}/../uploads/categories/${categoryTitle}`), (err) => {
+                if (err) reject(err);
+                resolve('Directory created')
+            })
+        })
+    }
+
+    removeDirectory(categoryTitle) {
+        return new Promise((resolve, reject) => {
+            fs.rmdir(path.join(`${__dirname}/../uploads/categories/${categoryTitle}`), { recursive: true }, (err) => {
+                if (err) reject(err);
+                else resolve('Directory deleted');
+            })
+        })
+
     }
 
     async updateCategoryAmountOfPicturesByTitle(categoryTitle, amountOfPictures) {
@@ -114,10 +139,18 @@ class CategoryRepository {
     }
 
     async deleteCategory(id) {
+        let category = await this.searchCategoryById(id);
         return new Promise((resolve, reject) => {
-            CategoryModel.deleteOne({ _id: id })
-                .then(deletedCategory => resolve(deletedCategory))
-                .catch(error => reject(error));
+            if (category.length > 0) {
+                CategoryModel.deleteOne({ _id: id })
+                    .then(deletedCategory => {
+                        this.removeDirectory(category[0].title);
+                        resolve(deletedCategory)
+                    })
+                    .catch(error => reject(error));
+            } else {
+                reject("Category does not exist");
+            }
         })
     }
 }

@@ -7,9 +7,7 @@ const categoryRepository = new CategoryRepository();
 
 const storageThumbnail = multer.diskStorage({
    destination: (req, file, callback) => {
-      // If req.body.category ... set destination ...
-      // Enum maken en vergelijken met req.body.category
-      callback(null, path.join(`${__dirname}/../uploads/thumbnail`));
+      callback(null, path.join(`${__dirname}/../uploads/categories/${req.body.category}`));
    },
    filename: (req, file, callback) => {
       const match = ["image/png", "image/jpeg"];
