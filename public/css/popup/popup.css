@@ -16,22 +16,23 @@ body {
 
 .alert {
   padding: 20px 40px;
-  min-width: 350px;
-  position: absolute;
-  right: 5%;
-  top: 300px;
+  max-width: 90%;
+  position: fixed;
+  top: 5px;
+  right: 5px;
   overflow: hidden;
+  z-index: 2;
 }
 
 .alert-warning {
   background: #ffdb9b;
-  border-left: 8px solid #ffa502;
+  border-left: 6px solid #ffa502;
   color: #ce8500;
 }
 
 .alert-success {
   background: #d4edda;
-  border-left: 8px solid #155724;
+  border-left: 6px solid #155724;
   color: #155724;
 }
 
@@ -92,5 +93,13 @@ body {
   }
   100% {
     transform: translateX(0%);
+  }
+}
+
+@media screen and (max-width: 420px) {
+  .alert {
+    width: 90%;
+    left: 50%;
+    transform: translateX(-50%);
   }
 }
