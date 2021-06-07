@@ -1,0 +1,96 @@
+* {
+  padding: 0;
+  margin: 0;
+  border: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+/* To be able to do this -> page needs to be responsive */
+body {
+  overflow-x: hidden;
+}
+
+.alert {
+  padding: 20px 40px;
+  min-width: 350px;
+  position: absolute;
+  right: 5%;
+  top: 300px;
+  overflow: hidden;
+}
+
+.alert-warning {
+  background: #ffdb9b;
+  border-left: 8px solid #ffa502;
+  color: #ce8500;
+}
+
+.alert-success {
+  background: #d4edda;
+  border-left: 8px solid #155724;
+  color: #155724;
+}
+
+.alert .fa-exclamation-circle,
+.fa-check-circle {
+  position: absolute;
+  left: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 20px;
+}
+
+.alert .message {
+  padding: 0 5px;
+}
+
+.alert .close-button {
+  padding: 20px;
+  position: absolute;
+  right: 0px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+}
+
+.alert .close-button-alert {
+  background: #ffd080;
+}
+
+.alert .close-button-alert:hover {
+  background: #ffc766;
+}
+
+.alert .close-button-success {
+  background: #8ec09a;
+}
+
+.alert .close-button-success:hover {
+  background: #6eb17e;
+}
+
+.close-button .fa-times {
+  font-size: 20px;
+  line-height: 40px;
+}
+
+.show-pop-up {
+  animation: show-alert 1s ease-in forwards;
+}
+
+.hide-pop-up {
+  display: none;
+}
+
+@keyframes show-alert {
+  0% {
+    transform: translateX(100%);
+  }
+  100% {
+    transform: translateX(0%);
+  }
+}
