@@ -30,8 +30,7 @@ const getIndex = (req, res) => {
 const postImages = (req, res) => {
    try {
       const newImages = SaveNewImages(req);
-      res.json({ images: newImages });
-      res.status(200).send();
+      res.status(200).json({ images: newImages });
    } catch (error) {
       res.status(501).send();
    }
