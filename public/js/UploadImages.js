@@ -10,16 +10,17 @@ let numberOfImagesToUpload = 0;
 let selectedFilesTag = document.getElementById("selectedFilesTag");
 let selectedFileNames = document.getElementById("fileNames");
 let searchCategories = document.getElementById("searchCategories");
-let popupWarning = document.getElementById("popupWarning")
+let popupWarning = document.getElementById("popupWarning");
+let popupSuccess = document.getElementById("popupSucces");
 
 const imageContainerCreator = new ImageContainerCreator();
 const imageRemover = new ImageRemover();
 
+const popupHandler = new Popup(popupSuccess, popupWarning, undefined, 0, 0);
+
 const searchUrl = "/api/categories";
 const categorySearcher = new CategorySearcher(searchCategories, searchUrl, 5);
 categorySearcher.addListeners();
-
-const popupHandler = new Popup(undefined, popupWarning, undefined, 0, 0);
 
 document.getElementById("uploadButton").addEventListener("click", () => {
    selectedFilesTag.click();

@@ -15,13 +15,22 @@ body {
 }
 
 .alert {
-  padding: 20px 40px;
-  max-width: 90%;
+  padding: 10px 15px;
+  width: 350px;
+  max-width: 40%;
   position: fixed;
   top: 5px;
   right: 5px;
-  overflow: hidden;
   z-index: 2;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.alert-show {
+  opacity: 1;
+  pointer-events: all;
 }
 
 .alert-warning {
@@ -38,68 +47,96 @@ body {
 
 .alert .fa-exclamation-circle,
 .fa-check-circle {
-  position: absolute;
-  left: 20px;
-  top: 50%;
-  transform: translateY(-50%);
-  font-size: 20px;
+  font-size: 20px !important;
+  margin-right: 5px;
+  align-self: flex-start;
 }
 
-.alert .message {
+.alert .message-title {
   padding: 0 5px;
+  align-self: center;
 }
 
 .alert .close-button {
-  padding: 20px;
-  position: absolute;
-  right: 0px;
-  top: 50%;
-  transform: translateY(-50%);
+  align-self: flex-start;
   cursor: pointer;
 }
-
-.alert .close-button-alert {
-  background: #ffd080;
-}
-
-.alert .close-button-alert:hover {
-  background: #ffc766;
-}
-
-.alert .close-button-success {
-  background: #8ec09a;
-}
-
 .alert .close-button-success:hover {
-  background: #6eb17e;
+  color: #062c0e;
 }
 
-.close-button .fa-times {
-  font-size: 20px;
-  line-height: 40px;
-}
-
-.show-pop-up {
-  animation: show-alert 1s ease-in forwards;
+.alert .close-button-warning:hover {
+  color: #8d5f0a;
 }
 
 .hide-pop-up {
-  display: none;
-}
+    animation: hide-alert 1s ease forwards;
+  }
+  
+  .show-pop-up {
+    animation: show-alert 1s ease-in-out forwards;
+  }
+  
+  @keyframes show-alert {
+    0% {
+      transform: translateX(100%);
+    }
+  
+    50% {
+      transform: translateX(-10%);
+    }
+  
+    75% {
+      transform: translateX(5%);
+    }
+  
+    100% {
+      transform: translateX(0%);
+    }
+  }
+  
+  @keyframes hide-alert {
+    0% {
+      transform: translateX(0%);
+    }
+    100% {
+      transform: translateX(110%);
+      pointer-events: none;
+    }
+  }
+  
+  @media screen and (max-width: 420px) {
+    .alert {
+      max-width: 90%;
+      width: 90%;
+      left: 50%;
+      transform: translateX(-50%);
+    }
 
-@keyframes show-alert {
-  0% {
-    transform: translateX(100%);
-  }
-  100% {
-    transform: translateX(0%);
-  }
-}
+    @keyframes show-alert {
+        0% {
+          transform: translateX(100%);
+        }
+      
+        50% {
+          transform: translateX(-60%);
+        }
+      
+        75% {
+          transform: translateX(-45%);
+        }
+      
+        100% {
+          transform: translateX(-50%);
+        }
+      }
 
-@media screen and (max-width: 420px) {
-  .alert {
-    width: 90%;
-    left: 50%;
-    transform: translateX(-50%);
+      @keyframes hide-alert {
+        0% {
+          transform: translateX(-50%);
+        }
+        100% {
+          transform: translateX(110%);
+        }
+      }
   }
-}
