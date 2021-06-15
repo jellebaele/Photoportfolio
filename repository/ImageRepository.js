@@ -5,20 +5,25 @@ const categoryRepository = new CategoryRepository();
 
 class UploadControllerHelper {
    async SaveNewImage(image, categoryTitle, newImages, description) {
-      const newImage = new ImageModel({
-         title: image.originalname,
-         img: {
-            path: "uploads" + image.path.split("uploads")[1],
-            mimetype: image.mimetype,
-            size: image.size,
-            encoding: image.encoding,
-         },
-         category: await this.getCategoryTitleAndUpdate(categoryTitle),
-         description: description,
-         index: await this.GetNewIndex(),
-      });
-      newImages.push(newImage);
-      await newImage.save();
+      try {
+         const newImage = new ImageModel({
+            title: image.originalname,
+            img: {
+               path: "uploads" + image.path.split("uploads")[1],
+               mimetype: image.mimetype,
+               size: image.size,
+               encoding: image.encoding,
+            },
+            category: await this.getCategoryTitleAndUpdate(categoryTitle),
+            description: description,
+            index: await this.GetNewIndex(),
+         });
+         newImages.push(newImage);
+         await newImage.save();
+      } catch (error) {
+         throw new Error(error)
+      }
+      
    }
 
    async getCategoryTitleAndUpdate(categoryTitle) {
@@ -28,7 +33,6 @@ class UploadControllerHelper {
                resolve(result.updatedCategory.title)
             })
             .catch(error => {
-               console.log(error);
                reject(error)
             })
       });
