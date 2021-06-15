@@ -30,7 +30,7 @@ const getIndex = (req, res) => {
 async function postImages(req, res) {
    try {
       const newImages = await SaveNewImages(req);
-      if (newImages.length < 2) {
+      if (newImages.length < 1) {
          throw new Error (`Attempt to upload ${newImages.length} image(s). Select one or more images to upload`)
       } 
       res.status(201).json({ images: newImages, amount: newImages.length, category: newImages[0].category });
