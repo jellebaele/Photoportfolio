@@ -27,12 +27,16 @@ const getIndex = (req, res) => {
    res.render("pages/admin/upload-images");
 };
 
-const postImages = (req, res) => {
+async function postImages(req, res) {
    try {
-      const newImages = SaveNewImages(req);
-      res.status(200).json({ images: newImages });
+      const newImages = await SaveNewImages(req);
+      if (newImages.length < 2) {
+         throw new Error (`Attempt to upload ${newImages.length} image(s). Select one or more images to upload`)
+      } 
+      res.status(201).json({ images: newImages, amount: newImages.length, category: newImages[0].category });
    } catch (error) {
-      res.status(501).send();
+      res.statusMessage = error.message;
+      res.status(400).end();
    }
 };
 

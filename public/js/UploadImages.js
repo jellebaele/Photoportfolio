@@ -103,15 +103,15 @@ document.getElementById("submit").addEventListener("click", () => {
       fetch(`/api/upload?categoryTitle=${category.value}`, {
          method: "POST",
          body: formData,
-      }).then(response => {
-         if (response.status === 200) {
-            return response.json();
-         } else {
-            // Show warning popup
-         }
       })
          .then(response => {
-            console.log(response);
+              if (response.status === 200 || response.status === 201) {
+                return response.json();
+             } else {   
+                throw new Error (response.statusText)           
+             }
+         })
+         .then(response => {
             window.scrollTo({ top: 0, behavior: "smooth" });
 
             setTimeout(() => {
@@ -120,10 +120,11 @@ document.getElementById("submit").addEventListener("click", () => {
                numberOfImagesToUpload = 0;
                selectedFileNames.innerHTML = `${numberOfImagesToUpload} bestand(en) geselecteerd`;
                category.value = "";
-               popupHandler.showWarning("");
-               // popupWarning.classList.remove("hide-pop-up");
-               // popupWarning.classList.add("show-pop-up");
+               popupHandler.showSucces(`${response.amount} afbeelding(en) ge-upload voor categorie '${response.category}'`);
             }, 500);
+         })
+         .catch(error => {
+            popupHandler.showWarning(error.message);
          });
    }
 });
