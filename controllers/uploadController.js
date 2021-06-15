@@ -51,8 +51,7 @@ async function SaveNewImages(req) {
       }
       return newImages;
    } catch (error) {
-      console.log("Something went wrong " + error);
-      return error;
+      throw new Error (error.message);
    }
 }
 
