@@ -32,14 +32,14 @@ selectedFilesTag.addEventListener("change", () => {
       selectedFileNames.innerHTML = `${numberOfImagesToUpload} bestand(en) geselecteerd`;
       drawImagesOnScreen(selectedFilesTag.files);
    } catch (error) {
-      selectedFileNames.innerHTML = `<i>Opgelet!</i> Er kunnen slechts ${MAX_AMOUNT_IMAGES} bestanden tegelijk ge-upload worden, er kunnen nog ${MAX_AMOUNT_IMAGES - numberOfImagesToUpload
-         } bestand(en) gekozen worden.`;
+      popupHandler.showWarning(error.message)
    }
 });
 
 function addImagesToListImagesToUpload(selectedImages) {
    if (selectedImages.length + imagesToUpload.length > 10) {
-      throw "Too many images selected, maximum 10 are allowed";
+      throw new Error (`Er kunnen slechts ${MAX_AMOUNT_IMAGES} bestanden tegelijk ge-upload worden, er kunnen nog ${MAX_AMOUNT_IMAGES - numberOfImagesToUpload
+      } bestand(en) gekozen worden.`);
    }
 
    for (let i = 0; i < selectedImages.length; i++) {
@@ -87,7 +87,7 @@ function deleteHandler(index) {
 
 document.getElementById("submit").addEventListener("click", () => {
    if (imagesToUpload.length < 1) {
-      alert("Geen bestanden geselecteerd!");
+      popupHandler.showWarning("Geen bestanden geselecteerd!")
    } else {
       const descriptions = appendDescriptionToImages();
       let formData = new FormData();
