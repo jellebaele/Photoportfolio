@@ -12,13 +12,14 @@ function getIndex(req, res) {
                   res.render("pages/index", { images: images });
                })
                .catch((error) => {
-                  console.log(error);
-                  res.status(500).send("An error occurred", error);
+                  res.statusMessage = error.message;
+                  console.error(error.message);
+                  res.status(500).end();
                });
          }
       })
       .catch((error) => {
-         console.log(error);
+         console.error('HomeController: ' + error);
          res.status(500);
          res.render("pages/index", { images: [] });
       });
