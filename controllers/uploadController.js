@@ -55,8 +55,6 @@ async function SaveNewImages(req) {
    }
 }
 
-const MulterUploadFiles = multer({ storage: storageThumbnail }).array("files", 10);
-
 const storageThumbnail = multer.diskStorage({
    destination: (req, file, callback) => {
       callback(null, path.join(`${__dirname}/../uploads/categories/${req.body.category}`));
@@ -71,6 +69,8 @@ const storageThumbnail = multer.diskStorage({
       callback(null, filename);
    },
 });
+
+const MulterUploadFiles = multer({ storage: storageThumbnail }).array("files", 10);
 
 module.exports = {
    getIndex,
