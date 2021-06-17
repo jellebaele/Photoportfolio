@@ -5,24 +5,6 @@ const CategoryRepository = require("../repository/CategoryRepository");
 const imageRepository = new ImageRepository();
 const categoryRepository = new CategoryRepository();
 
-const storageThumbnail = multer.diskStorage({
-   destination: (req, file, callback) => {
-      callback(null, path.join(`${__dirname}/../uploads/categories/${req.body.category}`));
-   },
-   filename: (req, file, callback) => {
-      const match = ["image/png", "image/jpeg"];
-      if (match.indexOf(file.mimetype) === -1) {
-         var message = `<strong>${file.originalname}</strong> is invalid. Only .png/.jpeg files are accepted`;
-         return callback(message, null);
-      }
-
-      let filename = file.originalname.replace(/[{}><*$µ£`()\´#^¨|\[\]]/gi, "");
-      callback(null, filename);
-   },
-});
-
-let uploadFiles = multer({ storage: storageThumbnail }).array("files", 10);
-
 const getIndex = (req, res) => {
    res.render("pages/admin/upload-images");
 };
@@ -40,6 +22,24 @@ async function postImages(req, res) {
    }
 };
 
+const uploadFiles = (req, res, next) => {
+   MulterUploadFiles(req, res, function(error) {
+      if (error) {
+         res.statusMessage = error.message;
+         res.status(400).end();
+      }
+      next();
+   })
+}
+
+async function createNewCategoryIfNeeded(req, res, next) {
+   await categoryRepository.createCategory(req.query.categoryTitle)
+      .then(() => next())
+      .catch(error => {
+         res.send(error)
+      })
+}
+
 async function SaveNewImages(req) {
    try {
       let newImages = [];
@@ -55,14 +55,22 @@ async function SaveNewImages(req) {
    }
 }
 
-async function createNewCategoryIfNeeded(req, res, next) {
-   await categoryRepository.createCategory(req.query.categoryTitle)
-      .then(() => next())
-      .catch(error => {
-         console.log(error);
-         res.send(error)
-      })
-}
+const MulterUploadFiles = multer({ storage: storageThumbnail }).array("files", 10);
+
+const storageThumbnail = multer.diskStorage({
+   destination: (req, file, callback) => {
+      callback(null, path.join(`${__dirname}/../uploads/categories/${req.body.category}`));
+   },
+   filename: (req, file, callback) => {
+      const match = ["image/png", "image/jpeg"];
+      if (match.indexOf(file.mimetype) === -1) {
+         return callback(new Error(`'${file.originalname}' is invalid. Only .png/.jpeg files are accepted`), null);
+      }
+
+      let filename = file.originalname.replace(/[{}><*$µ£`()\´#^¨|\[\]]/gi, "");
+      callback(null, filename);
+   },
+});
 
 module.exports = {
    getIndex,
