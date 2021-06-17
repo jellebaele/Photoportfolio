@@ -1,5 +1,5 @@
 class TableCreator {
-    constructor(tableTag, searchUrl) {
+    constructor(tableTag, searchUrl, popupHandler) {
         this.elements = {
             tableBody: tableTag.querySelector("#tableBody"),
             addButton: tableTag.querySelector("#createCategory"),
@@ -7,6 +7,7 @@ class TableCreator {
         }
 
         this.searchUrl = searchUrl;
+        this.popupHandler = popupHandler;
         this.title = '';
         this.addEventListeners();
     }
@@ -48,6 +49,8 @@ class TableCreator {
             })
             .catch((error) => {
                 console.error(error);
+                console.log("error");
+                this.popupHandler.showWarning(error.message);
             })
     }
 

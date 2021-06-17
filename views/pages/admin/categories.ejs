@@ -6,9 +6,7 @@
         <link rel="stylesheet" type="text/css" href="../../css/admin/categories.css">
         <link rel="icon" href="../../images/logo.jpg">
 </head>
-
 <body>
-
     <header>
         <link rel="stylesheet" type="text/css" href="../../css/partials/header.css">
         <%- include('../../partials/header', {title:"Manage categories", subtitle: false}); %>
@@ -55,7 +53,9 @@
                 </table>
             </div>
         </section>
-
+        <popup>
+            <%- include('../../popup/popup'); %>
+        </popup>
     </main>
 
     <footer>
