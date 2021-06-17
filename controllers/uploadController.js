@@ -13,8 +13,8 @@ async function postImages(req, res) {
    try {
       const newImages = await SaveNewImages(req);
       if (newImages.length < 1) {
-         throw new Error (`Attempt to upload ${newImages.length} image(s). Select one or more images to upload`)
-      } 
+         throw new Error(`Attempt to upload ${newImages.length} image(s). Select one or more images to upload`)
+      }
       res.status(201).json({ images: newImages, amount: newImages.length, category: newImages[0].category });
    } catch (error) {
       res.statusMessage = error.message;
@@ -23,7 +23,7 @@ async function postImages(req, res) {
 };
 
 const uploadFiles = (req, res, next) => {
-   MulterUploadFiles(req, res, function(error) {
+   MulterUploadFiles(req, res, function (error) {
       if (error) {
          res.statusMessage = error.message;
          res.status(501).end();
@@ -52,7 +52,7 @@ async function SaveNewImages(req) {
       }
       return newImages;
    } catch (error) {
-      throw new Error (error.message);
+      throw new Error(error.message);
    }
 }
 
