@@ -16,10 +16,10 @@ let popupSuccess = document.getElementById("popupSucces");
 const imageContainerCreator = new ImageContainerCreator();
 const imageRemover = new ImageRemover();
 
-const popupHandler = new Popup(popupSuccess, popupWarning, undefined, 0, 0);
+const popupHandler = new Popup(popupSuccess, popupWarning, undefined, 0, 0, 7000);
 
 const searchUrl = "/api/categories";
-const categorySearcher = new CategorySearcher(searchCategories, searchUrl, 5);
+const categorySearcher = new CategorySearcher(searchCategories, searchUrl, 5, popupHandler);
 categorySearcher.addListeners();
 
 document.getElementById("uploadButton").addEventListener("click", () => {

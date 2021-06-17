@@ -12,7 +12,8 @@ const searchCategories = (req, res) => {
          res.send(categories);
       })
       .catch((error) => {
-         res.status(501).send("Error: " + error);
+         res.statusMessage = error.message;
+         res.status(501).end();
       });
 };
 
