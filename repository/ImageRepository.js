@@ -16,7 +16,7 @@ class UploadControllerHelper {
             },
             category: await this.getCategoryTitleAndUpdate(categoryTitle),
             description: description,
-            index: await this.GetNewIndex(),
+            index: await this.GetNewIndex(categoryTitle),
          });
          newImages.push(newImage);
          await newImage.save();
@@ -35,9 +35,9 @@ class UploadControllerHelper {
       }
    }
 
-   async GetNewIndex() {
+   async GetNewIndex(categoryTitle) {
       try {
-         const lastImageUploaded = await ImageModel.find().sort({ $natural: -1 }).limit(1);
+         const lastImageUploaded = await ImageModel.find({ category: categoryTitle}).sort({ $natural: -1 }).limit(1);
          if (lastImageUploaded.length > 0) return lastImageUploaded[0].index + 1;
          else return 0;
       } catch (error) {
