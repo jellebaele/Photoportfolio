@@ -26,7 +26,7 @@ const uploadFiles = (req, res, next) => {
    MulterUploadFiles(req, res, function(error) {
       if (error) {
          res.statusMessage = error.message;
-         res.status(400).end();
+         res.status(501).end();
       }
       next();
    })
