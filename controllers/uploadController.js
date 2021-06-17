@@ -35,13 +35,14 @@ const uploadFiles = (req, res, next) => {
 }
 
 async function createNewCategoryIfNeeded(req, res, next) {
-   await categoryRepository.createCategory(req.query.categoryTitle)
-      .then(() => next())
-      .catch(error => {
-         res.statusMessage = error.message;
+   try {
+      await categoryRepository.createCategory(req.query.categoryTitle)
+      next();
+   } catch (error) {
+      res.statusMessage = error.message;
          console.error(error);
          res.status(501).end();
-      })
+   }
 }
 
 async function SaveNewImages(req) {

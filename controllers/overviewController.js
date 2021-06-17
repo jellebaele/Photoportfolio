@@ -3,21 +3,21 @@ const ImageRepository = require("../repository/ImageRepository");
 const categoryRepository = new CategoryRepository();
 const imageRepository = new ImageRepository();
 
-function getIndexOverviewCategory(req, res) {
-   categoryRepository.searchCategory(req.params.category)
-      .then(result => {
-         if (result.length > 0) {
-            imageRepository.findImagesByCategory(result[0].title)
-               .then(images => {
-                  res.send(images);
-               })
-               .catch(error => res.status(500).send(error))
-         } else {
-            //...
-         }
-
-      })
-      .catch(error => res.status(500).send(error));
+async function getIndexOverviewCategory(req, res) {
+   try {
+      const category = await categoryRepository.searchCategory(req.params.category);
+      if (category.length > 0) {
+         const images = await imageRepository.findImagesByCategory(result[0].title);
+         res.send(images);
+      } else {
+         //TODO
+      }
+   } catch (error) {
+      // TODO
+      console.error('overviewController: ' + error);
+      res.status(500);
+      res.send(error);
+   }
 }
 
 module.exports = {
