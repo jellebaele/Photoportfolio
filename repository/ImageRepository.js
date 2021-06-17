@@ -21,7 +21,7 @@ class UploadControllerHelper {
          newImages.push(newImage);
          await newImage.save();
       } catch (error) {
-         throw new Error(error)
+         throw error;
       }
 
    }
