@@ -3,34 +3,32 @@ const ImageRepository = require("../repository/ImageRepository");
 const categoryRepository = new CategoryRepository();
 const imageRepository = new ImageRepository();
 
-const searchCategories = (req, res) => {
+async function searchCategories(req, res) {
    const query = req.query.search;
    let limit = parseInt(req.query.limit);
 
-   categoryRepository.searchCategories(new RegExp('^' + query, "i"), limit)
-      .then((categories) => {
-         res.send(categories);
-      })
-      .catch((error) => {
-         res.statusMessage = error.message;
-         console.error(error);
-         res.status(501).end();
-      });
+   try {
+      const categories = await categoryRepository.searchCategories(new RegExp('^' + query, "i"), limit);
+      res.send(categories);
+   } catch (error) {
+      res.statusMessage = error.message;
+      console.error(error);
+      res.status(501).end();
+   }
 };
 
 async function createCategory(req, res) {
    let title = req.query.categoryTitle.replace(/[{}><*$µ£`()\´#^¨|\[\]]/gi, "");
    if (title === "") title = "undefined";
 
-   await categoryRepository.createCategory(title)
-      .then(result => {
-         res.status(201).send(result);
-      })
-      .catch(error => {
-         res.statusMessage = error.message;
-         console.error(error.message);
-         res.status(501).end();
-      });
+   try {
+      const result = await categoryRepository.createCategory(title);
+      res.status(201).send(result);
+   } catch (error) {
+      res.statusMessage = error.message;
+      console.error(error.message);
+      res.status(501).end();
+   }
 }
 
 async function deleteCategory(req, res) {
