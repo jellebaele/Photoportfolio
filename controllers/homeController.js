@@ -7,10 +7,12 @@ async function getIndex(req, res) {
    try {
       const category = await categoryRepository.searchCategoryByTitle("Thumbnail");
 
-   if (category.length > 0) {
-      const images = await imageRepository.findImagesByCategory(category[0].title);
-      res.render("pages/index", { images: images });
-   }
+      if (category.length > 0) {
+         const images = await imageRepository.findImagesByCategory(category[0].title);
+         res.render("pages/index", { images: images });
+      } else {
+         res.render("pages/index", { images: [] });
+      }
    } catch (error) {
       console.error('HomeController: ' + error);
       res.status(500);
