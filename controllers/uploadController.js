@@ -36,7 +36,8 @@ async function createNewCategoryIfNeeded(req, res, next) {
    await categoryRepository.createCategory(req.query.categoryTitle)
       .then(() => next())
       .catch(error => {
-         res.send(error)
+         res.statusMessage = error.message;
+         res.status(501).end();
       })
 }
 
