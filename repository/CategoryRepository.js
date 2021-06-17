@@ -42,7 +42,9 @@ class CategoryRepository {
         return new Promise((resolve, reject) => {
             CategoryModel.find({ _id: id })
                 .limit(1)
-                .then((result) => resolve(result))
+                .then((result) => {
+                    resolve(result)
+                })
                 .catch((error) => reject(error))
         });
     }
@@ -149,7 +151,7 @@ class CategoryRepository {
                     })
                     .catch(error => reject(error));
             } else {
-                reject("Category does not exist");
+                reject(new Error("Category does not exist"));
             }
         })
     }

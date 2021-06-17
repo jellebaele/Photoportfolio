@@ -23,7 +23,7 @@ class UploadControllerHelper {
       } catch (error) {
          throw new Error(error)
       }
-      
+
    }
 
    async getCategoryTitleAndUpdate(categoryTitle) {
@@ -80,15 +80,15 @@ class UploadControllerHelper {
    }
 
    async deleteAllImagesForCategory(categoryName) {
-      let images = await this.findImagesByCategory(categoryName, 50);
-      for (const image of images) {
-         // console.log(image.img.path);
-         // fs.unlink(image.img.path, (err => {
-         //    if (err) console.log(err);
-         //    else console.log('Deleted file: ' + image.img.path);
-         // }))
-
-      }
+      return new Promise((resolve, reject) => {
+         const filter = { category: categoryName };
+         
+         ImageModel.deleteMany(filter)
+            .then(deletedImages => {
+               resolve(deletedImages);
+            })
+            .catch(error => reject(error))
+      })
    }
 }
 
