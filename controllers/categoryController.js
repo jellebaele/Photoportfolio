@@ -36,26 +36,18 @@ async function createCategory(req, res) {
 async function deleteCategory(req, res) {
    const id = req.query.id;
 
-   await categoryRepository.searchCategoryById(id)
-      .then(categoryToBeDeleted => {
-         if (categoryToBeDeleted.length > 0) {
-            imageRepository.deleteAllImagesForCategory(categoryToBeDeleted[0].title);
-         }
-      })
-      .catch(error => {
-         res.statusMessage = error.message;
-         console.error(error.message);
-         res.status(501).end();
-      });
-
-
-   await categoryRepository.deleteCategory(id)
-      .then(deletedCategory => res.status(200).send(deletedCategory))
-      .catch(error => {
-         res.statusMessage = error.message;
-         console.error(error.message);
-         res.status(501).end();
-      });
+   try {
+      const categoryToBeDeleted = await categoryRepository.searchCategoryById(id);
+      if (categoryToBeDeleted.length > 0) {
+         await imageRepository.deleteAllImagesForCategory(categoryToBeDeleted[0].title);
+      }
+      const deletedCategory = await categoryRepository.deleteCategory(id);
+      res.status(200).send(deletedCategory);
+   } catch (error) {
+      res.statusMessage = error.message;
+      console.error(error.message);
+      res.status(501).end();
+   }
 }
 
 async function patchCategoryTitle(req, res) {
