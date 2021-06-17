@@ -27,68 +27,54 @@ class UploadControllerHelper {
    }
 
    async getCategoryTitleAndUpdate(categoryTitle) {
-      return new Promise((resolve, reject) => {
-         categoryRepository.updateCategoryAmountOfPicturesByTitle(categoryTitle, 1)
-            .then(result => {
-               resolve(result.updatedCategory.title)
-            })
-            .catch(error => {
-               reject(error)
-            })
-      });
+      try {
+         const result = await categoryRepository.updateCategoryAmountOfPicturesByTitle(categoryTitle, 1);
+         return result.updatedCategory.title;
+      } catch (error) {
+         throw error;
+      }
    }
 
    async GetNewIndex() {
-      return new Promise((resolve, reject) => {
-         ImageModel.find()
-            .sort({ $natural: -1 })
-            .limit(1)
-            .then((result) => {
-               if (result.length > 0) resolve(result[0].index + 1);
-               else resolve(0);
-            })
-            .catch((error) => reject(error));
-      });
+      try {
+         const lastImageUploaded = await ImageModel.find().sort({ $natural: -1 }).limit(1);
+         if (lastImageUploaded.length > 0) return lastImageUploaded[0].index + 1;
+         else return 0;
+      } catch (error) {
+         throw error;
+      }
+
    }
 
    async findImagesByCategory(categoryName, limit = 50) {
-      return new Promise((resolve, reject) => {
-         ImageModel.find({ category: categoryName })
-            .limit(limit)
-            .then((images) => {
-               resolve(images);
-            })
-            .catch((error) => {
-               reject(error);
-            });
-      })
+      try {
+         return await ImageModel.find({ category: categoryName }).limit(limit);
+      } catch (error) {
+         throw error;
+      }
    }
 
    async updateImagesByCategory(categoryName, newCategoryName) {
-      return new Promise((resolve, reject) => {
-         const filter = { category: categoryName };
-         const updateImage = {
-            $set: { category: newCategoryName }
-         };
+      const filter = { category: categoryName };
+      const updateImage = {
+         $set: { category: newCategoryName }
+      };
 
-         ImageModel.updateMany(filter, updateImage)
-            .then(updatedImages => {
-               resolve(updatedImages)
-            })
-            .catch(error => reject(error))
-      })
+      try {
+         return await ImageModel.updateMany(filter, updateImage);
+      } catch (error) {
+         throw error;
+      }
    }
 
    async deleteAllImagesForCategory(categoryName) {
-      return new Promise((resolve, reject) => {
-         const filter = { category: categoryName };
-         
-         ImageModel.deleteMany(filter)
-            .then(deletedImages => {
-               resolve(deletedImages);
-            })
-            .catch(error => reject(error))
-      })
+      const filter = { category: categoryName };
+
+      try {
+         return await ImageModel.deleteMany(filter);
+      } catch (error) {
+         throw error;
+      }
    }
 }
 
