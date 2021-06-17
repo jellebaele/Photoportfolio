@@ -52,6 +52,10 @@ body {
   align-self: flex-start;
 }
 
+.close-icon {
+  color: inherit;
+}
+
 .alert .message-title {
   padding: 0 5px;
   align-self: center;
