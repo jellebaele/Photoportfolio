@@ -51,37 +51,30 @@ async function deleteCategory(req, res) {
 async function patchCategoryTitle(req, res) {
    const id = req.query.id;
    const newTitle = req.query.newTitle;
-   let oldCategory = await categoryRepository.searchCategoryById(id);
 
-   await categoryRepository.updateCategoryById(id, newTitle)
-      .then(updatedCategory => {
-         if (oldCategory.length > 0) {
-            imageRepository.updateImagesByCategory(oldCategory[0].title, newTitle)
-               .then(updatedImages => {
-                  res.status(200).json({
-                     updatedCategory: updatedCategory,
-                     updatedImages: updatedImages
-                  })
-               })
-               .catch(error => {
-                  res.statusMessage = error.message;
-                  console.error(error.message);
-                  res.status(501).end();
-               })
-         } else {
-            res.status(200).json({
-               updatedCategory: updatedCategory,
-               updatedImages: {
-                  ok: 0, n: 0, nModified: 0
-               }
-            })
-         }
-      })
-      .catch(error => {
-         res.statusMessage = error.message;
-         console.error(error.message);
-         res.status(501).end();
-      })
+   try {
+      const oldCategory = await categoryRepository.searchCategoryById(id);
+      const updatedCategory = await categoryRepository.updateCategoryById(id, newTitle);
+
+      if (oldCategory.length > 0) {
+         const updatedImages = await imageRepository.updateImagesByCategory(oldCategory[0].title, newTitle);
+         res.status(200).json({
+            updatedCategory: updatedCategory,
+            updatedImages: updatedImages
+         })
+      } else {
+         res.status(200).json({
+            updatedCategory: updatedCategory,
+            updatedImages: {
+               ok: 0, n: 0, nModified: 0
+            }
+         })
+      }
+   } catch (error) {
+      res.statusMessage = error.message;
+      console.error(error.message);
+      res.status(501).end();
+   }
 }
 
 module.exports = {
