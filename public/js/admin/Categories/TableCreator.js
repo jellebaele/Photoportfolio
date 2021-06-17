@@ -40,18 +40,14 @@ class TableCreator {
         })
             .then((response) => {
                 if (response.status !== 200) {
-                    throw new Error("Something went wrong with the search for categories");
+                    throw new Error("Er ging iets fout bij het ophalen van de categoriën!");
                 }
                 return response.json();
             })
             .then((response) => {
                 return response;
             })
-            .catch((error) => {
-                console.error(error);
-                console.log("error");
-                this.popupHandler.showWarning(error.message);
-            })
+            .catch((error) => this.popupHandler.showWarning(error.message))
     }
 
     async createNewCategory(title) {
@@ -59,15 +55,17 @@ class TableCreator {
             method: "POST"
         })
             .then(response => {
-                console.log(response);
-                response.json()
+                console.log(response.status);
+                if (response.status !== 201) {
+                    throw new Error(`Er ging iets fout bij het creëeren van een nieuwe categorie met title '${title}'!`);
+                }
+                return response.json()
             })
             .then(response => {
-                // console.log(response);
-                // console.log(response.status);
                 this.GenerateTable();
+                this.popupHandler.showSucces(`Nieuwe categorie met title '${response.newCategory.title}' succesvol aangemaakt!`)
             })
-            .catch(error => console.error(error))
+            .catch(error => this.popupHandler.showWarning(error.message))
     }
 
     populateResults(results) {
@@ -203,53 +201,67 @@ class TableCreator {
     }
 
     deleteHandler(id, title) {
-        if (confirm(`Wil je categorie '${title}' verwijderen?`)) {
-            this.deleteCategory(id).then((response) => {
-                console.log("Category deleted succesfully");
-                return;
-            }).catch(error => console.error(error))
-        } else {
-            console.log("Category not deleted");
+        if (confirm(`Wil je categorie '${title}' met alle bijhorende foto's verwijderen?`)) {
+            this.deleteCategory(id, title)
+                .then((response) => {
+                    this.popupHandler.showSucces(`De categorie met titel '${title}' met alle bijhorende foto's is succesvol verwijderd!`);
+                    return;
+                })
+                .catch(error => this.popupHandler.showWarning(error.message));
         }
     }
 
     saveNewTitle(id, oldTitle, newTitle) {
-        if (confirm(`Wil je categorie ${oldTitle} hernoemen naar ${newTitle}?`)) {
-            this.updateTitle(id, newTitle).then(response => {
-                console.log('Category updated succesfully');
-                this.title = newTitle;
-                this.cancelEdit(id);
-            })
-        } else {
-            this.cancelEdit(id);
-        }
+        if (confirm(`Wil je categorie '${oldTitle}' hernoemen naar '${newTitle}'?`)) {
+            this.updateTitle(id, oldTitle, newTitle)
+                .then(response => {
+                    this.title = newTitle;
+                    this.popupHandler.showSucces(`De categorie hernoemd naar '${newTitle}' en bijhorende ${response.updatedImages.nModified} foto('s) bijgewerkt!`)
+                })
+                .catch(error => {
+                    this.popupHandler.showWarning(error.message);
+                })
+        } 
+        this.cancelEdit(id);
+        
     }
 
-    async deleteCategory(id) {
+    async deleteCategory(id, title) {
         return await fetch(`${this.searchUrl}?id=${id}`, {
             method: "DELETE"
         })
-            .then(response => response.json())
             .then(response => {
-                console.log(response.status);
+                if (response.status !== 200) {
+                    throw new Error(`Er ging iets fout bij het verwijderen van categorie '${title}'!`);
+                }
+                return response.json();
+            })
+            .then(response => {
                 this.GenerateTable();
             })
-            .catch(error => console.error(error))
+            .catch(error => {
+                throw new Error(error.message)
+            })
     }
 
-    async updateTitle(id, newTitle) {
+    async updateTitle(id, oldTitle, newTitle) {
         return await fetch(`${this.searchUrl}/title?id=${id}&newTitle=${newTitle}`, {
             method: "PATCH"
         })
             .then(response => {
-                console.log(response.status);
-                return response.json()
+                if (response.status !== 200) {
+                    throw new Error(`Er ging iets fout bij het hernoemen van categorie '${oldTitle}'!`);
+                }
+                return response.json();
             })
             .then(response => {
-                console.log(response);
                 this.GenerateTable();
+                return response;
             })
-            .catch(error => console.error(error));
+            .catch(error => {
+                this.title = oldTitle;
+                throw new Error(error.message)
+            });
     }
 }
 

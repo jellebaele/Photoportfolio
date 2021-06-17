@@ -23,10 +23,12 @@ async function createCategory(req, res) {
 
    await categoryRepository.createCategory(title)
       .then(result => {
-         res.send(result);
+         res.status(201).send(result);
       })
       .catch(error => {
-         res.status(500).send(error);
+         res.statusMessage = error.message;
+         console.error(error.message);
+         res.status(501).end();
       });
 }
 
@@ -39,12 +41,20 @@ async function deleteCategory(req, res) {
             imageRepository.deleteAllImagesForCategory(categoryToBeDeleted[0].title);
          }
       })
-      .catch(error => res.status(500).send("Failed: " + error));
-   
-   
+      .catch(error => {
+         res.statusMessage = error.message;
+         console.error(error.message);
+         res.status(501).end();
+      });
+
+
    await categoryRepository.deleteCategory(id)
       .then(deletedCategory => res.status(200).send(deletedCategory))
-      .catch(error => res.status(500).send("Failed: " + error));
+      .catch(error => {
+         res.statusMessage = error.message;
+         console.error(error.message);
+         res.status(501).end();
+      });
 }
 
 async function patchCategoryTitle(req, res) {
@@ -62,9 +72,12 @@ async function patchCategoryTitle(req, res) {
                      updatedImages: updatedImages
                   })
                })
-               .catch(error => res.status(500).json({ message: error }))
+               .catch(error => {
+                  res.statusMessage = error.message;
+                  console.error(error.message);
+                  res.status(501).end();
+               })
          } else {
-            console.log('No objects');
             res.status(200).json({
                updatedCategory: updatedCategory,
                updatedImages: {
@@ -73,8 +86,11 @@ async function patchCategoryTitle(req, res) {
             })
          }
       })
-      // TODO Change error code
-      .catch(error => res.status(500).json({ message: error }))
+      .catch(error => {
+         res.statusMessage = error.message;
+         console.error(error.message);
+         res.status(501).end();
+      })
 }
 
 module.exports = {
