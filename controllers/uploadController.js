@@ -18,6 +18,7 @@ async function postImages(req, res) {
       res.status(201).json({ images: newImages, amount: newImages.length, category: newImages[0].category });
    } catch (error) {
       res.statusMessage = error.message;
+      console.error(error);
       res.status(400).end();
    }
 };
@@ -26,6 +27,7 @@ const uploadFiles = (req, res, next) => {
    MulterUploadFiles(req, res, function (error) {
       if (error) {
          res.statusMessage = error.message;
+         console.error(error);
          res.status(501).end();
       }
       next();
@@ -37,6 +39,7 @@ async function createNewCategoryIfNeeded(req, res, next) {
       .then(() => next())
       .catch(error => {
          res.statusMessage = error.message;
+         console.error(error);
          res.status(501).end();
       })
 }
