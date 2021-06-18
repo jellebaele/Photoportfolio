@@ -5,10 +5,10 @@ const imageRepository = new ImageRepository();
 
 async function getIndexOverviewCategory(req, res) {
    try {
-      const category = await categoryRepository.searchCategory(req.params.category);
+      const category = await categoryRepository.searchCategoryByTitle(req.params.category);
       if (category.length > 0) {
-         const images = await imageRepository.findImagesByCategory(result[0].title);
-         res.send(images);
+         const images = await imageRepository.findImagesByCategory(category[0].title);
+         res.render("pages/categorie-overview", { categoryTitle: category[0].title, images: images });
       } else {
          //TODO
       }
