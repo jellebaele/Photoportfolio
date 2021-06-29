@@ -22,7 +22,7 @@ async function createCategory(req, res) {
    if (title === "") title = "undefined";
 
    try {
-      const result = await categoryRepository.createCategory(title);
+      const result = await categoryRepository.create(title);
       res.status(201).send(result);
    } catch (error) {
       res.statusMessage = error.message;
@@ -35,11 +35,11 @@ async function deleteCategory(req, res) {
    const id = req.query.id;
 
    try {
-      const categoryToBeDeleted = await categoryRepository.searchCategoryById(id);
+      const categoryToBeDeleted = await categoryRepository.searchById(id);
       if (categoryToBeDeleted.length > 0) {
          await imageRepository.deleteAllImagesForCategory(categoryToBeDeleted[0].title);
       }
-      const deletedCategory = await categoryRepository.deleteCategory(id);
+      const deletedCategory = await categoryRepository.deleteById(id);
       res.status(200).send(deletedCategory);
    } catch (error) {
       res.statusMessage = error.message;
@@ -53,8 +53,8 @@ async function patchCategoryTitle(req, res) {
    const newTitle = req.query.newTitle;
 
    try {
-      const oldCategory = await categoryRepository.searchCategoryById(id);
-      const updatedCategory = await categoryRepository.updateCategoryById(id, newTitle);
+      const oldCategory = await categoryRepository.searchById(id);
+      const updatedCategory = await categoryRepository.updateById(id, newTitle);
 
       if (oldCategory.length > 0) {
          const updatedImages = await imageRepository.updateImagesByCategory(oldCategory[0].title, newTitle);

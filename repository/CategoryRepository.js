@@ -3,10 +3,10 @@ const path = require("path");
 const CategoryModel = require("../models/Category");
 
 class CategoryRepository {
-    async createCategory(categoryTitle, amountOfPictures = 0) {
+    async create(categoryTitle, amountOfPictures = 0) {
         if (categoryTitle === "") categoryTitle = "undefined";
         try {
-            const category = await this.searchCategoryByTitle(categoryTitle);
+            const category = await this.searchByTitle(categoryTitle);
             if (category < 1) {
                 const newCategory = await this.createNewCategory(categoryTitle, amountOfPictures);
 
@@ -27,7 +27,7 @@ class CategoryRepository {
         }
     }
 
-    async searchCategoryByTitle(title) {
+    async searchByTitle(title) {
         try {
             return await CategoryModel.find({ title: title }).limit(1);
         } catch (error) {
@@ -35,7 +35,7 @@ class CategoryRepository {
         }
     }
 
-    async searchCategoryById(id) {
+    async searchById(id) {
         try {
             return await CategoryModel.find({ _id: id }).limit(1);
         } catch (error) {
@@ -80,9 +80,9 @@ class CategoryRepository {
         })
     }
 
-    async updateCategoryAmountOfPicturesByTitle(categoryTitle, amountOfPictures) {
+    async updateAmountOfPicturesByTitle(categoryTitle, amountOfPictures) {
         try {
-            const category = await this.searchCategoryByTitle(categoryTitle);
+            const category = await this.searchByTitle(categoryTitle);
 
             if (category.length > 0) {
                 const filter = { title: category[0].title };
@@ -103,7 +103,7 @@ class CategoryRepository {
         }
     }
 
-    async updateCategoryById(id, newTitle) {
+    async updateById(id, newTitle) {
         const filter = { _id: id };
         const updateCategory = {
             $set: { title: newTitle }
@@ -116,9 +116,9 @@ class CategoryRepository {
         }
     }
 
-    async deleteCategory(id) {
+    async deleteById(id) {
         try {
-            const category = await this.searchCategoryById(id);
+            const category = await this.searchById(id);
 
             if (category.length > 0) {
                 const deletedCategory = await CategoryModel.deleteOne({ _id: id });

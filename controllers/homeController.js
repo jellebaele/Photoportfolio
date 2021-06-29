@@ -5,7 +5,7 @@ const imageRepository = new ImageRepository();
 
 async function getIndex(req, res) {
    try {
-      const category = await categoryRepository.searchCategoryByTitle("Thumbnail");
+      const category = await categoryRepository.searchByTitle("Thumbnail");
 
       if (category.length > 0) {
          const images = await imageRepository.findImagesByCategory(category[0].title);

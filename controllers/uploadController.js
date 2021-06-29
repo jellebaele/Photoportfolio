@@ -40,7 +40,7 @@ async function uploadFiles(req, res, next) {
 
 async function createNewCategoryIfNeeded(req, res, next) {
    try {
-      await categoryRepository.createCategory(req.query.categoryTitle)
+      await categoryRepository.create(req.query.categoryTitle)
       next();
    } catch (error) {
       res.statusMessage = error.message;
