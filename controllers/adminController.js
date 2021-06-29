@@ -9,7 +9,7 @@ function getIndexCategories(req, res) {
 
 async function getEditCategory(req, res) {
    try {
-      const category = await categoryRepository.searchByTitle(req.params.category);
+      const category = await categoryRepository.searchCategories(req.params.category, 1);
       if (category.length > 0) {
          const images = await imageRepository.findImagesByCategory(category[0].title);
          res.render("pages/admin/edit-category-overview", { categoryTitle: category[0].title, images: images });

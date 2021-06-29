@@ -5,7 +5,7 @@ const imageRepository = new ImageRepository();
 
 async function getIndexOverviewCategory(req, res) {
    try {
-      const category = await categoryRepository.searchByTitle(req.params.category);
+      const category = await categoryRepository.searchCategories(req.params.category, 1);
       if (category.length > 0) {
          const images = await imageRepository.findImagesByCategory(category[0].title);
          res.render("pages/categorie-overview", { categoryTitle: category[0].title, images: images });
