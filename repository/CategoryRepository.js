@@ -72,15 +72,16 @@ class CategoryRepository {
         })
     }
 
-    async incrementAmountOfPicturesByTitle(categoryTitle, amountOfPictures) {
+    async incrementAmountOfPicturesByTitle(categoryTitle, sum = 1) {
         try {
             const category = await this.searchByTitle(categoryTitle, 1);
 
             if (category.length > 0) {
+                const newAmountOfPictures = await category[0].amountOfPictures + sum;
                 const filter = { title: category[0].title };
                 const updateCategory = {
                     $set: {
-                        amountOfPictures: ++category[0].amountOfPictures,
+                        amountOfPictures: newAmountOfPictures,
                     },
                 };
 
