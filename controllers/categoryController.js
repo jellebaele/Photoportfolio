@@ -8,7 +8,7 @@ async function searchCategories(req, res) {
    let limit = parseInt(req.query.limit);
 
    try {
-      const categories = await categoryRepository.searchCategories(new RegExp('^' + query, "i"), limit);
+      const categories = await categoryRepository.searchByTitle(new RegExp('^' + query, "i"), limit);
       res.send(categories);
    } catch (error) {
       res.statusMessage = error.message;
@@ -54,7 +54,7 @@ async function patchCategoryTitle(req, res) {
 
    try {
       const oldCategory = await categoryRepository.searchById(id);
-      const updatedCategory = await categoryRepository.updateById(id, newTitle);
+      const updatedCategory = await categoryRepository.updateTitleById(id, newTitle);
 
       if (oldCategory.length > 0) {
          const updatedImages = await imageRepository.updateImagesByCategory(oldCategory[0].title, newTitle);

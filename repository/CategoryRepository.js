@@ -95,7 +95,7 @@ class CategoryRepository {
         }
     }
 
-    async updateById(id, newTitle) {
+    async updateTitleById(id, newTitle) {
         const filter = { _id: id };
         const updateCategory = {
             $set: { title: newTitle }
