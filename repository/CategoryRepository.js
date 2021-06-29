@@ -72,7 +72,7 @@ class CategoryRepository {
         })
     }
 
-    async updateAmountOfPicturesByTitle(categoryTitle, amountOfPictures) {
+    async incrementAmountOfPicturesByTitle(categoryTitle, amountOfPictures) {
         try {
             const category = await this.searchByTitle(categoryTitle, 1);
 

@@ -28,7 +28,7 @@ class UploadControllerHelper {
 
    async getCategoryTitleAndUpdate(categoryTitle) {
       try {
-         const result = await categoryRepository.updateAmountOfPicturesByTitle(categoryTitle, 1);
+         const result = await categoryRepository.incrementAmountOfPicturesByTitle(categoryTitle, 1);
          return result.updatedCategory.title;
       } catch (error) {
          throw error;
