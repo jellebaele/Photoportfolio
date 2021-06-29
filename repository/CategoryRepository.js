@@ -6,7 +6,7 @@ class CategoryRepository {
     async create(categoryTitle, amountOfPictures = 0) {
         if (categoryTitle === "") categoryTitle = "undefined";
         try {
-            const category = await this.searchCategories(categoryTitle, 1);
+            const category = await this.searchByTitle(categoryTitle, 1);
             if (category < 1) {
                 const newCategory = await this.createNewCategory(categoryTitle, amountOfPictures);
 
@@ -35,7 +35,7 @@ class CategoryRepository {
         }
     }
 
-    async searchCategories(title, limit = 50) {
+    async searchByTitle(title, limit = 50) {
         if (limit > 50) limit = 50;
 
         try {
@@ -74,7 +74,7 @@ class CategoryRepository {
 
     async updateAmountOfPicturesByTitle(categoryTitle, amountOfPictures) {
         try {
-            const category = await this.searchCategories(categoryTitle, 1);
+            const category = await this.searchByTitle(categoryTitle, 1);
 
             if (category.length > 0) {
                 const filter = { title: category[0].title };
