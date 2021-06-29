@@ -1,6 +1,7 @@
 const fs = require('fs');
 const path = require("path");
 const CategoryModel = require("../models/Category");
+const UploadDirectory = require("../general/UploadDirectory");
 
 class CategoryRepository {
     async create(categoryTitle, amountOfPictures = 0) {
@@ -53,23 +54,11 @@ class CategoryRepository {
             });
 
             const newCategorySaved = await newCategory.save();
-            await this.createDirectory(categoryTitle);
+            await this.createDirectories(categoryTitle);
             return newCategorySaved;
         } catch (error) {
             throw error;
         }
-    }
-
-    createDirectory(categoryTitle) {
-        fs.mkdir(path.join(`${__dirname}/../uploads/categories/${categoryTitle}`), (err) => {
-            if (err) throw err;
-        })
-    }
-
-    removeDirectory(categoryTitle) {
-        fs.rmdir(path.join(`${__dirname}/../uploads/categories/${categoryTitle}`), { recursive: true }, (err) => {
-            if (err) throw (err);
-        })
     }
 
     async incrementAmountOfPicturesByTitle(categoryTitle, sum = 1) {
@@ -115,7 +104,7 @@ class CategoryRepository {
 
             if (category.length > 0) {
                 const deletedCategory = await CategoryModel.deleteOne({ _id: id });
-                await this.removeDirectory(category[0].title);;
+                await this.removeDirectories(category[0].title);;
                 return deletedCategory;
             } else {
                 throw new Error("Category does not exist");
@@ -123,6 +112,26 @@ class CategoryRepository {
         } catch (error) {
             throw error;
         }
+    }
+
+    async createDirectories(categoryTitle) {
+        await fs.mkdir(path.join(UploadDirectory.getRootCategory(categoryTitle)), (err) => {
+            if (err) throw err;
+        });
+
+        await fs.mkdir(path.join(UploadDirectory.getOriginalImageDirectory(categoryTitle)), (err) => {
+            if (err) throw err;
+        });
+
+        await fs.mkdir(path.join(UploadDirectory.getResizedImageDirectory(categoryTitle)), (err) => {
+            if (err) throw err;
+        });
+    }
+
+    removeDirectories(categoryTitle) {
+        fs.rmdir(path.join(`${__dirname}/../uploads/categories/${categoryTitle}`), { recursive: true }, (err) => {
+            if (err) throw (err);
+        })
     }
 }
 

@@ -20,7 +20,7 @@ function getResizedImageDirectory(categoryTitle) {
     return path.join(`${root}/${categoryTitle}/${RESIZED_SIZE_FOLDER_NAME}`);
 }
 
-function getResizedImageDirectory(categoryTitle, imageTitle) {
+function getResizedImageDirectoryWithImageTitle(categoryTitle, imageTitle) {
     return path.join(`${root}/${categoryTitle}/${RESIZED_SIZE_FOLDER_NAME}/${imageTitle}`);
 }
 
@@ -28,5 +28,6 @@ module.exports = {
     getRoot,
     getRootCategory,
     getOriginalImageDirectory,
-    getResizedImageDirectory
+    getResizedImageDirectory,
+    getResizedImageDirectoryWithImageTitle
 }

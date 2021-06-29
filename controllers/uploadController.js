@@ -66,7 +66,7 @@ async function SaveNewImages(req) {
 
 const storageThumbnail = multer.diskStorage({
    destination: (req, file, callback) => {
-      callback(null, UploadDirectory.getRootCategory(req.body.category));
+      callback(null, UploadDirectory.getOriginalImageDirectory(req.body.category));
    },
    filename: (req, file, callback) => {
       const match = ["image/png", "image/jpeg"];
@@ -92,7 +92,7 @@ async function ResizeAndUploadImages(req, res, next) {
                 fit: 'contain'
              })
              .jpeg({ quality: 90 })
-             .toFile(UploadDirectory.getResizedImageDirectory(req.body.category, image.filename));
+             .toFile(UploadDirectory.getResizedImageDirectoryWithImageTitle(req.body.category, image.filename));
          
          //TODO Make sure this path is also added to upload in DB
       })
