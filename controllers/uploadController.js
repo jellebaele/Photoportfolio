@@ -1,9 +1,13 @@
 const multer = require("multer");
 const path = require("path");
+const sharp = require("sharp");
+const fs = require("fs");
 const ImageRepository = require("../repository/ImageRepository");
 const CategoryRepository = require("../repository/CategoryRepository");
+
 const imageRepository = new ImageRepository();
 const categoryRepository = new CategoryRepository();
+const DIRECTORY = `${__dirname}/../uploads/categories/`
 
 const getIndex = (req, res) => {
    res.render("pages/admin/upload-images");
@@ -23,7 +27,7 @@ async function postImages(req, res) {
    }
 };
 
-const uploadFiles = (req, res, next) => {
+async function uploadFiles(req, res, next) {
    MulterUploadFiles(req, res, function (error) {
       if (error) {
          res.statusMessage = error.message;
@@ -40,8 +44,8 @@ async function createNewCategoryIfNeeded(req, res, next) {
       next();
    } catch (error) {
       res.statusMessage = error.message;
-         console.error(error);
-         res.status(501).end();
+      console.error(error);
+      res.status(501).end();
    }
 }
 
@@ -77,9 +81,32 @@ const storageThumbnail = multer.diskStorage({
 
 const MulterUploadFiles = multer({ storage: storageThumbnail }).array("files", 10);
 
+async function ResizeAndUploadImages(req, res, next) {
+   if (!req.files) return next();
+   try {
+      console.log('TEST');
+      await req.files.map(async image => {
+         let small = await sharp(image.path)
+             .resize({
+                width: 240,
+                fit: 'contain'
+             })
+             .jpeg({ quality: 90 })
+             .toFile(path.resolve(image.destination,'resized', image.filename))
+      })
+   } catch (error) {
+      res.statusMessage = error.message;
+      console.error(error);
+      res.status(501).end();
+   }
+
+   next();
+}
+
 module.exports = {
    getIndex,
    postImages,
    uploadFiles,
-   createNewCategoryIfNeeded
+   createNewCategoryIfNeeded,
+   ResizeAndUploadImages
 };
