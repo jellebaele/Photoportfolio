@@ -1,4 +1,5 @@
 const fs = require('fs');
+const fsExtra = require('fs-extra');
 const path = require("path");
 const CategoryModel = require("../models/Category");
 const UploadDirectory = require("../general/UploadDirectory");
@@ -92,7 +93,11 @@ class CategoryRepository {
         };
 
         try {
-            return await CategoryModel.updateOne(filter, updateCategory);
+            const oldCategory = await this.searchById(id);
+            if (oldCategory.length > 0) {
+                await CategoryModel.updateOne(filter, updateCategory);
+                this.renameDirectory(oldCategory[0].title, newTitle);
+            }            
         } catch (error) {
             throw error;
         }
@@ -117,14 +122,27 @@ class CategoryRepository {
     async createDirectories(categoryTitle) {
         await fs.mkdir(path.join(UploadDirectory.getRootCategory(categoryTitle)), (err) => {
             if (err) throw err;
+            return;
         });
 
         await fs.mkdir(path.join(UploadDirectory.getOriginalImageDirectory(categoryTitle)), (err) => {
             if (err) throw err;
+            return;
         });
 
         await fs.mkdir(path.join(UploadDirectory.getResizedImageDirectory(categoryTitle)), (err) => {
             if (err) throw err;
+            return;
+        });
+    }
+
+    async renameDirectory(oldTitle, newTitle) {
+        const srcPath = UploadDirectory.getRootCategory(oldTitle);
+        const destPath = UploadDirectory.getRootCategory(newTitle);
+
+        await fsExtra.copy(srcPath, destPath, (err) => {
+            if (err) throw err;
+            this.removeDirectories(oldTitle);
         });
     }
 
