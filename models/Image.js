@@ -6,7 +6,11 @@ const ImageSchema = new Schema({
       type: String,
    },
    img: {
-      path: {
+      path_original: {
+         type: String,
+         default: "Not found",
+      },
+      path_resized: {
          type: String,
          default: "Not found",
       },

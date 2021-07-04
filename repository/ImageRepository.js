@@ -6,10 +6,12 @@ const categoryRepository = new CategoryRepository();
 class UploadControllerHelper {
    async SaveNewImage(image, categoryTitle, newImages, description) {
       try {
+         // console.log("uploads" + image.path.split("uploads")[1]);
+         // console.log(image);
          const newImage = new ImageModel({
             title: image.originalname,
             img: {
-               path: "uploads" + image.path.split("uploads")[1],
+               path_original: "uploads" + image.path.split("uploads")[1],
                mimetype: image.mimetype,
                size: image.size,
                encoding: image.encoding,
