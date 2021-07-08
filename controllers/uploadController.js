@@ -8,24 +8,63 @@ const UploadDirectory = require("../general/UploadDirectory");
 const imageRepository = new ImageRepository();
 const categoryRepository = new CategoryRepository();
 
-
 const getIndex = (req, res) => {
    res.render("pages/admin/upload-images");
 };
 
 async function postImages(req, res) {
+
    try {
-      const newImages = await SaveNewImages(req);
-      if (newImages.length < 1) {
-         throw new Error(`Attempt to upload ${newImages.length} image(s). Select one or more images to upload`)
+      const images = req.files;
+      const category = req.body.category;
+      const descriptions = req.body.descriptions.split(",");
+
+      const resizedImages = await resizeMultipleImages(images, category);
+      const storedImages = await saveImagesInDb(images, resizedImages, category, descriptions);
+
+      if (storedImages.length < 1) {
+         throw new Error(`Attempt to upload ${storedImages.length} image(s). Select one or more images to upload`)
       }
-      res.status(201).json({ images: newImages, amount: newImages.length, category: newImages[0].category });
+      res.status(201).json({ images: storedImages, amount: storedImages.length, category: category });
+
    } catch (error) {
       res.statusMessage = error.message;
       console.error(error);
       res.status(400).end();
    }
-};
+}
+
+async function resizeMultipleImages(images, category) {
+   return new Promise(async (resolve, reject) => {
+      if (!images) reject("No images");
+
+      const resizedImages = images.map(image => resizeSingleImage(image, category));
+
+      Promise.all(resizedImages)
+         .then(resizedImages => resolve(resizedImages))
+         .catch(error => reject(error))
+   });
+}
+
+async function resizeSingleImage(image, category) {
+   return new Promise(async (resolve, reject) => {
+      const uploadPath = UploadDirectory.getResizedImageDirectoryWithImageTitle(category, image.filename)
+
+      await sharp(image.path)
+         .resize({
+            width: 240,
+            fit: 'contain'
+         })
+         .jpeg({ quality: 90 })
+         .toFile(uploadPath)
+         .then(resized => {
+            resized.category = category;
+            resized.path = uploadPath;
+            resolve(resized);
+         })
+         .catch(error => reject(error));
+   });
+}
 
 async function uploadFiles(req, res, next) {
    MulterUploadFiles(req, res, function (error) {
@@ -49,14 +88,12 @@ async function createNewCategoryIfNeeded(req, res, next) {
    }
 }
 
-async function SaveNewImages(req) {
+async function saveImagesInDb(images, resizedImages, category, descriptions)
+{
    try {
       let newImages = [];
-      let descriptions = req.body.descriptions.split(",");
-
-      for (let i = 0; i < req.files.length; i++) {
-         const image = req.files[i];
-         await imageRepository.SaveNewImage(image, req.body.category, newImages, descriptions[i]);
+      for (let i = 0; i < images.length; i++) {
+         await imageRepository.SaveNewImage(images[i], resizedImages[i], category, descriptions[i], newImages);
       }
       return newImages;
    } catch (error) {
@@ -81,34 +118,9 @@ const storageThumbnail = multer.diskStorage({
 
 const MulterUploadFiles = multer({ storage: storageThumbnail }).array("files", 10);
 
-async function ResizeAndUploadImages(req, res, next) {
-   if (!req.files) return next();
-   
-   try {
-      await req.files.map(async image => {
-         let small = await sharp(image.path)
-             .resize({
-                width: 240,
-                fit: 'contain'
-             })
-             .jpeg({ quality: 90 })
-             .toFile(UploadDirectory.getResizedImageDirectoryWithImageTitle(req.body.category, image.filename));
-         
-         //TODO Make sure this path is also added to upload in DB
-      })
-   } catch (error) {
-      res.statusMessage = error.message;
-      console.error(error);
-      res.status(501).end();
-   }
-
-   next();
-}
-
 module.exports = {
    getIndex,
    postImages,
    uploadFiles,
-   createNewCategoryIfNeeded,
-   ResizeAndUploadImages
+   createNewCategoryIfNeeded
 };

@@ -3,7 +3,7 @@ const uploadController = require("../../controllers/uploadController");
 const categoryController = require("../../controllers/categoryController");
 
 router.post("/upload", uploadController.createNewCategoryIfNeeded, uploadController.uploadFiles,
-    uploadController.ResizeAndUploadImages, uploadController.postImages);
+    uploadController.postImages);
 
 router.get("/categories", categoryController.searchCategories);
 router.post("/categories", categoryController.createCategory)
