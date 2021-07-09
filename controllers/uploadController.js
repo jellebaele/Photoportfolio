@@ -2,7 +2,7 @@ const multer = require("multer");
 const sharp = require("sharp");
 const ImageRepository = require("../repository/ImageRepository");
 const CategoryRepository = require("../repository/CategoryRepository");
-const UploadDirectory = require("../general/UploadDirectory");
+const UploadDirectory = require("../configuration/uploadDirectory");
 const storage = require("../configuration/multerStorage");
 
 const imageRepository = new ImageRepository();

@@ -2,7 +2,7 @@ const fs = require('fs');
 const fsExtra = require('fs-extra');
 const path = require("path");
 const CategoryModel = require("../models/Category");
-const UploadDirectory = require("../general/UploadDirectory");
+const UploadDirectory = require("../configuration/uploadDirectory");
 
 class CategoryRepository {
     async create(categoryTitle, amountOfPictures = 0) {
