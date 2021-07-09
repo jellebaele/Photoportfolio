@@ -48,7 +48,11 @@ class UploadControllerHelper {
 
    async findImagesByCategory(categoryName, limit = 50) {
       try {
-         return await ImageModel.find({ category: categoryName }).limit(limit);
+         if (limit !== -1) {
+            return await ImageModel.find({ category: categoryName }).limit(limit);
+         } else {
+            return await ImageModel.find({ category: categoryName });
+         }          
       } catch (error) {
          throw error;
       }
