@@ -8,17 +8,45 @@ const imageRepository = new ImageRepository();
 const categoryRepository = new CategoryRepository();
 const imageResizer = new ImageResizer();
 
+const MULTER_UPLOAD_ARRAY_NAME = 'files';
+const RESIZE_WIDTH = 240;
+const RESIZE_FIT = 'contain';
+
 const getIndex = (req, res) => {
    res.render("pages/admin/upload-images");
 };
 
-async function postImages(req, res) {
+async function createNewCategoryIfNeeded(req, res, next) {
+   try {
+      await categoryRepository.create(req.query.categoryTitle)
+      next();
+   } catch (error) {
+      res.statusMessage = error.message;
+      console.error(error);
+      res.status(501).end();
+   }
+}
+
+async function uploadFilesToDirectory(req, res, next) {
+   MulterUploadFiles(req, res, function (error) {
+      if (error) {
+         res.statusMessage = error.message;
+         console.error(error);
+         res.status(501).end();
+      }
+      next();
+   })
+}
+
+const MulterUploadFiles = multer({ storage: storage }).array(MULTER_UPLOAD_ARRAY_NAME, 10);
+
+async function resizeAndPostImagesInDb(req, res) {
    try {
       const images = req.files;
       const category = req.body.category;
       const descriptions = req.body.descriptions.split(",");
 
-      const resizedImages = await imageResizer.resizeMultipleImages(images, category, 240, 'contain');
+      const resizedImages = await imageResizer.resizeMultipleImages(images, category, RESIZE_WIDTH, RESIZE_FIT);
       const storedImages = await saveImagesInDb(images, resizedImages, category, descriptions);
 
       if (storedImages.length < 1) {
@@ -33,30 +61,7 @@ async function postImages(req, res) {
    }
 }
 
-async function uploadFiles(req, res, next) {
-   MulterUploadFiles(req, res, function (error) {
-      if (error) {
-         res.statusMessage = error.message;
-         console.error(error);
-         res.status(501).end();
-      }
-      next();
-   })
-}
-
-async function createNewCategoryIfNeeded(req, res, next) {
-   try {
-      await categoryRepository.create(req.query.categoryTitle)
-      next();
-   } catch (error) {
-      res.statusMessage = error.message;
-      console.error(error);
-      res.status(501).end();
-   }
-}
-
-async function saveImagesInDb(images, resizedImages, category, descriptions)
-{
+async function saveImagesInDb(images, resizedImages, category, descriptions) {
    try {
       let newImages = [];
       for (let i = 0; i < images.length; i++) {
@@ -68,11 +73,9 @@ async function saveImagesInDb(images, resizedImages, category, descriptions)
    }
 }
 
-const MulterUploadFiles = multer({ storage: storage }).array("files", 10);
-
 module.exports = {
    getIndex,
-   postImages,
-   uploadFiles,
-   createNewCategoryIfNeeded
+   createNewCategoryIfNeeded,
+   uploadFilesToDirectory,
+   resizeAndPostImagesInDb   
 };
