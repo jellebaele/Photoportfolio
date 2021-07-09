@@ -3,7 +3,7 @@
 
 <head>
     <%- include('../../partials/head', {tabTitle:'Katleen Lapaige'}); %>
-    <link rel="stylesheet" type="text/css" href="../../css/index.css">
+    <link rel="stylesheet" type="text/css" href="../../../css/admin/category-overview.css">
     <link rel="icon" href="/images/logo.jpg">
 </head>
 
@@ -19,7 +19,7 @@
     </div>
     <section>
         <header>
-            <link rel="stylesheet" type="text/css" href="../../css/partials/header.css">
+            <link rel="stylesheet" type="text/css" href="../../../css/partials/header.css">
             <%- include('../../partials/header', {title:categoryTitle, subtitle: false}); %>
         </header>
         <main>
@@ -28,7 +28,7 @@
                     
                     <% if(images) { images.forEach(image=> { %>
                         <a class="image-container fade" href="/overview/<%= image.description %>">
-                            <img src=<%= '../../' + image.img.path %> alt="">
+                            <!-- <img src=<%= '../../' + image.img.path %> alt=""> -->
                             <p class="p-text">
                                 <%=image.description %>
                             </p>
@@ -38,11 +38,11 @@
             </section>
         </main>
         <footer>
-            <link rel="stylesheet" href="../../css/partials/footer.css">
+            <link rel="stylesheet" href="../../../css/partials/footer.css">
             <%- include('../../partials/footer'); %>
         </footer>
     </section>
-    <script src="../../js/index.js"> </script>
+    <script src="../../../js/index.js"> </script>
 </body>
 
 </html>

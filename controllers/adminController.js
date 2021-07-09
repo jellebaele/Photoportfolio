@@ -12,12 +12,11 @@ async function getEditCategory(req, res) {
       const category = await categoryRepository.searchByTitle(req.params.category, 1);
       if (category.length > 0) {
          const images = await imageRepository.findImagesByCategory(category[0].title);
-         res.render("pages/admin/edit-category-overview", { categoryTitle: category[0].title, images: images });
+         res.render("pages/admin/category-editor", { categoryTitle: category[0].title, images: images });
       } else {
          //TODO
       }
    } catch (error) {
-      // TODO
       console.error('overviewController: ' + error);
       res.status(500);
       res.send(error);
