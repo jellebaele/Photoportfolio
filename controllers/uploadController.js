@@ -1,9 +1,9 @@
 const multer = require("multer");
-const path = require("path");
 const sharp = require("sharp");
 const ImageRepository = require("../repository/ImageRepository");
 const CategoryRepository = require("../repository/CategoryRepository");
 const UploadDirectory = require("../general/UploadDirectory");
+const storage = require("../configuration/multerStorage");
 
 const imageRepository = new ImageRepository();
 const categoryRepository = new CategoryRepository();
@@ -101,22 +101,7 @@ async function saveImagesInDb(images, resizedImages, category, descriptions)
    }
 }
 
-const storageThumbnail = multer.diskStorage({
-   destination: (req, file, callback) => {
-      callback(null, UploadDirectory.getOriginalImageDirectory(req.body.category));
-   },
-   filename: (req, file, callback) => {
-      const match = ["image/png", "image/jpeg"];
-      if (match.indexOf(file.mimetype) === -1) {
-         return callback(new Error(`'${file.originalname}' is invalid. Only .png/.jpeg files are accepted`), null);
-      }
-
-      let filename = file.originalname.replace(/[{}><*$µ£`()\´#^¨|\[\]]/gi, "");
-      callback(null, filename);
-   },
-});
-
-const MulterUploadFiles = multer({ storage: storageThumbnail }).array("files", 10);
+const MulterUploadFiles = multer({ storage: storage }).array("files", 10);
 
 module.exports = {
    getIndex,
