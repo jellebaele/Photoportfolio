@@ -6,6 +6,7 @@
         <link rel="stylesheet" type="text/css" href="../../css/admin/categories.css">
         <link rel="icon" href="../../images/logo.jpg">
 </head>
+
 <body>
     <header>
         <link rel="stylesheet" type="text/css" href="../../css/partials/header.css">
@@ -17,9 +18,11 @@
             <h2>Categoriën</h2>
             <div class="table">
                 <div class="table-button-section">
-                    <button id="deleteCategories" class="table-top-button"><i class="fa fa-trash fa-trash-top-button" aria-hidden="true"></i>Verwijderen</button>
-                    <button id="createCategory" class="table-top-button"><i class="fa fa-plus" aria-hidden="true"></i>Voeg
-                        toe</button>              
+                    <button id="deleteCategories" class="table-top-button"><i class="fa fa-trash fa-trash-top-button"
+                            aria-hidden="true"></i>Verwijderen</button>
+                    <button id="createCategory" class="table-top-button"><i class="fa fa-plus"
+                            aria-hidden="true"></i>Voeg
+                        toe</button>
                 </div>
                 <table class="table-categories" cellspacing="0">
                     <thead>
@@ -34,11 +37,14 @@
                     </thead>
                     <tbody id="tableBody">
                         <tr class="tr-body">
-                            <!-- <td class="td-checkbox"><input class="table-checkbox" type="checkbox"
+                            <td class="td-checkbox"><input class="table-checkbox" type="checkbox"
                                     id="selectCategoryThumbnail" name="selectCategoryThumbnail"
                                     value="categoryThumbnail">
                             <td id="tdTableTitle">
-                                <input class="td-title-input" type="text" value="Thumbnail">
+                                <a href="www.google.com" class="category-editor-link--disabled">
+                                    <input class="td-title-input category-editor-link--disabled" type="text"
+                                        value="Thumbnail">
+                                </a>
                                 <button id="" class="table-edit"><i class="fa fa-check" aria-hidden="true"></i></button>
                                 <button class="table-edit"><i class="fa fa-times" aria-hidden="true"></i></button>
                             </td>
@@ -47,7 +53,7 @@
                             <td>
                                 <div class="table-delete-spacer"><button class="table-delete"><i class="fa fa-trash"
                                             aria-hidden="true"></i></button></div>
-                            </td> -->
+                            </td>
                         </tr>
                     </tbody>
                 </table>

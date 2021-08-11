@@ -1,5 +1,5 @@
 class TableCreator {
-    constructor(tableTag, searchUrl, popupHandler) {
+    constructor(tableTag, searchUrl, popupHandler, categoryEditorBaseUrl) {
         this.elements = {
             tableBody: tableTag.querySelector("#tableBody"),
             addButton: tableTag.querySelector("#createCategory"),
@@ -8,6 +8,7 @@ class TableCreator {
 
         this.searchUrl = searchUrl;
         this.popupHandler = popupHandler;
+        this.categoryEditorBaseUrl = categoryEditorBaseUrl;
         this.title = '';
         this.addEventListeners();
     }
@@ -104,6 +105,10 @@ class TableCreator {
     createTdTitle(title, id) {
         const tdTitle = document.createElement("td");
         tdTitle.id = `tdTableTitle_${id}`
+
+        const categoryEditorLink = document.createElement("a");
+        categoryEditorLink.href = `${this.categoryEditorBaseUrl}/${title}`
+
         const inputText = document.createElement("input");
         inputText.classList.add("td-title-input");
         inputText.classList.add("td-title-input--uneditable");
@@ -113,7 +118,8 @@ class TableCreator {
         this.title = title;
         inputText.addEventListener('keyup', e => this.titleKeyUpHandler(e, inputText));
 
-        tdTitle.appendChild(inputText);
+        categoryEditorLink.appendChild(inputText);
+        tdTitle.appendChild(categoryEditorLink);
         return tdTitle;
     }
 
@@ -125,7 +131,8 @@ class TableCreator {
 
     createTdEditButton(id) {
         const tdButton = document.createElement("td");
-        const editButton = this.createTdButton("table-edit", "fa fa-pencil", id);
+        console.log(id);
+        const editButton = this.createTdButton("table-edit", "fa fa-pencil", `editButton_${id}`);
         editButton.addEventListener("click", () => this.editHandler(id, editButton));
 
         tdButton.appendChild(editButton);
@@ -138,7 +145,7 @@ class TableCreator {
         const spacer = document.createElement("div");
         spacer.classList.add("table-delete-spacer");
 
-        const button = this.createTdButton("table-delete", "fa fa-trash", id);
+        const button = this.createTdButton("table-delete", "fa fa-trash", `editDeleteButton_${id}`);
         button.addEventListener("click", () => this.deleteHandler(id, title));
 
         spacer.appendChild(button);
@@ -149,7 +156,7 @@ class TableCreator {
     createTdButton(className, classIcon, id) {
         const button = document.createElement("button");
         button.classList.add(className);
-        button.id = `editButton_${id}`
+        button.id = id;
         button.innerHTML = `<i class=\"${classIcon}\" aria-hidden=\"true\"></i>`;
 
         return button;
@@ -167,6 +174,8 @@ class TableCreator {
 
     editHandler(id, editButton) {
         const tdTitle = this.elements.tableBody.querySelector(`#tdTableTitle_${id}`);
+        const titleLinkEditorPage = tdTitle.querySelector('a');
+        titleLinkEditorPage.addEventListener('click', this.preventLink);
         const titleInputTag = tdTitle.querySelector('.td-title-input');
         this.title = titleInputTag.value;
 
@@ -174,10 +183,10 @@ class TableCreator {
         titleInputTag.classList.remove("td-title-input--uneditable");
         titleInputTag.select();
 
-        const editAcceptButton = this.createTdButton('table-edit', 'fa fa-check');
+        const editAcceptButton = this.createTdButton('table-edit', 'fa fa-check', `editAcceptButton_${id}`);
         editAcceptButton.addEventListener('click', () => this.saveNewTitle(id, this.title, titleInputTag.value));
 
-        const editCancelButton = this.createTdButton('table-edit', 'fa fa-times');
+        const editCancelButton = this.createTdButton('table-edit', 'fa fa-times', `editCancelButton_${id}`);
         editCancelButton.addEventListener('click', () => this.cancelEdit(id));
 
         tdTitle.appendChild(editAcceptButton);
@@ -186,6 +195,8 @@ class TableCreator {
 
     cancelEdit(id) {
         const tdTitle = this.elements.tableBody.querySelector(`#tdTableTitle_${id}`);
+        const titleLinkEditorPage = tdTitle.querySelector('a');
+        titleLinkEditorPage.removeEventListener('click', this.preventLink);
         const titleInputTag = tdTitle.querySelector('.td-title-input');
         const editButton = this.elements.tableBody.querySelector(`#editButton_${id}`);
 
@@ -193,11 +204,22 @@ class TableCreator {
         titleInputTag.blur();
         titleInputTag.classList.add("td-title-input--uneditable");
 
-        while (titleInputTag.nextSibling) {
-            tdTitle.removeChild(titleInputTag.nextSibling);
-        }
+        // console.log(tdTitle);
+        // console.log("-");
+        // console.log(titleLinkEditorPage.nextSibling);
+        // while (titleLinkEditorPage.nextSibling) {
+        //     tdTitle.removeChild(titleInputTag.nextSibling);
+        // }
+
+        tdTitle.removeChild(document.getElementById(`editAcceptButton_${id}`));
+        tdTitle.removeChild(document.getElementById(`editCancelButton_${id}`));
 
         editButton.disabled = false;
+    }
+
+    preventLink(e) {
+        console.log(e);
+        e.preventDefault();
     }
 
     deleteHandler(id, title) {
