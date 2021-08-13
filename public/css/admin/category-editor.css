@@ -21,7 +21,7 @@ body {
   margin: 0 auto 70px auto;
   max-width: 90%;
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  grid-template-columns: repeat(4, 1fr);
   grid-gap: 1%;
 }
 
@@ -60,13 +60,27 @@ body {
 
 .full-image {
   position: absolute;
-  height: 80%;
+  max-width: 90%;
+  max-height: 80%;
   top: 50%;
   left: 50%;
+  object-fit: contain;
   transform: translate(-50%, -50%) scale(0.5);
   transition: all 0.5s ease-out;
 }
 
 .full-image.open {
   transform: translate(-50%, -50%) scale(1);
+}
+
+@media screen and (max-width: 1300px) {
+  .gallery {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media screen and (max-width: 400px) {
+  .gallery {
+    grid-template-columns: repeat(2, 1fr);
+  }
 }
