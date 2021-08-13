@@ -3,37 +3,38 @@
 
 <head>
     <%- include('../../partials/head', {tabTitle:'Katleen Lapaige'}); %>
-    <link rel="stylesheet" type="text/css" href="../../../css/admin/category-overview.css">
-    <link rel="icon" href="/images/logo.jpg">
+        <link rel="stylesheet" type="text/css" href="../../../css/admin/category-editor.css">
+        <link rel="icon" href="/images/logo.jpg">
 </head>
 
-<body class="container">
-    <div class="preload">
-        <div class="animation-container">
-            <div class="square">
-                <div class="line-horizontal"></div>
-                <div class="line-vertical"></div>
-            </div>
-        </div>
-
-    </div>
-    <section>
+<body>
+    <%- include('../../preloader/preloader', { styleLink: '../../css/preloader/preloader.css' ,
+        jsLink: '../../js/preloader/preloader.js' }); %>
         <header>
             <link rel="stylesheet" type="text/css" href="../../../css/partials/header.css">
             <%- include('../../partials/header', {title:categoryTitle, subtitle: false}); %>
         </header>
         <main>
             <section class="categories">
-                <div class="container-black-white">
-                    
-                    <% if(images) { images.forEach(image=> { %>
-                        <a class="image-container fade" href="/overview/<%= image.description %>">
-                            <!-- <img src=<%= '../../' + image.img.path %> alt=""> -->
-                            <p class="p-text">
-                                <%=image.description %>
-                            </p>
-                        </a>
-                        <% }); } %>
+                <div class="gallery">
+                    <div class="img-container">
+                        <img src="\uploads\categories\Thumbnail\resized\cat-abstract.png"
+                            data-original="\uploads\categories\Thumbnail\orginal\cat-abstract.png">
+                    </div>
+
+                    <div class="img-container">
+                        <img src="\uploads\categories\Thumbnail\resized\cat-camera-painting.png"
+                            data-original="\uploads\categories\Thumbnail\orginal\cat-camera-painting.png">
+                    </div>
+
+                    <div class="img-container">
+                        <img src="\uploads\categories\Thumbnail\resized\cat-experimenteel.png"
+                            data-original="\uploads\categories\Thumbnail\orginal\cat-camera-painting.png">
+                    </div>
+                    <div class="img-container">
+                        <img src="\uploads\categories\Thumbnail\resized\cat-minimalisme.png"
+                            data-original="\uploads\categories\Thumbnail\orginal\cat-minimalisme.png">
+                    </div>
                 </div>
             </section>
         </main>
@@ -41,8 +42,6 @@
             <link rel="stylesheet" href="../../../css/partials/footer.css">
             <%- include('../../partials/footer'); %>
         </footer>
-    </section>
-    <script src="../../../js/index.js"> </script>
 </body>
 
 </html>
