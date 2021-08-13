@@ -54,15 +54,21 @@ body {
 }
 
 @media screen and (max-width: 735px) {
+  .header {
+    height: 150px;
+  }
+  
   .name {
-    font-size: 15px;
+    padding: 7px 0 0 12px;
+    font-size: 12px;
   }
   .subtitle {
-      font-size: 12px;
+      font-size: 10px;
   }
 
   .category-title {
       right: 7.5%;
+      top: 50px;
       font-size: 40px;
   }
 }
