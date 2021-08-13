@@ -1,82 +1,68 @@
 * {
-    padding: 0;
-    margin: 0;
-    border: 0;
+  padding: 0;
+  margin: 0;
+  border: 0;
 }
 
 body {
-    font-family: 'Space Grotesk', sans-serif;
-    color: white;
-    background: #f4f5f5;
-    padding: 0;
-    margin: 0;
+  font-family: "Space Grotesk", sans-serif;
+  color: white;
+  background: #f4f5f5;
+  padding: 0;
+  margin: 0;
 }
 
-header {
+.header {
+  background: linear-gradient(
+      to left,
+      rgba(23, 23, 23, 0.6),
+      rgba(23, 23, 23, 0.2)
+    ),
+    url("/images/header.png");
+  background-size: cover;
+  height: 250px;
+  width: 90%;
+  margin: 25px auto;
+  position: relative;
+}
+
+.name {
+  padding: 10px 0 0 20px;
+  font-size: 20px;
+}
+
+.name-bottom {
+  margin-left: 25px;
+}
+
+.subtitle {
+  font-size: 15px;
+  position: absolute;
+  bottom: 10%;
+  margin-left: 25px;
+  margin-right: 20px;
+  text-align: right;
+  display: inline-block;
+}
+
+.category-title {
     position: absolute;
-    height: 230px;
-    width: 90%;
-    top: 5%;
-    left: 5%;
-    background: linear-gradient(to left, rgba(23, 23, 23, 0.6), rgba(23, 23, 23, 0.2)), url("../images/header.png");
-    background-size: cover;
+    right: 10%;
+    top: 100px;
+    font-weight: normal;
+    font-size: 45px;
 }
 
-.title-text {
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-}
+@media screen and (max-width: 735px) {
+  .name {
+    font-size: 15px;
+  }
+  .subtitle {
+      font-size: 12px;
+  }
 
-.title h1 {
-    font-size: 3vw;
-    padding: 3px 0;
-    margin: 0;
-}
-
-.title {
-    padding: 10px 0 0 20px;
-}
-
-.title a {
-    color: white;
-    text-decoration: none;
-}
-
-.title .right {
-    margin-top: -10px;
-    margin-left: 30px;
-}
-
-.title-top {
-    cursor: pointer;
-    position: relative;
-    padding: 5px 0;
-}
-
-.title-sub {
-    position: absolute;
-    bottom: 10%;
-    margin-left: 30px;
-    margin-right: 20px;
-    text-align: right;
-    display: inline-block;
-
-}
-
-.title p {
-    margin-top: -20px;
-}
-
-header .head-title p {
-    font-size: 6vw;
-    padding: 0;
-}
-
-header .head-title {
-    position: absolute;
-    top: 50%;
-    left: 80%;
-    transform: translate(-80%, -50%);
-    overflow: hidden;
+  .category-title {
+      right: 7.5%;
+      font-size: 40px;
+  }
 }
