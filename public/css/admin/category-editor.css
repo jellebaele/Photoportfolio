@@ -18,7 +18,7 @@ body {
 }
 
 .gallery {
-  margin: 300px auto 70px auto;
+  margin: 0 auto 70px auto;
   max-width: 90%;
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
