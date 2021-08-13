@@ -4,8 +4,10 @@
         <h2 class="name-bottom">Lapaige</h2>
     </div>
     <div class="subtitle">
-        <p>We don't see the things as they are,</p>
-        <p>but as we are.</p>
+        <% if (subtitle) { %>
+            <p>We don't see the things as they are,</p>
+            <p>but as we are.</p>
+        <% } %>
     </div>
-    <h1 class="category-title">Thumbnail</h1>
+    <h1 class="category-title"><%= typeof title !='undefined' ? title : '' %></h1>
 </div>
