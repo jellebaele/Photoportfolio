@@ -3,45 +3,40 @@
 
 <head>
     <%- include('../partials/head', {tabTitle:'Katleen Lapaige'}); %>
-    <link rel="stylesheet" type="text/css" href="../css/index.css">
-    <link rel="icon" href="/images/logo.jpg">
+        <link rel="stylesheet" type="text/css" href="/css/category-overview.css"> -->
+        <link rel="icon" href="/images/logo.jpg">
 </head>
 
-<body class="container">
-    <div class="preload">
-        <div class="animation-container">
-            <div class="square">
-                <div class="line-horizontal"></div>
-                <div class="line-vertical"></div>
-            </div>
-        </div>
-
-    </div>
-    <section>
+<body>
+    <%- include('../preloader/preloader', { styleLink: '../../css/preloader/preloader.css' ,
+        jsLink: '../js/preloader/preloader.js' }); %>
         <header>
-            <link rel="stylesheet" type="text/css" href="../css/partials/header.css">
+            <link rel="stylesheet" type="text/css" href="../../../css/partials/header.css">
             <%- include('../partials/header', {title:categoryTitle, subtitle: false}); %>
         </header>
         <main>
             <section class="categories">
-                <div class="container-black-white">
+                <div class="gallery">
                     <% if(images) { images.forEach(image=> { %>
-                        <a class="image-container fade" href="/overview/<%= image.description %>">
-                            <img src=<%= '../' + image.img.path %> alt="">
-                            <p class="p-text">
-                                <%=image.description %>
-                            </p>
-                        </a>
+                        <div class="img-container">
+                            <img src="/<%= image.img.path_resized %>"
+                                data-original="/<%= image.img.path_original %>"
+                                id="<%= image.title %>"
+                                alt="<%= image.description %>">
+                        </div>
                         <% }); } %>
                 </div>
             </section>
+            <section class="modal">
+                <img src="" alt="" class="full-image">
+                <p class="caption"></p>
+            </section>
         </main>
         <footer>
-            <link rel="stylesheet" href="css/partials/footer.css">
+            <link rel="stylesheet" href="../../../css/partials/footer.css">
             <%- include('../partials/footer'); %>
         </footer>
-    </section>
-    <script src="../js/index.js"> </script>
+        <script async src="../../js/admin/CategoryEditor.js" type="module"></script>
 </body>
 
 </html>

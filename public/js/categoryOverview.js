@@ -1,5 +1,19 @@
-window.addEventListener('load', () => {
-    const preload = document.querySelector('.preload');
-    preload.classList.add('preload-finish');
-    document.getElementsByTagName("body")[0].style = 'overflow: auto';
+const modal = document.querySelector('.modal');
+const previews = document.querySelectorAll(".gallery img");
+const fullImage = document.querySelector(".full-image");
+
+previews.forEach(preview => {
+  preview.addEventListener('click', () => {
+    modal.classList.add("open");
+    fullImage.classList.add("open");
+    const originalSource = preview.getAttribute("data-original");
+    fullImage.src = originalSource;
   })
+});
+
+modal.addEventListener('click', (e) => {
+  if (e.target.classList.contains('modal')) {
+    modal.classList.remove('open');
+    fullImage.classList.remove('open');
+  }
+});
