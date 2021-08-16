@@ -15,28 +15,15 @@
             <%- include('../partials/header', {title:categoryTitle, subtitle: false}); %>
         </header>
         <main>
-            <section class="categories">
-                <div class="gallery">
-                    <% if(images) { images.forEach(image=> { %>
-                        <div class="img-container">
-                            <img src="/<%= image.img.path_resized %>"
-                                data-original="/<%= image.img.path_original %>"
-                                id="<%= image.title %>"
-                                alt="<%= image.description %>">
-                        </div>
-                        <% }); } %>
-                </div>
-            </section>
-            <section class="modal">
-                <img src="" alt="" class="full-image">
-                <p class="caption"></p>
+            <section class="grid-images-modal-on-click">
+                <%- include('../images/grid-and-modal-on-click', {styleLink: '../../css/images/grid-and-modal-on-click.css',
+                jsLink: '../../js/images/gridAndModalOnClick.js', images: images}); %>
             </section>
         </main>
         <footer>
             <link rel="stylesheet" href="../../../css/partials/footer.css">
             <%- include('../partials/footer'); %>
         </footer>
-        <script async src="../../js/admin/CategoryEditor.js" type="module"></script>
 </body>
 
 </html>

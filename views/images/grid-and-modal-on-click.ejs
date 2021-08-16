@@ -1,0 +1,18 @@
+<link rel="stylesheet" type="text/css" href="<%= styleLink %>">
+
+<section class="categories">
+    <div class="gallery">
+        <% if(images) { images.forEach(image=> { %>
+            <div class="img-container">
+                <img src="/<%= image.img.path_resized %>"
+                    data-original="/<%= image.img.path_original %>" id="<%= image.title %>"
+                    alt="<%= image.description %>">
+            </div>
+            <% }); } %>
+    </div>
+</section>
+<section class="modal">
+    <img src="" alt="" class="full-image">
+    <p class="caption"></p>
+</section>
+<script async src="<%= jsLink %>" type="module"></script>

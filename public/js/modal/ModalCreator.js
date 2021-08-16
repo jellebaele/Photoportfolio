@@ -23,7 +23,6 @@ class ModalCreator {
       })
     });
 
-
     this.modal.addEventListener('click', (e) => {
       if (e.target.classList.contains('modal')) {
         this.modal.classList.remove('open');
