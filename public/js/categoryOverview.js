@@ -1,4 +1,4 @@
-import ModalCreator from "./modal/ModalCreator.js";
+import ModalCreator from "./dom/images/ModalCreator.js";
 
 const modal = document.querySelector('.modal');
 const previews = document.querySelectorAll(".gallery img");
