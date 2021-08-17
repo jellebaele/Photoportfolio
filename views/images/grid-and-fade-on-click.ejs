@@ -3,16 +3,15 @@
 <section class="categories">
     <div class="gallery">
         <% if(images) { images.forEach(image=> { %>
-            <div class="img-container">
+            <div class="img-container fade">
                 <img src="/<%= image.img.path_resized %>"
                     data-original="/<%= image.img.path_original %>" id="<%= image.title %>"
                     alt="<%= image.description %>">
+                <div class="button-section">
+                    <button class="container-button" id="delete_<%= image._id %>">Delete</button>
+                </div>
             </div>
             <% }); } %>
     </div>
-</section>
-<section class="modal">
-    <img src="" alt="" class="full-image">
-    <p class="caption"></p>
 </section>
 <script async src="<%= jsLink %>" type="module"></script>

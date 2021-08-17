@@ -15,9 +15,19 @@
             <%- include('../../partials/header', {title:categoryTitle, subtitle: false}); %>
         </header>
         <main>
-            <section class="grid-images-modal-on-click">
-                <%- include('../../images/grid-and-fade-on-click', {styleLink: '../../css/images/grid-and-fade-on-click.css',
-                jsLink: '../../js/images/gridAndFadeOnClick.js', images: images}); %>
+            <section class="categories">
+                <div class="gallery">
+                    <% if(images) { images.forEach(image=> { %>
+                        <div class="img-container fade" id="<%= image._id %>">
+                            <img src="/<%= image.img.path_resized %>"
+                                data-original="/<%= image.img.path_original %>" id="<%= image.title %>"
+                                alt="<%= image.description %>">
+                            <div class="button-section">
+                                <button class="container-button" id="delete_<%= image._id %>">Delete</button>
+                            </div>
+                        </div>
+                        <% }); } %>
+                </div>
             </section>
         </main>
         <footer>

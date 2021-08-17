@@ -12,19 +12,59 @@
   
   .img-container {
     overflow: hidden;
+    position: relative;
   }
+
+  .fade::after {
+    content: "";
+    background: black;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+ }
+
+ .fade:hover::after {
+    opacity: 0.5;
+ }
   
   .img-container img {
     cursor: pointer;
     width: 100%;
     height: 100%;
     object-fit: cover;
-    transition: all 0.5s ease-out;
   }
-  
-  .img-container img:hover {
-    transform: scale(1.1);
-  }
+
+  .img-container .button-section {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    opacity: 0;
+    transition: opacity 1s ease;
+    font-size: 2vw;
+    z-index: 2;
+    text-align: center;
+ }
+
+ .img-container:hover > .button-section {
+    opacity: 1;
+ }
+
+ .container-button {
+    cursor: pointer;
+    padding: 5px 10px;
+    border-radius: 10%;
+    margin: 5px;
+    transition: transform 0.5s ease-out;
+ }
+ 
+ .container-button:hover {
+    transform: translateY(-3px);
+ }
   
   .modal {
     background: rgba(0, 0, 0, 0.8);
