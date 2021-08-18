@@ -47,16 +47,40 @@ class UploadControllerHelper {
 
    }
 
-   async findImagesByCategory(categoryName, limit = 50) {
+   async findImageById(id, limit = 50, filter) {
       try {
          if (limit !== -1) {
-            return await ImageModel.find({ category: categoryName }).limit(limit);
+            return await ImageModel.findById(id).limit(limit);
          } else {
-            return await ImageModel.find({ category: categoryName });
+            return await ImageModel.findById(id);
          }
       } catch (error) {
          throw error;
       }
+   }
+
+   async findImagesByCategory(categoryName, limit = 50, filter) {
+      try {
+         let defaultFilter = { category: categoryName };
+
+         if (typeof filter !== 'undefined') defaultFilter = filter;
+
+         if (limit !== -1) {
+            return await ImageModel.find(defaultFilter).limit(limit);
+         } else {
+            return await ImageModel.find(defaultFilter);
+         }
+      } catch (error) {
+         throw error;
+      }
+   }
+
+   async findImagesByCategoryAndIndex(categoryName, limit = 50, index, isIncremental = true) {
+      let filter;
+      if (isIncremental) filter = { category: categoryName, index: { $gt: index } }
+      else filter = { category: categoryName, index: { $lt: index } }
+
+      return await this.findImagesByCategory(categoryName, limit, filter);
    }
 
    async updateImagesByCategory(oldCategoryName, newCategoryName) {
@@ -80,13 +104,24 @@ class UploadControllerHelper {
       }
    }
 
+   async updateImageIndexById(id, newIndex) {
+      try {
+         let imageToBeUpdated = await this.findImageById(id);
+         imageToBeUpdated.index = newIndex;
+         return await imageToBeUpdated.save();
+      } catch (error) {
+         throw error;
+      }
+   }
+
    async deleteImageById(id) {
       try {
          const image = await ImageModel.findById(id);
          const category = image.category;
+         const index = image.index;
          await this.deleteImageInDirectory(image.img.path_original, image.img.path_resized);
          const deletedImage = await ImageModel.deleteOne(image);
-         return { deletedImage: deletedImage, category: category }
+         return { deletedImage: deletedImage, category: category, index: index }
       } catch (error) {
          console.error(error);
          throw error;
