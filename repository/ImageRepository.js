@@ -1,3 +1,4 @@
+const fs = require('fs');
 const ImageModel = require("../models/Image");
 const CategoryRepository = require("./CategoryRepository");
 const categoryRepository = new CategoryRepository();
@@ -28,7 +29,7 @@ class UploadControllerHelper {
 
    async getCategoryTitleAndUpdate(categoryTitle) {
       try {
-         const result = await categoryRepository.incrementAmountOfPicturesByTitle(categoryTitle, 1);
+         const result = await categoryRepository.adjustAmountOfPicturesByTitle(categoryTitle, 1);
          return result.updatedCategory.title;
       } catch (error) {
          throw error;
@@ -52,7 +53,7 @@ class UploadControllerHelper {
             return await ImageModel.find({ category: categoryName }).limit(limit);
          } else {
             return await ImageModel.find({ category: categoryName });
-         }          
+         }
       } catch (error) {
          throw error;
       }
@@ -79,6 +80,19 @@ class UploadControllerHelper {
       }
    }
 
+   async deleteImageById(id) {
+      try {
+         const image = await ImageModel.findById(id);
+         const category = image.category;
+         await this.deleteImageInDirectory(image.img.path_original, image.img.path_resized);
+         const deletedImage = await ImageModel.deleteOne(image);
+         return { deletedImage: deletedImage, category: category }
+      } catch (error) {
+         console.error(error);
+         throw error;
+      }
+   }
+
    async deleteAllImagesForCategory(categoryName) {
       const filter = { category: categoryName };
 
@@ -87,6 +101,18 @@ class UploadControllerHelper {
       } catch (error) {
          throw error;
       }
+   }
+
+   async deleteImageInDirectory(pathOriginal, pathResized) {
+      await fs.unlink(pathOriginal, (err) => {
+         if (err) throw err;
+         return;
+      });
+
+      await fs.unlink(pathResized, (err) => {
+         if (err) throw err;
+         return;
+      });
    }
 }
 
