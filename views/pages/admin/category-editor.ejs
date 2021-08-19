@@ -22,8 +22,10 @@
                             <img src="/<%= image.img.path_resized %>"
                                 data-original="/<%= image.img.path_original %>" id="<%= image.title %>"
                                 alt="<%= image.description %>">
+                            
                             <div class="button-section">
-                                <button class="container-button" id="delete_<%= image._id %>">Delete</button>
+                                <button class="container-button" id="delete_<%= image._id %>"><i class="fa fa-trash" aria-hidden="true"></i></button>
+                                <button class="container-button" id="details_<%= image._id %>"><i class="fa fa-info-circle" aria-hidden="true"></i></i></button>
                             </div>
                         </div>
                         <% }); } %>

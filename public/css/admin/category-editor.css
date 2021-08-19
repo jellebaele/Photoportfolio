@@ -60,9 +60,10 @@ body {
   transform: translate(-50%, -50%);
   opacity: 0;
   transition: opacity 1s ease;
-  font-size: 2vw;
   z-index: 2;
   text-align: center;
+  display: flex;
+  flex-direction: row;
 }
 
 .img-container:hover > .button-section {
@@ -71,6 +72,7 @@ body {
 
 .container-button {
   cursor: pointer;
+  font-size: 25px;
   padding: 5px 10px;
   border-radius: 10%;
   margin: 5px;
@@ -117,10 +119,16 @@ body {
   .gallery {
     grid-template-columns: repeat(3, 1fr);
   }
+  .container-button {
+    font-size: 20px;
+  }
 }
 
 @media screen and (max-width: 400px) {
   .gallery {
     grid-template-columns: repeat(2, 1fr);
+  }
+  .container-button {
+    font-size: 15px;
   }
 }
