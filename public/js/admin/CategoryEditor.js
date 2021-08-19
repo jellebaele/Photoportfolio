@@ -1,5 +1,5 @@
 import FadeCreator from "../dom/images/FadeCreator.js";
-import Alert from "../popup/Popup.js";
+import Alert from "../popup/Alert.js";
 
 const url = "/api/image"
 const gallery = document.querySelector(".gallery");

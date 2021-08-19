@@ -1,7 +1,7 @@
 import ImageContainerCreator from "./UploadImages/ImageContainerCreator.js";
 import ImageRemover from "./UploadImages/ImageRemover.js";
 import CategorySearcher from "./UploadImages/CategorySearcher.js";
-import Alert from "./popup/Popup.js";
+import Alert from "./popup/Alert.js";
 
 const MAX_AMOUNT_IMAGES = 10;
 let imagesToUpload = [];

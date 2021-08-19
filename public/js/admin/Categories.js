@@ -1,5 +1,5 @@
 import TableCreator from "./Categories/TableCreator.js";
-import Alert from "../popup/Popup.js";
+import Alert from "../popup/Alert.js";
 
 const table = document.querySelector(".table")
 const searchUrl = "/api/categories";
