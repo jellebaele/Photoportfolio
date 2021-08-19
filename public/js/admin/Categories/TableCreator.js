@@ -1,5 +1,5 @@
 class TableCreator {
-    constructor(tableTag, searchUrl, popupHandler, categoryEditorBaseUrl) {
+    constructor(tableTag, searchUrl, alertHandler, categoryEditorBaseUrl) {
         this.elements = {
             tableBody: tableTag.querySelector("#tableBody"),
             addButton: tableTag.querySelector("#createCategory"),
@@ -7,7 +7,7 @@ class TableCreator {
         }
 
         this.searchUrl = searchUrl;
-        this.popupHandler = popupHandler;
+        this.alertHandler = alertHandler;
         this.categoryEditorBaseUrl = categoryEditorBaseUrl;
         this.title = '';
         this.addEventListeners();
@@ -48,7 +48,7 @@ class TableCreator {
             .then((response) => {
                 return response;
             })
-            .catch((error) => this.popupHandler.showWarning(error.message))
+            .catch((error) => this.alertHandler.showWarning(error.message))
     }
 
     async createNewCategory(title) {
@@ -64,9 +64,9 @@ class TableCreator {
             })
             .then(response => {
                 this.GenerateTable();
-                this.popupHandler.showSucces(`Nieuwe categorie met title '${response.newCategory.title}' succesvol aangemaakt!`)
+                this.alertHandler.showSucces(`Nieuwe categorie met title '${response.newCategory.title}' succesvol aangemaakt!`)
             })
-            .catch(error => this.popupHandler.showWarning(error.message))
+            .catch(error => this.alertHandler.showWarning(error.message))
     }
 
     populateResults(results) {
@@ -218,10 +218,10 @@ class TableCreator {
         if (confirm(`Wil je categorie '${title}' met alle bijhorende foto's verwijderen?`)) {
             this.deleteCategory(id, title)
                 .then((response) => {
-                    this.popupHandler.showSucces(`De categorie met titel '${title}' met alle bijhorende foto's is succesvol verwijderd!`);
+                    this.alertHandler.showSucces(`De categorie met titel '${title}' met alle bijhorende foto's is succesvol verwijderd!`);
                     return;
                 })
-                .catch(error => this.popupHandler.showWarning(error.message));
+                .catch(error => this.alertHandler.showWarning(error.message));
         }
     }
 
@@ -232,11 +232,11 @@ class TableCreator {
                     this.title = newTitle;
                     this.clearTableContent();
                     this.GenerateTable();
-                    this.popupHandler.showSucces(`De categorie hernoemd naar '${newTitle}' en bijhorende ${response.updatedImages.nModified} foto('s) bijgewerkt!`)
+                    this.alertHandler.showSucces(`De categorie hernoemd naar '${newTitle}' en bijhorende ${response.updatedImages.nModified} foto('s) bijgewerkt!`)
 
                 })
                 .catch(error => {
-                    this.popupHandler.showWarning(error.message);
+                    this.alertHandler.showWarning(error.message);
                 })
         }
         this.cancelEdit(id);

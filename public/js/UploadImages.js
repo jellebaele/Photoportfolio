@@ -10,16 +10,16 @@ let numberOfImagesToUpload = 0;
 let selectedFilesTag = document.getElementById("selectedFilesTag");
 let selectedFileNames = document.getElementById("fileNames");
 let searchCategories = document.getElementById("searchCategories");
-let popupWarning = document.getElementById("alertWarning");
-let popupSuccess = document.getElementById("alertSucces");
+let alertWarning = document.getElementById("alertWarning");
+let alertSuccess = document.getElementById("alertSucces");
 
 const imageContainerCreator = new ImageContainerCreator();
 const imageRemover = new ImageRemover();
 
-const popupHandler = new Alert(popupSuccess, popupWarning, undefined, 0, 0, 7000);
+const alertHandler = new Alert(alertSuccess, alertWarning, undefined, 0, 0, 7000);
 
 const searchUrl = "/api/categories";
-const categorySearcher = new CategorySearcher(searchCategories, searchUrl, 5, popupHandler);
+const categorySearcher = new CategorySearcher(searchCategories, searchUrl, 5, alertHandler);
 categorySearcher.addListeners();
 
 document.getElementById("uploadButton").addEventListener("click", () => {
@@ -32,7 +32,7 @@ selectedFilesTag.addEventListener("change", () => {
       selectedFileNames.innerHTML = `${numberOfImagesToUpload} bestand(en) geselecteerd`;
       drawImagesOnScreen(selectedFilesTag.files);
    } catch (error) {
-      popupHandler.showWarning(error.message)
+      alertHandler.showWarning(error.message)
    }
 });
 
@@ -87,7 +87,7 @@ function deleteHandler(index) {
 
 document.getElementById("submit").addEventListener("click", () => {
    if (imagesToUpload.length < 1) {
-      popupHandler.showWarning("Geen bestanden geselecteerd!")
+      alertHandler.showWarning("Geen bestanden geselecteerd!")
    } else {
       const descriptions = appendDescriptionToImages();
       let formData = new FormData();
@@ -120,11 +120,11 @@ document.getElementById("submit").addEventListener("click", () => {
                numberOfImagesToUpload = 0;
                selectedFileNames.innerHTML = `${numberOfImagesToUpload} bestand(en) geselecteerd`;
                category.value = "";
-               popupHandler.showSucces(`${response.amount} afbeelding(en) ge-upload voor categorie '${response.category}'`);
+               alertHandler.showSucces(`${response.amount} afbeelding(en) ge-upload voor categorie '${response.category}'`);
             }, 500);
          })
          .catch(error => {
-            popupHandler.showWarning(error.message);
+            alertHandler.showWarning(error.message);
          });
    }
 });

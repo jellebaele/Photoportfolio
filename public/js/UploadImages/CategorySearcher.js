@@ -1,5 +1,5 @@
 class CategorySearcher {
-   constructor(searchCategoriesSection, searchUrl, queryLimit = 5, popupHandler) {
+   constructor(searchCategoriesSection, searchUrl, queryLimit = 5, alertHandler) {
       this.elements = {
          main: searchCategoriesSection,
          input: searchCategoriesSection.querySelector(".search-input"),
@@ -7,7 +7,7 @@ class CategorySearcher {
       };
       this.searchUrl = searchUrl;
       this.queryLimit = queryLimit;
-      this.popupHandler = popupHandler;
+      this.alertHandler = alertHandler;
    }
 
    addListeners() {
@@ -56,7 +56,7 @@ class CategorySearcher {
          .catch((error) => {
             console.error(error);
             this.populateResults([]);
-            this.popupHandler.showWarning(error.message);
+            this.alertHandler.showWarning(error.message);
          })
          .finally(() => {
             this.setLoading(false);

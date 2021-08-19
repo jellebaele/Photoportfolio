@@ -1,6 +1,6 @@
-import Popup from "./Popup.js"
+import Alert from "./Alert.js"
 
-class Warning extends Popup {
+class Warning extends Alert {
     constructor(x, y) {
         super(x, y);
     }

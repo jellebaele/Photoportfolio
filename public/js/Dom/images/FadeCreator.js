@@ -1,11 +1,11 @@
 class FadeCreator {
-    constructor(url, galleryImages, popupHandler) {
+    constructor(url, galleryImages, alertHandler) {
         this.url = url;
         this.elements = {
             gallery: galleryImages,
             imageContainers: galleryImages.querySelectorAll(".img-container")
         };
-        this.popupHandler = popupHandler;
+        this.alertHandler = alertHandler;
         
     }
 
@@ -32,11 +32,11 @@ class FadeCreator {
             .then((response) => {
                 const imageContainerToBeRemoved = document.getElementById(id);
                 this.elements.gallery.removeChild(imageContainerToBeRemoved);
-                this.popupHandler.showSucces("Afbeelding verwijderd!");
+                this.alertHandler.showSucces("Afbeelding verwijderd!");
             })
             .catch((error) => {
                 console.error(error);
-                this.popupHandler.showWarning(`Fout bij het verwijderen van de afbeelding!`);
+                this.alertHandler.showWarning(`Fout bij het verwijderen van de afbeelding!`);
             })
     }
 

@@ -3,12 +3,12 @@ import Alert from "../popup/Alert.js";
 
 const url = "/api/image"
 const gallery = document.querySelector(".gallery");
-const popupWarning = document.getElementById("alertWarning");
-const popupSuccess = document.getElementById("alertSucces");
+const alertWarning = document.getElementById("alertWarning");
+const alertSuccess = document.getElementById("alertSucces");
 
 function init() {
-    const popupHandler = new Alert(popupSuccess, popupWarning, undefined, 0, 0, 7000);
-    let fadeCreator = new FadeCreator(url, gallery, popupHandler);
+    const alertHandler = new Alert(alertSuccess, alertWarning, undefined, 0, 0, 7000);
+    let fadeCreator = new FadeCreator(url, gallery, alertHandler);
     fadeCreator.addListeners();
 }
 
