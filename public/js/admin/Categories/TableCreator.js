@@ -131,7 +131,6 @@ class TableCreator {
 
     createTdEditButton(id) {
         const tdButton = document.createElement("td");
-        console.log(id);
         const editButton = this.createTdButton("table-edit", "fa fa-pencil", `editButton_${id}`);
         editButton.addEventListener("click", () => this.editHandler(id, editButton));
 
@@ -163,12 +162,13 @@ class TableCreator {
     }
 
     titleKeyUpHandler(e, titleInputTag) {
+        const idTdTitle = titleInputTag.parentElement.parentElement.id;
+        const id = idTdTitle.split("_");
         if (e.key === 'Escape') {
-            const id = titleInputTag.parentElement.parentElement.id;
-            this.cancelEdit(id);
+            this.cancelEdit(id[1]);
         } else if (e.key === 'Enter') {
-            const id = titleInputTag.parentElement.parentElement.id;
-            this.saveNewTitle(id, this.title, titleInputTag.value);
+
+            this.saveNewTitle(id[1], this.title, titleInputTag.value);
         }
     }
 
@@ -204,13 +204,6 @@ class TableCreator {
         titleInputTag.blur();
         titleInputTag.classList.add("td-title-input--uneditable");
 
-        // console.log(tdTitle);
-        // console.log("-");
-        // console.log(titleLinkEditorPage.nextSibling);
-        // while (titleLinkEditorPage.nextSibling) {
-        //     tdTitle.removeChild(titleInputTag.nextSibling);
-        // }
-
         tdTitle.removeChild(document.getElementById(`editAcceptButton_${id}`));
         tdTitle.removeChild(document.getElementById(`editCancelButton_${id}`));
 
@@ -218,7 +211,6 @@ class TableCreator {
     }
 
     preventLink(e) {
-        console.log(e);
         e.preventDefault();
     }
 
@@ -238,14 +230,17 @@ class TableCreator {
             this.updateTitle(id, oldTitle, newTitle)
                 .then(response => {
                     this.title = newTitle;
+                    this.clearTableContent();
+                    this.GenerateTable();
                     this.popupHandler.showSucces(`De categorie hernoemd naar '${newTitle}' en bijhorende ${response.updatedImages.nModified} foto('s) bijgewerkt!`)
+
                 })
                 .catch(error => {
                     this.popupHandler.showWarning(error.message);
                 })
-        } 
+        }
         this.cancelEdit(id);
-        
+
     }
 
     async deleteCategory(id, title) {

@@ -1,7 +1,7 @@
 import ImageContainerCreator from "./UploadImages/ImageContainerCreator.js";
 import ImageRemover from "./UploadImages/ImageRemover.js";
 import CategorySearcher from "./UploadImages/CategorySearcher.js";
-import Popup from "./popup/Popup.js";
+import Alert from "./popup/Popup.js";
 
 const MAX_AMOUNT_IMAGES = 10;
 let imagesToUpload = [];
@@ -16,7 +16,7 @@ let popupSuccess = document.getElementById("popupSucces");
 const imageContainerCreator = new ImageContainerCreator();
 const imageRemover = new ImageRemover();
 
-const popupHandler = new Popup(popupSuccess, popupWarning, undefined, 0, 0, 7000);
+const popupHandler = new Alert(popupSuccess, popupWarning, undefined, 0, 0, 7000);
 
 const searchUrl = "/api/categories";
 const categorySearcher = new CategorySearcher(searchCategories, searchUrl, 5, popupHandler);
