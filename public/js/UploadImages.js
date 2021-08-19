@@ -10,8 +10,8 @@ let numberOfImagesToUpload = 0;
 let selectedFilesTag = document.getElementById("selectedFilesTag");
 let selectedFileNames = document.getElementById("fileNames");
 let searchCategories = document.getElementById("searchCategories");
-let popupWarning = document.getElementById("popupWarning");
-let popupSuccess = document.getElementById("popupSucces");
+let popupWarning = document.getElementById("alertWarning");
+let popupSuccess = document.getElementById("alertSucces");
 
 const imageContainerCreator = new ImageContainerCreator();
 const imageRemover = new ImageRemover();

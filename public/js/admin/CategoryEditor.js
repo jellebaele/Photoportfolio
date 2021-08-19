@@ -3,8 +3,8 @@ import Popup from "../popup/Popup.js";
 
 const url = "/api/image"
 const gallery = document.querySelector(".gallery");
-const popupWarning = document.getElementById("popupWarning");
-const popupSuccess = document.getElementById("popupSucces");
+const popupWarning = document.getElementById("alertWarning");
+const popupSuccess = document.getElementById("alertSucces");
 
 function init() {
     const popupHandler = new Popup(popupSuccess, popupWarning, undefined, 0, 0, 7000);
