@@ -1,8 +1,8 @@
-class Popup {
-    constructor(popupSucces, popupWarning, popupError, top, left, timeOut = 5000) {
-        this.popupSucces = popupSucces;
-        this.popupWarning = popupWarning;
-        this.popupError = popupError;
+class Alert {
+    constructor(alertSucces, alertWarning, alertError, top, left, timeOut = 5000) {
+        this.alertSucces = alertSucces;
+        this.alertWarning = alertWarning;
+        this.alertError = alertError;
         this.top = top;
         this.left = left;
         this.timeOut = timeOut;
@@ -11,42 +11,42 @@ class Popup {
     }
 
     addEventlisteners() {
-        this.popupSucces.querySelector(".close-button").addEventListener('click', () => {
-            this.hidePopup(this.popupSucces);
+        this.alertSucces.querySelector(".close-button").addEventListener('click', () => {
+            this.hideAlert(this.alertSucces);
         });
-        this.popupWarning.querySelector(".close-button").addEventListener('click', () => {
-            this.hidePopup(this.popupWarning);
+        this.alertWarning.querySelector(".close-button").addEventListener('click', () => {
+            this.hideAlert(this.alertWarning);
         });
     }
 
     showSucces(message) {
-        this.showPopup(this.popupSucces, `Succes! ${message}`);
+        this.showAlert(this.alertSucces, `Succes! ${message}`);
     }
 
     showWarning(message) {
-        this.showPopup(this.popupWarning, `Warning! ${message}`);
+        this.showAlert(this.alertWarning, `Warning! ${message}`);
     }
 
     showError(message) {
-        this.showPopup(this.popupError);
+        this.showAlert(this.alertError);
     }
 
-    showPopup(popup, message) {
-        popup.classList.remove("hide-alert");
-        popup.classList.add("show-alert");
-        popup.classList.add("alert-show");
+    showAlert(alert, message) {
+        alert.classList.remove("hide-alert");
+        alert.classList.add("show-alert");
+        alert.classList.add("alert-show");
 
-        popup.querySelector(".message-title").innerHTML = message;
+        alert.querySelector(".message-title").innerHTML = message;
 
         setTimeout(() => {
-            this.hidePopup(popup);
+            this.hideAlert(alert);
         }, this.timeOut)
     }
 
-    hidePopup(popup) {
-        popup.classList.remove("show-alert");
-        popup.classList.add("hide-alert");
+    hideAlert(alert) {
+        alert.classList.remove("show-alert");
+        alert.classList.add("hide-alert");
     }
 }
 
-export default Popup;
+export default Alert;
