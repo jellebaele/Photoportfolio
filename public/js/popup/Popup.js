@@ -32,8 +32,8 @@ class Popup {
     }
 
     showPopup(popup, message) {
-        popup.classList.remove("hide-pop-up");
-        popup.classList.add("show-pop-up");
+        popup.classList.remove("hide-alert");
+        popup.classList.add("show-alert");
         popup.classList.add("alert-show");
 
         popup.querySelector(".message-title").innerHTML = message;
@@ -44,8 +44,8 @@ class Popup {
     }
 
     hidePopup(popup) {
-        popup.classList.remove("show-pop-up");
-        popup.classList.add("hide-pop-up");
+        popup.classList.remove("show-alert");
+        popup.classList.add("hide-alert");
     }
 }
 
