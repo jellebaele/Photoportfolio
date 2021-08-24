@@ -83,8 +83,8 @@ body {
   transform: translateY(-3px);
 }
 
-.modal {
-  background: rgba(0, 0, 0, 0.8);
+.details-modal {
+  background: rgba(0, 0, 0, 0.3);
   position: fixed;
   top: 0;
   left: 0;
@@ -92,27 +92,106 @@ body {
   height: 100%;
   opacity: 0;
   pointer-events: none;
+  z-index: 10;
   transition: all 0.25s ease-out;
 }
 
-.modal.open {
+.details-modal.open {
   opacity: 1;
   pointer-events: all;
 }
 
-.full-image {
-  position: absolute;
-  max-width: 90%;
-  max-height: 80%;
+.modal-container {
+  color: #333;
+  position: fixed;
   top: 50%;
   left: 50%;
-  object-fit: contain;
-  transform: translate(-50%, -50%) scale(0.5);
-  transition: all 0.5s ease-out;
+  transform: translate(-50%, -50%);
+  border: 3px solid #333;
+  z-index: 2;
+  background-color: #f4f5f5;
+  width: 60%;
+  max-height: 85%;
+  overflow-y: auto;
 }
 
-.full-image.open {
-  transform: translate(-50%, -50%) scale(1);
+.header-modal {
+  padding: 10px 15px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.title-modal {
+  font-size: 1.25rem;
+}
+
+.close-modal {
+  font-size: 15px;
+  background-color: #f4f5f5;
+}
+
+.modal-body {
+  padding: 10px 15px;
+}
+
+.modal-row {
+  display: grid;
+  grid-template-columns: 100px 1fr;
+  grid-row-gap: 10px;
+  align-items: start;
+  margin-bottom: 10px;
+}
+
+.modal-row-detailed {
+  margin-bottom: 10px;
+}
+
+.modal-row-detailed .text-field {
+  padding-bottom: 5px;
+}
+
+.modal-row-detailed .modal-row {
+  grid-row-gap: 0px;
+  margin-bottom: 5px;
+}
+
+.modal-row-detailed .text-field-detailed {
+  font-size: small;
+  padding-left: 10px;
+  margin-bottom: 0px;
+}
+
+.modal-body textarea {
+  resize: none;
+  border: 1px solid rgba(51, 51, 51, 0.4);
+}
+
+.modal-row-buttons {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.modal-body button {
+  text-decoration: none;
+  color: rgba(54, 54, 54);
+  border: solid rgba(54, 54, 54) 3px;
+  padding: 5px 10px;
+  display: inline-block;
+  transform: translateY(0);
+  transition: background-color 0.75s ease, color 0.75s ease;
+  cursor: pointer;
+  margin-left: 10px;
+  margin-top: 10px;
+}
+
+.modal-body button:hover {
+  background-color: rgba(54, 54, 54);
+  color: #f4f5f5;
+}
+
+.fa-pencil, .fa-trash {
+  margin-right: 3px;
 }
 
 @media screen and (max-width: 1300px) {
@@ -121,6 +200,30 @@ body {
   }
   .container-button {
     font-size: 20px;
+  }
+}
+
+@media screen and (max-width: 1000px) {
+  .modal-row {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .modal-body textarea {
+    width: 100%;
+  }
+
+  .modal-row-detailed textarea {
+    margin-left: 10px;
+  }
+
+  .modal-row-detailed .text-field {
+    padding-bottom: 1px;
+  }
+
+  .modal-row {
+    margin-bottom: 3px;
+    grid-row-gap: 4px;
   }
 }
 
