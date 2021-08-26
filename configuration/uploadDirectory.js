@@ -1,27 +1,26 @@
 const path = require('path');
+require('dotenv').config();
 
-const ORIGINAL_SIZE_FOLDER_NAME = "original"
-const RESIZED_SIZE_FOLDER_NAME = "resized"
-const root = path.join(`${__dirname}/../uploads`)
+const ROOT_FOLDER = path.join(`${__dirname}/../${process.env.UPLOAD_FOLDER_NAME}`)
 
 function getRoot() {
-    return root;
+    return ROOT_FOLDER;
 }
 
 function getRootCategory(categoryTitle) {
-    return  path.join(`${root}/${categoryTitle}`);
+    return path.join(`${ROOT_FOLDER}/${categoryTitle}`);
 }
 
 function getOriginalImageDirectory(categoryTitle) {
-    return path.join(`${root}/${categoryTitle}/${ORIGINAL_SIZE_FOLDER_NAME}`);
+    return path.join(`${ROOT_FOLDER}/${categoryTitle}/${process.env.ORIGINAL_SIZE_FOLDER_NAME}`);
 }
 
 function getResizedImageDirectory(categoryTitle) {
-    return path.join(`${root}/${categoryTitle}/${RESIZED_SIZE_FOLDER_NAME}`);
+    return path.join(`${ROOT_FOLDER}/${categoryTitle}/${process.env.RESIZED_SIZE_FOLDER_NAME}`);
 }
 
 function getResizedImageDirectoryWithImageTitle(categoryTitle, imageTitle) {
-    return path.join(`${root}/${categoryTitle}/${RESIZED_SIZE_FOLDER_NAME}/${imageTitle}`);
+    return path.join(`${ROOT_FOLDER}/${categoryTitle}/${process.env.RESIZED_SIZE_FOLDER_NAME}/${imageTitle}`);
 }
 
 module.exports = {

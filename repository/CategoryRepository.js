@@ -147,7 +147,7 @@ class CategoryRepository {
     }
 
     removeDirectories(categoryTitle) {
-        fs.rmdir(path.join(`${__dirname}/../uploads/categories/${categoryTitle}`), { recursive: true }, (err) => {
+        fs.rmdir(path.join(UploadDirectory.getRootCategory(categoryTitle)), { recursive: true }, (err) => {
             if (err) throw (err);
         })
     }
