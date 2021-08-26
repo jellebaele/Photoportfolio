@@ -1,8 +1,10 @@
 import FadeCreator from "../dom/images/FadeCreator.js";
+import ModalImageEditor from "../Dom/modal/ModalImageEditor.js";
 import Alert from "../popup/Alert.js";
 
 const url = "/api/image"
 const gallery = document.querySelector(".gallery");
+const modal = document.querySelector(".modal-base")
 const alertWarning = document.getElementById("alertWarning");
 const alertSuccess = document.getElementById("alertSucces");
 
@@ -12,6 +14,10 @@ function init() {
     const alertHandler = new Alert(alertSuccess, alertWarning, undefined, 0, 0, 7000);
     let imageFadeCreator = new FadeCreator(url, gallery, alertHandler);
     imageFadeCreator.addListeners();
+
+    const modalImageEditor = new ModalImageEditor(modal, 0, 0, 0.3);
+    modalImageEditor.create();
+    modalImageEditor.open();
 
     // const detailsModelCreator = new DetailsModalCreator();
     setupTextAreas(textAreas);
