@@ -2,7 +2,7 @@ const path = require('path');
 
 const ORIGINAL_SIZE_FOLDER_NAME = "original"
 const RESIZED_SIZE_FOLDER_NAME = "resized"
-const root = path.join(`${__dirname}/../uploads/categories`)
+const root = path.join(`${__dirname}/../uploads`)
 
 function getRoot() {
     return root;
