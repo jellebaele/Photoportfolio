@@ -1,5 +1,5 @@
-const CategoryRepository = require("../repository/CategoryRepository");
-const ImageRepository = require("../repository/ImageRepository");
+const CategoryRepository = require("../../repository/CategoryRepository");
+const ImageRepository = require("../../repository/ImageRepository");
 const categoryRepository = new CategoryRepository();
 const imageRepository = new ImageRepository();
 
