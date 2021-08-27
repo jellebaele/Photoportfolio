@@ -16,7 +16,6 @@ function init() {
     imageFadeCreator.addListeners();
 
     const modalImageEditor = new ModalImageEditor(modal, 0, 0, 0.3);
-    modalImageEditor.create();
     modalImageEditor.open();
 
     // const detailsModelCreator = new DetailsModalCreator();
