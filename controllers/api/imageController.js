@@ -10,7 +10,7 @@ async function getImage(req, res) {
 
         const image = await imageRepository.findImageById(id);
         if (image) {
-            res.status(200).send({image: image});
+            res.status(200).send(image);
         } else {
             res.status(400).send(`Image with id '${id}' not found.`);
         }
