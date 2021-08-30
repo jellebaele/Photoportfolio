@@ -11,6 +11,7 @@ router.post("/categories", categoryController.createCategory)
 router.delete("/categories", categoryController.deleteCategory);
 router.patch("/categories/title", categoryController.patchCategoryTitle);
 
+router.get("/image", imageController.getImage);
 router.delete("/image", imageController.deleteImage);
 
 module.exports = router;
