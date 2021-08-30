@@ -12,11 +12,12 @@ class ModalBase {
     }
 
     create() {
-        this.createTagElements();
+        this.createOverlay();
+        this.createModal();
         this.addListeners();
     }
 
-    createTagElements() {
+    createModal() {
         throw new ("Implementation required in derived class");
     }
     
@@ -26,8 +27,9 @@ class ModalBase {
 
     createOverlay() {
         this.overlay = document.createElement("div");
-        this.overlay.classList.add("details-modal");
+        this.overlay.classList.add("modal-overlay");
         this.overlay.style.background = `rgba(${this.RGBBackgroundOverlay[0]},${this.RGBBackgroundOverlay[1]},${this.RGBBackgroundOverlay[2]},${this.overlayOpacity})`
+        this.main.appendChild(this.overlay);
     }
 
     open() {

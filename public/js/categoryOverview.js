@@ -1,12 +1,13 @@
-import ModalCreator from "./dom/images/ModalCreator.js";
+import ModalFullImage from "./Dom/modal/ModalFullImage.js";
+
 
 const modal = document.querySelector('.modal');
 const previews = document.querySelectorAll(".gallery img");
 const fullImage = document.querySelector(".full-image");
 
 function init() {
-  const modalCreator = new ModalCreator(modal, previews, fullImage);
-  modalCreator.addEventListeners();
+  const fullImageModal = new ModalFullImage(modal, 0, 0, 0.3, previews);
+  fullImageModal.create();
 }
 
 init();
