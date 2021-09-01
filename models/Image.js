@@ -15,7 +15,8 @@ const ImageSchema = new Schema({
          default: "Not found",
       },
       mimetype: String,
-      size: Number,
+      size_original: Number,
+      size_resized: Number,
       encoding: String,
    },
    category: {
