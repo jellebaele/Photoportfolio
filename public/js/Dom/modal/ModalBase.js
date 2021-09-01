@@ -33,7 +33,6 @@ class ModalBase {
     }
 
     open() {
-        this.create();
         this.overlay.classList.add("open");
     }
 

@@ -10,7 +10,6 @@ class ModalFullImage extends ModalBase {
 
     createModal() {
         this.fullImage = this.createFullImage();
-
         this.overlay.appendChild(this.fullImage);
     }
 

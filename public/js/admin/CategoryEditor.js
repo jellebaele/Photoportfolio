@@ -4,7 +4,8 @@ import Alert from "../popup/Alert.js";
 
 const url = "/api/image"
 const gallery = document.querySelector(".gallery");
-const modal = document.querySelector(".modal-base")
+const detailButtons = document.querySelectorAll(".gallery .details-button");
+const modalBase = document.querySelector(".modal-base")
 const alertWarning = document.getElementById("alertWarning");
 const alertSuccess = document.getElementById("alertSucces");
 
@@ -15,8 +16,9 @@ function init() {
     let imageFadeCreator = new FadeCreator(url, gallery, alertHandler);
     imageFadeCreator.addListeners();
 
-    const modalImageEditor = new ModalImageEditor(modal, 0, 0, 0.3);
-    modalImageEditor.open();
+    const modalImageEditor = new ModalImageEditor(modalBase, 0, 0, 0.3, gallery, url, alertHandler);
+    modalImageEditor.create();
+    // modalImageEditor.open();
 
     // const detailsModelCreator = new DetailsModalCreator();
     setupTextAreas(textAreas);
