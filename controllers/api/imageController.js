@@ -48,7 +48,21 @@ async function updateIndexImagesUponDelete(categoryTitle, index) {
     });
 }
 
+async function patchImage(req, res)
+ {
+    const id = req.query.id;
+    try {
+        if (id === undefined) throw new Error("No id was specified.");
+
+        const image = await imageRepository.findImageById(id);
+    } catch (error) {
+        res.statusMessage = error.message;
+        console.error(error.message);
+        res.status(501).end();
+    }
+ }
 module.exports = {
     getImage,
-    deleteImage
+    deleteImage,
+    patchImage
 };

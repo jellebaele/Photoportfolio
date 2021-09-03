@@ -13,5 +13,6 @@ router.patch("/categories/title", categoryController.patchCategoryTitle);
 
 router.get("/image", imageController.getImage);
 router.delete("/image", imageController.deleteImage);
+router.patch("/image", imageController.patchImage);
 
 module.exports = router;
