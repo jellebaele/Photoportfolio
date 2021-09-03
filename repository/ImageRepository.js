@@ -3,7 +3,7 @@ const ImageModel = require("../models/Image");
 const CategoryRepository = require("./CategoryRepository");
 const categoryRepository = new CategoryRepository();
 
-class UploadControllerHelper {
+class ImageRepository {
    async SaveNewImage(image, resizedImage, categoryTitle, description, newImages) {
       try {
          const newImage = new ImageModel({
@@ -152,4 +152,4 @@ class UploadControllerHelper {
    }
 }
 
-module.exports = UploadControllerHelper;
+module.exports = ImageRepository;
