@@ -71,13 +71,9 @@ class ModalImageEditor extends ModalBase {
 
     async detailsButtonImageHandler(id) {
         const image = await this.fetchImageDetails(id);
-        this.addInfoToBody(image, id);
+        const infoBody = this.bodyCreator.create(image, id);
+        this.container.appendChild(infoBody);
         super.open();
-    }
-
-    addInfoToBody(image, id) {
-        let bodyTag = this.bodyCreator.create(image, id);
-        this.container.appendChild(bodyTag);
     }
 
     async fetchImageDetails(id) {
@@ -98,13 +94,15 @@ class BodyCreator {
     constructor() {
         this.bodyTag = document.createElement("div");
         this.bodyTag.classList.add("modal-body");
+
+        this.isEditMode = false;
+        this.originalTextAreaValues = {};
     }
 
     create(image, id) {
-        console.log(image);
-        const title = this.createRow("Titel", "title", image.title);
-        const category = this.createRow("Category", "category", image.category);
-        const description = this.createRow("Beschrijving", "description", image.description);
+        this.title = this.createRow("Titel", "title", image.title);
+        this.category = this.createRow("Category", "category", image.category);
+        this.description = this.createRow("Beschrijving", "description", image.description);
         const originalInfoRow = this.createRowDetailed("Origineel",
             this.getSubrowSizeInfo("size-original", "url-original", `${image.img.size_original}kB`, image.img.path_original))
         const resizedInfoRow = this.createRowDetailed("Origineel",
@@ -112,9 +110,9 @@ class BodyCreator {
         const typeRow = this.createRow("Type", "mime-type", image.img.mimetype);
         const buttonRow = this.createButtonRow(id);
 
-        this.bodyTag.appendChild(title);
-        this.bodyTag.appendChild(category);
-        this.bodyTag.appendChild(description);
+        this.bodyTag.appendChild(this.title);
+        this.bodyTag.appendChild(this.category);
+        this.bodyTag.appendChild(this.description);
         this.bodyTag.appendChild(originalInfoRow);
         this.bodyTag.appendChild(resizedInfoRow);
         this.bodyTag.appendChild(typeRow);
@@ -174,7 +172,7 @@ class BodyCreator {
         deleteButton.addEventListener('click', () => this.deleteHandler(id));
 
         const editButton = this.createButton("button", "fa fa-pencil", "Bewerken");
-        editButton.addEventListener('click', () => this.editHandler(id));
+        editButton.addEventListener('click', () => this.editHandler(id, editButton, modalRowButton, this.getTextAreasToEdit()));
 
         modalRowButton.appendChild(deleteButton);
         modalRowButton.appendChild(editButton);
@@ -182,18 +180,71 @@ class BodyCreator {
     }
 
     createButton(className, icon, content) {
-        const deleteButton = document.createElement("button");
-        deleteButton.classList.add(className);
-        deleteButton.innerHTML = `<i class=\"${icon}\"aria-hidden=\"true\"></i>${content}`;
-        return deleteButton;
+        const button = document.createElement("button");
+        button.classList.add(className);
+        button.innerHTML = `<i class=\"${icon}\"aria-hidden=\"true\"></i>${content}`;
+        return button;
+    }
+
+    adjustButton(button, icon, content) {
+        button.innerHTML = `<i class=\"${icon}\"aria-hidden=\"true\"></i>${content}`;
+    }
+
+    deleteButton(parentNode, button) {
+        parentNode.removeChild(button);
     }
 
     deleteHandler(id) {
         console.log("Delete " + id);
     }
 
-    editHandler(id) {
-        console.log("Edit " + id);
+    getTextAreasToEdit() {
+        const titleTextArea = this.title.querySelector("textarea");
+        const categoryTextArea = this.category.querySelector("textarea");
+        const descriptionTextArea = this.description.querySelector("textarea");
+
+        return [titleTextArea, categoryTextArea, descriptionTextArea];
+    }
+
+    editHandler(id, editButton, modalRowButton, textAreas) {
+        if (this.isEditMode) {
+            this.cancelEdit(textAreas, editButton, modalRowButton);
+        } else {
+            this.retrieveOriginalValuesFromDOM(textAreas, this.originalTextAreaValues);
+            this.setDisableInputTags(textAreas, false);
+
+            this.adjustButton(editButton, "fa fa-times", "Annuleren");
+            this.acceptButton = this.createButton("button", "fa fa-check", "Opslaan");
+            modalRowButton.appendChild(this.acceptButton);
+
+            this.isEditMode = true;
+        }
+    }
+
+    retrieveOriginalValuesFromDOM(textAreas, originalTextAreaValues) {
+        textAreas.forEach(textArea => {
+            originalTextAreaValues[textArea.id] = textArea.value;
+        });
+
+        return originalTextAreaValues;
+    }
+
+    setOriginalValuesToDOM(textAreas, originalTextAreaValues) {
+        textAreas.forEach(textArea => {
+            textArea.value = originalTextAreaValues[textArea.id];
+        })
+    }
+
+    setDisableInputTags(tags, isEnabled) {
+        tags.forEach(tag => tag.disabled = isEnabled);
+    }
+
+    cancelEdit(textAreas, editButton, modalRowButton) {
+        this.setDisableInputTags(textAreas, true);
+        this.setOriginalValuesToDOM(textAreas, this.originalTextAreaValues);
+        this.adjustButton(editButton, "fa fa-pencil", "Bewerken");
+        this.deleteButton(modalRowButton, this.acceptButton)
+        this.isEditMode = false;
     }
 }
 

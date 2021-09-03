@@ -16,8 +16,8 @@ class FadeCreator {
             const deleteButton = imageContainer.querySelector(".delete-button");
             deleteButton.addEventListener('click', () => this.deleteImageHandler(id));
 
-            const detailsButton = imageContainer.querySelector(".details-button");
-            detailsButton.addEventListener('click', () => this.detailsImageHandler(id));
+            // const detailsButton = imageContainer.querySelector(".details-button");
+            // detailsButton.addEventListener('click', () => this.detailsImageHandler(id));
         });
     }
 
