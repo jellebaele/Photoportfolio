@@ -57,7 +57,7 @@ async function patchCategoryTitle(req, res) {
       const updatedCategory = await categoryRepository.updateTitleById(id, newTitle);
 
       if (oldCategory.length > 0) {
-         const updatedImages = await imageRepository.updateImagesByCategory(oldCategory[0].title, newTitle);
+         const updatedImages = await imageRepository.updateImagesPathByCategory(oldCategory[0].title, newTitle);
          res.status(200).json({
             updatedCategory: updatedCategory,
             updatedImages: updatedImages
