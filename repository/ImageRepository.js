@@ -84,7 +84,7 @@ class ImageRepository {
       return await this.findImagesByCategory(categoryName, limit, filter);
    }
 
-   async updateImagesByCategory(oldCategoryName, newCategoryName) {
+   async updateImagesPathByCategory(oldCategoryName, newCategoryName) {
       try {
          const imagesToBeUpdated = await this.findImagesByCategory(oldCategoryName, -1);
          imagesToBeUpdated.forEach(async (image, i) => {
