@@ -139,12 +139,37 @@ class BodyCreator {
 
         const textArea = document.createElement("textarea");
         textArea.id = rowId;
-        if (isDisabled) textArea.disabled = true;
-        textArea.innerHTML = rowContent;
+        this.setupTextArea(textArea, isDisabled, rowContent);
 
         rowTag.appendChild(label);
         rowTag.appendChild(textArea);
         return rowTag;
+    }
+
+    setupTextArea(textArea, isDisabled, rowContent) {
+        if (isDisabled)
+            textArea.disabled = true;
+        textArea.innerHTML = rowContent;
+
+        this.resizeTextArea(textArea);
+        textArea.addEventListener('keyup', (e) => {
+            this.resizeTextArea(e.srcElement)
+        });
+        textArea.addEventListener('change', (e) => {
+            this.resizeTextArea(e.srcElement)
+        });
+    }
+
+    resizeTextArea(textArea) {
+        let content = textArea.value;
+        let columns = textArea.cols;
+    
+        let linecount = 0;
+        content.split("\n").forEach(line => {
+            linecount += Math.ceil(line.length / (columns * 2));
+        });
+    
+        textArea.rows = linecount;
     }
 
     createRowDetailed(mainRowName, subrows, isDisabled = true) {
