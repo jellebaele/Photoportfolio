@@ -1,19 +1,21 @@
+const LIMIT = 5000;
+
 class BodyCreator {
     constructor() {
         this.bodyTag = document.createElement("div");
         this.bodyTag.classList.add("modal-body");
 
         this.isEditMode = false;
-        this.originalTextAreaValues = {};
+        this.originalInputValues = {};
     }
 
     create(image, id) {
         this.title = this.createTextAreaRow("Titel", "title", image.title);
         this.category = this.createDropdownRow("Category", "category", image.category);
         this.description = this.createTextAreaRow("Beschrijving", "description", image.description);
-        const originalInfoRow = this.createDetailedTextAreaDetailed("Origineel",
+        const originalInfoRow = this.createDetailedTextAreaRow("Origineel",
             this.getSubrowSizeInfo("size-original", "url-original", `${image.img.size_original}kB`, image.img.path_original))
-        const resizedInfoRow = this.createDetailedTextAreaDetailed("Origineel",
+        const resizedInfoRow = this.createDetailedTextAreaRow("Origineel",
             this.getSubrowSizeInfo("size-resized", "url-resize", `${image.img.size_resized}kB`, image.img.path_resized));
         const typeRow = this.createTextAreaRow("Type", "mime-type", image.img.mimetype);
         const buttonRow = this.createButtonRow(id);
@@ -51,16 +53,15 @@ class BodyCreator {
 
     createDropdownRow(rowName, rowId, rowContent, textFieldClassName = "text-field", isDisabled = true) {
         const rowTag = this.createRowTag();
+        rowTag.id = rowContent;
         const label = this.createLabelTag(textFieldClassName, rowId, rowName);
 
         const dropdown = document.createElement("select");
         dropdown.name = rowId;
         dropdown.disabled = isDisabled;
-        
-        const optionElement = document.createElement("option");
-        optionElement.textContent = rowContent;
-        optionElement.value = rowContent;
-        
+
+        const optionElement = this.createDropdownElement(rowContent);
+
         dropdown.appendChild(optionElement);
         rowTag.appendChild(label);
         rowTag.appendChild(dropdown);
@@ -79,6 +80,13 @@ class BodyCreator {
         const rowTag = document.createElement("div");
         rowTag.classList.add("modal-row");
         return rowTag;
+    }
+
+    createDropdownElement(rowContent) {
+        const optionElement = document.createElement("option");
+        optionElement.textContent = rowContent;
+        optionElement.value = rowContent;
+        return optionElement;
     }
 
     setupTextArea(textArea, isDisabled, rowContent) {
@@ -107,7 +115,7 @@ class BodyCreator {
         textArea.rows = linecount;
     }
 
-    createDetailedTextAreaDetailed(mainRowName, subrows, isDisabled = true) {
+    createDetailedTextAreaRow(mainRowName, subrows, isDisabled = true) {
         const mainRowTag = document.createElement("div");
         mainRowTag.classList.add("modal-row-detailed");
 
@@ -170,8 +178,9 @@ class BodyCreator {
         if (this.isEditMode) {
             this.cancelEdit(inputFields, editButton, modalRowButton);
         } else {
-            this.retrieveOriginalValuesFromDOM(inputFields, this.originalTextAreaValues);
+            this.retrieveOriginalValuesFromDOM(inputFields, this.originalInputValues);
             this.setDisableInputTags(inputFields, false);
+            this.fillCategoriesDropdown(this.category.querySelector("select"))
 
             this.adjustButton(editButton, "fa fa-times", "Annuleren");
             this.acceptButton = this.createButton("button", "fa fa-check", "Opslaan");
@@ -182,9 +191,26 @@ class BodyCreator {
         }
     }
 
+    async fillCategoriesDropdown(dropdownTag) {
+        try {
+            const response = await fetch(`/api/categories?limit=${LIMIT}`);
+            const categories = await response.json();
+
+            categories.forEach(category => {
+                if (category.title !== this.category.id) {
+                    const dropdownElement = this.createDropdownElement(category.title);
+                    dropdownTag.appendChild(dropdownElement);
+                }
+            });
+        } catch (error) {
+            // this.alertHandler.showWarning(error.message))
+        }
+
+    }
+
     saveChangesHandler(id, textAreas) {
         let inputValues = this.retrieveInputValuesFromDOM(textAreas);
-  
+
         fetch(`/api/image?id=${id}`, {
             method: "PATCH",
             headers: {
@@ -222,7 +248,7 @@ class BodyCreator {
 
     cancelEdit(textAreas, editButton, modalRowButton) {
         this.setDisableInputTags(textAreas, true);
-        this.setOriginalValuesToDOM(textAreas, this.originalTextAreaValues);
+        this.setOriginalValuesToDOM(textAreas, this.originalInputValues);
         this.adjustButton(editButton, "fa fa-pencil", "Bewerken");
         this.deleteButton(modalRowButton, this.acceptButton)
         this.isEditMode = false;
