@@ -48,19 +48,21 @@ async function updateIndexImagesUponDelete(categoryTitle, index) {
     });
 }
 
-async function patchImage(req, res)
- {
+async function patchImage(req, res) {
     const id = req.query.id;
+    const newTitle = req.body.title;
+    const newCategory = req.body.category;
+    const newDescription = req.body.description;
     try {
         if (id === undefined) throw new Error("No id was specified.");
-
-        const image = await imageRepository.findImageById(id);
+        const image = await imageRepository.updateImageById(id, newTitle, newCategory, newDescription);
+        res.status(201).send({ updatedImage: image });
     } catch (error) {
         res.statusMessage = error.message;
         console.error(error.message);
         res.status(501).end();
     }
- }
+}
 module.exports = {
     getImage,
     deleteImage,
