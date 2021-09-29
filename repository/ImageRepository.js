@@ -115,6 +115,24 @@ class ImageRepository {
       }
    }
 
+   async updateImageById(id, newTitle, newCategory, newDescription) {
+      const filter = { _id: id };
+      const updateImage = {
+         $set: {
+            title: newTitle,
+            category: newCategory,
+            description: newDescription
+         }
+      };
+
+      try {
+         const updatedImage = await ImageModel.updateOne(filter, updateImage);
+         return { status: updatedImage }
+      } catch (error) {
+         throw error;
+      }
+   }
+
    async deleteImageById(id) {
       try {
          const image = await ImageModel.findById(id);

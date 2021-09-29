@@ -17,6 +17,7 @@ app.use("/css", express.static(__dirname + "public/css"));
 
 app.set("view engine", "ejs");
 app.use(express.json());
+app.use(express.urlencoded( {extended: true}));
 app.use("/uploads", express.static("uploads"));
 app.use(routes);
 
