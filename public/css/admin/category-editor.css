@@ -167,6 +167,11 @@ body {
   border: 1px solid rgba(51, 51, 51, 0.4);
 }
 
+.modal-body select {
+  resize: none;
+  border: 1px solid rgba(51, 51, 51, 0.4);
+}
+
 .modal-row-buttons {
   display: flex;
   justify-content: flex-end;
@@ -190,7 +195,8 @@ body {
   color: #f4f5f5;
 }
 
-.fa-pencil, .fa-trash {
+.fa-pencil,
+.fa-trash {
   margin-right: 3px;
 }
 
@@ -207,15 +213,25 @@ body {
   .modal-container {
     width: 80%;
   }
-  
+
   .modal-row {
     display: flex;
     flex-direction: column;
     margin-bottom: 5px;
   }
 
-  .modal-body textarea {
+  .modal-body textarea,
+  .modal-body select {
     width: 100%;
+  }
+
+  .modal-body select {
+    font: Arial;
+  }
+
+  .modal-body select[disabled] {
+    background: #EFEFEF4D;
+    color: #1b1b1b;
   }
 
   .modal-row-detailed textarea {
