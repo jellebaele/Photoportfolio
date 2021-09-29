@@ -71,12 +71,12 @@ class BodyCreator {
     resizeTextArea(textArea) {
         let content = textArea.value;
         let columns = textArea.cols;
-    
+
         let linecount = 0;
         content.split("\n").forEach(line => {
             linecount += Math.ceil(line.length / (columns * 2));
         });
-    
+
         textArea.rows = linecount;
     }
 
@@ -148,17 +148,29 @@ class BodyCreator {
 
             this.adjustButton(editButton, "fa fa-times", "Annuleren");
             this.acceptButton = this.createButton("button", "fa fa-check", "Opslaan");
+            this.acceptButton.addEventListener("click", () => this.saveChangesHandler(id, textAreas));
             modalRowButton.appendChild(this.acceptButton);
 
             this.isEditMode = true;
         }
     }
 
+    saveChangesHandler(id, textAreas) {
+        let inputValues = this.retrieveInputValuesFromDOM(textAreas);
+  
+        fetch(`/api/image?id=${id}`, {
+            method: "PATCH",
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(inputValues)
+        })
+    }
+
     retrieveOriginalValuesFromDOM(textAreas, originalTextAreaValues) {
         textAreas.forEach(textArea => {
             originalTextAreaValues[textArea.id] = textArea.value;
         });
-
         return originalTextAreaValues;
     }
 
@@ -166,6 +178,15 @@ class BodyCreator {
         textAreas.forEach(textArea => {
             textArea.value = originalTextAreaValues[textArea.id];
         })
+    }
+
+    retrieveInputValuesFromDOM(textAreas) {
+        let values = {}
+        textAreas.forEach(textArea => {
+            values[textArea.id] = textArea.value;
+        });
+
+        return values;
     }
 
     setDisableInputTags(tags, isEnabled) {
@@ -178,6 +199,12 @@ class BodyCreator {
         this.adjustButton(editButton, "fa fa-pencil", "Bewerken");
         this.deleteButton(modalRowButton, this.acceptButton)
         this.isEditMode = false;
+    }
+
+    EditeableFormData(fTitle, fCategory, fDescription) {
+        this.title = fTitle;
+        this.category = fCategory;
+        this.description = fDescription;
     }
 }
 
