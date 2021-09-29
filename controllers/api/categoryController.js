@@ -4,7 +4,8 @@ const categoryRepository = new CategoryRepository();
 const imageRepository = new ImageRepository();
 
 async function searchCategories(req, res) {
-   const query = req.query.search;
+   let query = req.query.search;
+   if (query === undefined) query = "";
    let limit = parseInt(req.query.limit);
 
    try {
