@@ -132,7 +132,7 @@ class BodyCreator {
         deleteButton.addEventListener('click', () => this.deleteHandler(id));
 
         const editButton = this.createButton("button", "fa fa-pencil", "Bewerken");
-        editButton.addEventListener('click', () => this.editHandler(id, editButton, modalRowButton, this.getTextAreasToEdit()));
+        editButton.addEventListener('click', () => this.editHandler(id, editButton, modalRowButton, this.getInputFieldsToEdit()));
 
         modalRowButton.appendChild(deleteButton);
         modalRowButton.appendChild(editButton);
@@ -158,24 +158,24 @@ class BodyCreator {
         console.log("Delete " + id);
     }
 
-    getTextAreasToEdit() {
+    getInputFieldsToEdit() {
         const titleTextArea = this.title.querySelector("textarea");
-        const categoryTextArea = this.category.querySelector("textarea");
+        const categoryTextArea = this.category.querySelector("select");
         const descriptionTextArea = this.description.querySelector("textarea");
 
         return [titleTextArea, categoryTextArea, descriptionTextArea];
     }
 
-    editHandler(id, editButton, modalRowButton, textAreas) {
+    editHandler(id, editButton, modalRowButton, inputFields) {
         if (this.isEditMode) {
-            this.cancelEdit(textAreas, editButton, modalRowButton);
+            this.cancelEdit(inputFields, editButton, modalRowButton);
         } else {
-            this.retrieveOriginalValuesFromDOM(textAreas, this.originalTextAreaValues);
-            this.setDisableInputTags(textAreas, false);
+            this.retrieveOriginalValuesFromDOM(inputFields, this.originalTextAreaValues);
+            this.setDisableInputTags(inputFields, false);
 
             this.adjustButton(editButton, "fa fa-times", "Annuleren");
             this.acceptButton = this.createButton("button", "fa fa-check", "Opslaan");
-            this.acceptButton.addEventListener("click", () => this.saveChangesHandler(id, textAreas));
+            this.acceptButton.addEventListener("click", () => this.saveChangesHandler(id, inputFields));
             modalRowButton.appendChild(this.acceptButton);
 
             this.isEditMode = true;
@@ -226,12 +226,6 @@ class BodyCreator {
         this.adjustButton(editButton, "fa fa-pencil", "Bewerken");
         this.deleteButton(modalRowButton, this.acceptButton)
         this.isEditMode = false;
-    }
-
-    EditeableFormData(fTitle, fCategory, fDescription) {
-        this.title = fTitle;
-        this.category = fCategory;
-        this.description = fDescription;
     }
 }
 
