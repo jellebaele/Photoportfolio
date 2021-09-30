@@ -1,5 +1,6 @@
 import ModalBase from "./ModalBase.js"
 import BodyCreator from "./BodyCreator.js";
+import HeaderCreator from "./DOMCreators/Implementation/ModalImageEditor/HeaderCreator.js";
 
 class ModalImageEditor extends ModalBase {
     constructor(main, height, width, overlayOpacity = 0.3, galleryImages, url, alertHandler) {
@@ -12,12 +13,12 @@ class ModalImageEditor extends ModalBase {
         this.alertHandler = alertHandler;
 
         this.container;
+        this.headerCreator = new HeaderCreator("header-modal");
         this.bodyCreator = new BodyCreator();
     }
 
     createModal() {
         this.container = this.createContainer();
-        this.container.appendChild(this.createHeader());
         this.overlay.appendChild(this.container);
     }
 
@@ -29,7 +30,7 @@ class ModalImageEditor extends ModalBase {
             // deleteButton.addEventListener('click', () => this.deleteImageHandler(id));
 
             const detailsButton = imageContainer.querySelector(".details-button");
-            detailsButton.addEventListener('click', () => this.detailsButtonImageHandler(id));
+            detailsButton.addEventListener('click', () => this.open(id));
         });
 
         this.overlay.addEventListener('click', (e) => {
@@ -39,8 +40,10 @@ class ModalImageEditor extends ModalBase {
         });
     }
 
+    // Override
     close() {
         super.close();
+        this.headerCreator.clear();
         this.bodyCreator.clear();
     }
 
@@ -51,30 +54,26 @@ class ModalImageEditor extends ModalBase {
         return containerTag;
     }
 
-    createHeader() {
-        const headerTag = document.createElement("div");
-        headerTag.classList.add("header-modal");
-
-        const title = document.createElement("div");
-        title.classList.add("title-modal");
-        title.innerHTML = "DETAILS";
-
-        const closeButton = document.createElement("button");
-        closeButton.classList.add("container-button");
-        closeButton.classList.add("close-modal");
-        closeButton.innerHTML = "<i class=\"fa fa-times-circle\" aria-hidden=\"true\"></i>"
-        closeButton.addEventListener("click", () => this.close());
-
-        headerTag.appendChild(title);
-        headerTag.appendChild(closeButton);
-        return headerTag;
+    async open(id) {
+        const header = this.createHeader();
+        const body = await this.createBody(id);
+        
+        this.container.appendChild(header);        
+        this.container.appendChild(body);
+        super.open();
     }
 
-    async detailsButtonImageHandler(id) {
+    createHeader() {
+        let header = this.headerCreator.create();
+        header.buttons.closeButton.addEventListener("click", () => this.close());
+
+        return header.mainTag;
+    }
+
+    async createBody(id) {
         const image = await this.fetchImageDetails(id);
         const infoBody = this.bodyCreator.create(image, id);
-        this.container.appendChild(infoBody);
-        super.open();
+        return infoBody;
     }
 
     async fetchImageDetails(id) {
