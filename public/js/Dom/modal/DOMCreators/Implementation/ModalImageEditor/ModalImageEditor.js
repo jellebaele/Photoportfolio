@@ -1,6 +1,6 @@
-import ModalBase from "./DOMCreators/Base/ModalBase.js"
-import BodyCreator from "./DOMCreators/Implementation/ModalImageEditor/BodyCreator.js";
-import HeaderCreator from "./DOMCreators/Implementation/ModalImageEditor/HeaderCreator.js";
+import ModalBase from "../../Base/ModalBase.js"
+import BodyCreator from "./BodyCreator.js";
+import HeaderCreator from "./HeaderCreator.js";
 
 class ModalImageEditor extends ModalBase {
     constructor(main, height, width, overlayOpacity = 0.3, galleryImages, url, alertHandler) {

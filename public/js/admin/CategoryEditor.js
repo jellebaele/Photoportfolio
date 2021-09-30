@@ -1,5 +1,5 @@
 import FadeCreator from "../dom/images/FadeCreator.js";
-import ModalImageEditor from "../Dom/modal/ModalImageEditor.js";
+import ModalImageEditor from "../Dom/modal/DOMCreators/Implementation/ModalImageEditor/ModalImageEditor.js";
 import Alert from "../popup/Alert.js";
 
 const url = "/api/image"
