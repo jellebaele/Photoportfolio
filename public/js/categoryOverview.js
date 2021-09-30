@@ -1,4 +1,4 @@
-import ModalFullImage from "./Dom/modal/ModalFullImage.js";
+import ModalFullImage from "./Dom/modal/DOMCreators/Implementation/ModalFullImage/ModalFullImage.js";
 
 
 const modal = document.querySelector('.modal');

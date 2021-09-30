@@ -1,4 +1,4 @@
-import ModalBase from "./DOMCreators/Base/ModalBase.js"
+import ModalBase from "../../Base/ModalBase.js"
 
 class ModalFullImage extends ModalBase {
     constructor(main, height, width, overlayOpacity = 0.3, previews) {

@@ -55,8 +55,8 @@ async function patchImage(req, res) {
     const newDescription = req.body.description;
     try {
         if (id === undefined) throw new Error("No id was specified.");
-        const image = await imageRepository.updateImageById(id, newTitle, newCategory, newDescription);
-        res.status(201).send({ updatedImage: image });
+        const updateStatus = await imageRepository.updateImageById(id, newTitle, newCategory, newDescription);
+        res.status(201).send({status: updateStatus, image: "TEST"});
     } catch (error) {
         res.statusMessage = error.message;
         console.error(error.message);
