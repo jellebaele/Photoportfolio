@@ -1,4 +1,4 @@
-import OverlayCreator from "./DOMCreators/Implementation/OverlayCreator.js";
+import OverlayCreator from "../Implementation/OverlayCreator.js";
 
 class ModalBase {
 

@@ -1,4 +1,4 @@
-import ModalBase from "./ModalBase.js"
+import ModalBase from "./DOMCreators/Base/ModalBase.js"
 import BodyCreator from "./BodyCreator.js";
 import HeaderCreator from "./DOMCreators/Implementation/ModalImageEditor/HeaderCreator.js";
 
