@@ -1,3 +1,5 @@
+import OverlayCreator from "./DOMCreators/Implementation/OverlayCreator.js";
+
 class ModalBase {
 
     RGBBackgroundOverlay = [0, 0, 0]
@@ -7,6 +9,8 @@ class ModalBase {
         this.height = height;
         this.width = width;
         this.overlayOpacity = overlayOpacity;
+
+        this.overlayCreator = new OverlayCreator("modal-overlay");
 
         this.overlay;
     }
@@ -20,24 +24,28 @@ class ModalBase {
     createModal() {
         throw new ("Implementation required in derived class");
     }
-    
-    addListeners () {
-        throw new ("Implementation required in derived class"); 
+
+    addListeners() {
+        throw new ("Implementation required in derived class");
     }
 
     createOverlay() {
-        this.overlay = document.createElement("div");
-        this.overlay.classList.add("modal-overlay");
-        this.overlay.style.background = `rgba(${this.RGBBackgroundOverlay[0]},${this.RGBBackgroundOverlay[1]},${this.RGBBackgroundOverlay[2]},${this.overlayOpacity})`
+        this.overlay = this.overlayCreator.create();
         this.main.appendChild(this.overlay);
+
+        this.overlay.addEventListener('click', (e) => {
+            if (e.target.classList.contains('modal-overlay')) {
+                this.close();
+            }
+        });
     }
 
     open() {
-        this.overlay.classList.add("open");
+        this.overlayCreator.open();
     }
 
     close() {
-        this.overlay.classList.remove("open");
+        this.overlayCreator.close();
     }
 }
 

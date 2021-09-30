@@ -32,12 +32,6 @@ class ModalImageEditor extends ModalBase {
             const detailsButton = imageContainer.querySelector(".details-button");
             detailsButton.addEventListener('click', () => this.open(id));
         });
-
-        this.overlay.addEventListener('click', (e) => {
-            if (e.target.classList.contains('modal-overlay')) {
-                this.close();
-            }
-        });
     }
 
     // Override
@@ -47,13 +41,7 @@ class ModalImageEditor extends ModalBase {
         this.bodyCreator.clear();
     }
 
-    createContainer() {
-        const containerTag = document.createElement("div");
-        containerTag.classList.add("modal-container");
-
-        return containerTag;
-    }
-
+    // Override
     async open(id) {
         const header = this.createHeader();
         const body = await this.createBody(id);
@@ -61,6 +49,13 @@ class ModalImageEditor extends ModalBase {
         this.container.appendChild(header);        
         this.container.appendChild(body);
         super.open();
+    }
+
+    createContainer() {
+        const containerTag = document.createElement("div");
+        containerTag.classList.add("modal-container");
+
+        return containerTag;
     }
 
     createHeader() {
