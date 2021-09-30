@@ -1,5 +1,5 @@
 import ModalBase from "./DOMCreators/Base/ModalBase.js"
-import BodyCreator from "./BodyCreator.js";
+import BodyCreator from "./DOMCreators/Implementation/ModalImageEditor/BodyCreator.js";
 import HeaderCreator from "./DOMCreators/Implementation/ModalImageEditor/HeaderCreator.js";
 
 class ModalImageEditor extends ModalBase {
