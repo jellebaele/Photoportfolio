@@ -196,7 +196,9 @@ body {
 }
 
 .fa-pencil,
-.fa-trash {
+.fa-trash, 
+.fa-check,
+.fa-times {
   margin-right: 3px;
 }
 
