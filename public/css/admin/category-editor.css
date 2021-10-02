@@ -195,6 +195,11 @@ body {
   color: #f4f5f5;
 }
 
+.modal-body .button.hide {
+  opacity: 0;
+  pointer-events: none;
+}
+
 .fa-pencil,
 .fa-trash, 
 .fa-check,

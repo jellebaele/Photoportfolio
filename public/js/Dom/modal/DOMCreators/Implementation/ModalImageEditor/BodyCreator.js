@@ -1,13 +1,12 @@
 import ModalDOMCreator from "../../Base/ModalDOMCreator.js";
 
-const LIMIT = 5000;
-
 class BodyCreator extends ModalDOMCreator {
     constructor(className) {
         super(className);
 
         this.isEditMode = false;
         this.originalInputValues = {};
+        this.buttonRow;
     }
 
     create(image, id) {
@@ -19,7 +18,7 @@ class BodyCreator extends ModalDOMCreator {
         const resizedInfoRow = this.createDetailedTextAreaRow("Origineel",
             this.getSubrowSizeInfo("size-resized", "url-resize", `${image.img.size_resized}kB`, image.img.path_resized));
         const typeRow = this.createTextAreaRow("Type", "mime-type", image.img.mimetype);
-        const buttonRow = this.createButtonRow(id);
+        this.buttonRow = this.createButtonRow(id);
 
         this.mainTag.appendChild(this.title);
         this.mainTag.appendChild(this.category);
@@ -27,14 +26,22 @@ class BodyCreator extends ModalDOMCreator {
         this.mainTag.appendChild(originalInfoRow);
         this.mainTag.appendChild(resizedInfoRow);
         this.mainTag.appendChild(typeRow);
-        this.mainTag.appendChild(buttonRow.buttonRow);
+        this.mainTag.appendChild(this.buttonRow.buttonRow);
         return {
             mainTag: this.mainTag,
             buttons: {
-                deleteButton: buttonRow.buttons.deleteButton,
-                editButton: buttonRow.buttons.editButton
+                deleteButton: this.buttonRow.buttons.deleteButton,
+                editButton: this.buttonRow.buttons.editButton
             }
         };
+    }
+
+    addButtonToButtonRow(button) {
+        this.buttonRow.buttonRow.appendChild(button)
+    }
+
+    deleteButtonFromBody(button) {
+        this.buttonRow.buttonRow.removeChild(button)
     }
 
     createTextAreaRow(rowName, rowId, rowContent, textFieldClassName = "text-field", isDisabled = true) {
@@ -90,10 +97,7 @@ class BodyCreator extends ModalDOMCreator {
         modalRowButton.classList.add("modal-row-buttons");
 
         const deleteButton = this.createButton("button", "fa fa-trash", "Verwijderen");
-        // deleteButton.addEventListener('click', () => this.deleteHandler(id));
-
         const editButton = this.createButton("button", "fa fa-pencil", "Bewerken");
-        // editButton.addEventListener('click', () => this.editHandler(id, editButton, modalRowButton, this.getInputFieldsToEdit()));
 
         modalRowButton.appendChild(deleteButton);
         modalRowButton.appendChild(editButton);
@@ -164,104 +168,20 @@ class BodyCreator extends ModalDOMCreator {
         return button;
     }
 
+    hideButton(button) {
+        button.classList.add("hide");
+    }
+
+    showButton(button) {
+        button.classList.remove("hide");
+    }
+
     adjustButton(button, icon, content) {
         button.innerHTML = `<i class=\"${icon}\"aria-hidden=\"true\"></i>${content}`;
     }
 
-    deleteButton(parentNode, button) {
-        parentNode.removeChild(button);
-    }
-
-    deleteHandler(id) {
-        console.log("Delete " + id);
-    }
-
-    getInputFieldsToEdit() {
-        const titleTextArea = this.title.querySelector("textarea");
-        const categoryTextArea = this.category.querySelector("select");
-        const descriptionTextArea = this.description.querySelector("textarea");
-
-        return [titleTextArea, categoryTextArea, descriptionTextArea];
-    }
-
-    editHandler(id, editButton, modalRowButton, inputFields) {
-        if (this.isEditMode) {
-            this.cancelEdit(inputFields, editButton, modalRowButton);
-        } else {
-            this.retrieveOriginalValuesFromDOM(inputFields, this.originalInputValues);
-            this.setDisableInputTags(inputFields, false);
-            this.fillCategoriesDropdown(this.category.querySelector("select"))
-
-            this.adjustButton(editButton, "fa fa-times", "Annuleren");
-            this.acceptButton = this.createButton("button", "fa fa-check", "Opslaan");
-            this.acceptButton.addEventListener("click", () => this.saveChangesHandler(id, inputFields));
-            modalRowButton.appendChild(this.acceptButton);
-
-            this.isEditMode = true;
-        }
-    }
-
-    async fillCategoriesDropdown(dropdownTag) {
-        try {
-            const response = await fetch(`/api/categories?limit=${LIMIT}`);
-            const categories = await response.json();
-
-            categories.forEach(category => {
-                if (category.title !== this.category.id) {
-                    const dropdownElement = this.createDropdownElement(category.title);
-                    dropdownTag.appendChild(dropdownElement);
-                }
-            });
-        } catch (error) {
-            // this.alertHandler.showWarning(error.message))
-        }
-
-    }
-
-    saveChangesHandler(id, textAreas) {
-        let inputValues = this.retrieveInputValuesFromDOM(textAreas);
-
-        fetch(`/api/image?id=${id}`, {
-            method: "PATCH",
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(inputValues)
-        })
-    }
-
-    retrieveOriginalValuesFromDOM(textAreas, originalTextAreaValues) {
-        textAreas.forEach(textArea => {
-            originalTextAreaValues[textArea.id] = textArea.value;
-        });
-        return originalTextAreaValues;
-    }
-
-    setOriginalValuesToDOM(textAreas, originalTextAreaValues) {
-        textAreas.forEach(textArea => {
-            textArea.value = originalTextAreaValues[textArea.id];
-        })
-    }
-
-    retrieveInputValuesFromDOM(textAreas) {
-        let values = {}
-        textAreas.forEach(textArea => {
-            values[textArea.id] = textArea.value;
-        });
-
-        return values;
-    }
-
-    setDisableInputTags(tags, isEnabled) {
+    setInputTagsDisabled(tags, isEnabled) {
         tags.forEach(tag => tag.disabled = isEnabled);
-    }
-
-    cancelEdit(inputFields, editButton, modalRowButton) {
-        this.setDisableInputTags(inputFields, true);
-        this.setOriginalValuesToDOM(inputFields, this.originalInputValues);
-        this.adjustButton(editButton, "fa fa-pencil", "Bewerken");
-        this.deleteButton(modalRowButton, this.acceptButton)
-        this.isEditMode = false;
     }
 }
 

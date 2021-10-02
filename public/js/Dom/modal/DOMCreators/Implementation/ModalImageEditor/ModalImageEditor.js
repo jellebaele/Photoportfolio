@@ -1,5 +1,6 @@
 import ModalBase from "../../Base/ModalBase.js"
 import BodyCreator from "./BodyCreator.js";
+import EditHandler from "./EditHandler.js";
 import HeaderCreator from "./HeaderCreator.js";
 
 class ModalImageEditor extends ModalBase {
@@ -14,7 +15,8 @@ class ModalImageEditor extends ModalBase {
 
         this.container;
         this.headerCreator = new HeaderCreator("header-modal");
-        this.bodyCreator = new BodyCreator();
+        this.bodyCreator = new BodyCreator("modal-body");
+        this.editHandler = new EditHandler(this.bodyCreator, alertHandler);
     }
 
     createModal() {
@@ -45,8 +47,8 @@ class ModalImageEditor extends ModalBase {
     async open(id) {
         const header = this.createHeader();
         const body = await this.createBody(id);
-        
-        this.container.appendChild(header);        
+
+        this.container.appendChild(header);
         this.container.appendChild(body);
         super.open();
     }
@@ -59,7 +61,7 @@ class ModalImageEditor extends ModalBase {
     }
 
     createHeader() {
-        let header = this.headerCreator.create();
+        const header = this.headerCreator.create();
         header.buttons.closeButton.addEventListener("click", () => this.close());
 
         return header.mainTag;
@@ -67,8 +69,30 @@ class ModalImageEditor extends ModalBase {
 
     async createBody(id) {
         const image = await this.fetchImageDetails(id);
-        const infoBody = this.bodyCreator.create(image, id);
-        return infoBody;
+        const body = this.bodyCreator.create(image, id);
+        const inputFields = this.getInputFieldsToEdit(body.mainTag);
+
+        body.buttons.editButton.addEventListener("click", () => this.editHandler.handleClickEvent(id, inputFields, body.buttons));
+        body.buttons.deleteButton.addEventListener("click", () => this.deleteHandler());
+
+        return body.mainTag;
+    }
+
+    getInputFieldsToEdit(body) {
+        let fiels = new Map();
+        const titleTextArea = body.querySelector("#title");
+        const categorySelectArea = body.querySelector("#category");
+        const descriptionTextArea = body.querySelector("#description");
+
+        return new Map([
+            ["titleTextArea", titleTextArea], 
+            ["categorySelectArea", categorySelectArea],
+            ["descriptionTextArea", descriptionTextArea]
+        ]);
+    }
+
+    deleteHandler() {
+        console.log("Test Delete");
     }
 
     async fetchImageDetails(id) {

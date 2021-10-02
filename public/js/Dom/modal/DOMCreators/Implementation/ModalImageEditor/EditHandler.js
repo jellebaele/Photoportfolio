@@ -1,39 +1,47 @@
+import CategoryApi from "../../../../../api/CategoryApi.js";
+import ImageApi from "../../../../../api/ImageApi.js";
+
+const LIMIT = 5000;
+
 class EditHandler {
-    constructor() {
+    constructor(bodyCreator, alertHandler) {
         this.isEditMode = false;
         this.originalInputValues = {};
+
+        this.bodyCreator = bodyCreator;
+        this.alertHandler = alertHandler;
+        this.acceptButton;
     }
 
     handleClickEvent(id, inputFields, buttons) {
         if (this.isEditMode) {
             this.cancelEdit(inputFields, buttons);
         } else {
-            this.startEdit(inputFields, buttons);
+            this.startEdit(id, inputFields, buttons);
         }
     }
 
-    startEdit(inputFields, buttons) {
+    startEdit(id, inputFields, buttons) {
         this.retrieveOriginalValuesFromDOM(inputFields, this.originalInputValues)
-        this.setInputTagsDisabled(inputFields, false);
-        
-        // this.fillCategoriesDropdown(this.category.querySelector("select"));
-        this.adjustButton(buttons.deleteButton, "fa fa-check", "Accepteren");
-        this.adjustButton(buttons.editButton, "fa fa-times", "Annuleren");
+        this.bodyCreator.setInputTagsDisabled(inputFields, false);
+        this.fillCategoriesDropdown(inputFields.get("categorySelectArea"));
 
+        this.bodyCreator.hideButton(buttons.deleteButton);
+        this.bodyCreator.adjustButton(buttons.editButton, "fa fa-times", "Annuleren");
+        this.createAcceptButton(id, inputFields);
 
         this.isEditMode = true;
-        console.log("Start Edit");
     }
 
     cancelEdit(inputFields, buttons) {
-        this.setInputTagsDisabled(inputFields, true);
+        this.bodyCreator.setInputTagsDisabled(inputFields, true);
         this.setOriginalValuesToDOM(inputFields, this.originalInputValues);
 
-        this.adjustButton(buttons.deleteButton, "fa fa-trash", "Delete");
-        this.adjustButton(buttons.editButton, "fa fa-pencil", "Bewerken");
+        this.bodyCreator.showButton(buttons.deleteButton);
+        this.bodyCreator.adjustButton(buttons.editButton, "fa fa-pencil", "Bewerken");
+        this.bodyCreator.deleteButtonFromBody(this.acceptButton);
 
         this.isEditMode = false;
-        console.log("Stop edit");
     }
 
     retrieveOriginalValuesFromDOM(inputFields, originalTextAreaValues) {
@@ -43,18 +51,57 @@ class EditHandler {
         return originalTextAreaValues;
     }
 
-    setOriginalValuesToDOM(textAreas, originalTextAreaValues) {
-        textAreas.forEach(textArea => {
-            textArea.value = originalTextAreaValues[textArea.id];
+    retrieveCurrentValuesFromDOM(inputFields) {
+        let values = {}
+        inputFields.forEach(iField => {
+            values[iField.id] = iField.value;
+        });
+
+        return values;
+    }
+
+    setOriginalValuesToDOM(inputFields, originalInputValues) {
+        inputFields.forEach(iField => {
+            iField.value = originalInputValues[iField.id];
         })
     }
 
-    setInputTagsDisabled(tags, isEnabled) {
-        tags.forEach(tag => tag.disabled = isEnabled);
+    createAcceptButton(id, inputFields) {
+        this.acceptButton = this.bodyCreator.createButton("button", "fa fa-check", "Opslaan");
+        this.acceptButton.addEventListener("click", () => this.saveChangesHandler(id, inputFields));
+        this.bodyCreator.addButtonToButtonRow(this.acceptButton);
     }
 
-    adjustButton(button, icon, content) {
-        button.innerHTML = `<i class=\"${icon}\"aria-hidden=\"true\"></i>${content}`;
+    async fillCategoriesDropdown(dropdownTag) {
+        try {
+            const categories = await CategoryApi.searchAllCategories(LIMIT);
+
+            categories.forEach(category => {
+                if (category.title !== dropdownTag.value) {
+                    const dropdownElement = this.bodyCreator.createDropdownElement(category.title);
+                    dropdownTag.appendChild(dropdownElement);
+                }
+            });
+        } catch (error) {
+            this.alertHandler.showWarning(error.message);
+        }
+    }
+
+    async saveChangesHandler(id, inputFields) {
+        try {
+            const inputValues = this.retrieveCurrentValuesFromDOM(inputFields);
+            const response = await ImageApi.patchImage(id, inputValues);
+
+            console.log(response);
+        } catch (error) {
+            this.alertHandler.showWarning(error.message);
+        }
+       
+        // console.log(inputFields);
+       
+        // console.log(inputValues);
+        // console.log(id);
+        // console.log("SaveChangesHandler");
     }
 }
 
