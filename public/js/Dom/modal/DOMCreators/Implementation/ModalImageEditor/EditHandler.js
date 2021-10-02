@@ -28,7 +28,7 @@ class EditHandler {
 
         this.bodyCreator.hideButton(buttons.deleteButton);
         this.bodyCreator.adjustButton(buttons.editButton, "fa fa-times", "Annuleren");
-        this.createAcceptButton(id, inputFields);
+        this.createAcceptButton(id, inputFields, buttons);
 
         this.isEditMode = true;
     }
@@ -66,9 +66,9 @@ class EditHandler {
         })
     }
 
-    createAcceptButton(id, inputFields) {
+    createAcceptButton(id, inputFields, buttons) {
         this.acceptButton = this.bodyCreator.createButton("button", "fa fa-check", "Opslaan");
-        this.acceptButton.addEventListener("click", () => this.saveChangesHandler(id, inputFields));
+        this.acceptButton.addEventListener("click", () => this.saveChangesHandler(id, inputFields, buttons));
         this.bodyCreator.addButtonToButtonRow(this.acceptButton);
     }
 
@@ -87,21 +87,22 @@ class EditHandler {
         }
     }
 
-    async saveChangesHandler(id, inputFields) {
+    async saveChangesHandler(id, inputFields, buttons) {
         try {
             const inputValues = this.retrieveCurrentValuesFromDOM(inputFields);
             const response = await ImageApi.patchImage(id, inputValues);
 
-            console.log(response);
+            this.alertHandler.showSucces("Succesvol geüpdatet!");
+            this.retrieveOriginalValuesFromDOM(inputFields, this.originalInputValues);
+
+            if (response.updatedImage.category !== this.originalInputValues.category) {
+                console.log("!!");
+            }
         } catch (error) {
             this.alertHandler.showWarning(error.message);
+        } finally {
+            this.cancelEdit(inputFields, buttons);
         }
-       
-        // console.log(inputFields);
-       
-        // console.log(inputValues);
-        // console.log(id);
-        // console.log("SaveChangesHandler");
     }
 }
 

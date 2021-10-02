@@ -1,10 +1,7 @@
 const BASE_URL = "/api/image"
 
 class ImageApi {
-    static async patchImage(id, data) {
-        
-        console.log(JSON.stringify(data));
-        
+    static async patchImage(id, data) {        
         try {
             const response = await fetch(`${BASE_URL}?id=${id}`, {
                 method: "PATCH",
@@ -14,7 +11,11 @@ class ImageApi {
                 body: JSON.stringify(data)
             });
 
-            return await response.json();
+            if (response.status === 200 || response.status === 201) 
+                return await response.json();
+            else
+                throw new Error (`Something went wrong. Status code: ${response.status}`);
+
         } catch (error) {
             throw error;
         }
