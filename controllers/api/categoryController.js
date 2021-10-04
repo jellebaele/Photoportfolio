@@ -52,24 +52,16 @@ async function deleteCategory(req, res) {
 async function patchCategoryTitle(req, res) {
    const id = req.query.id;
    const newTitle = req.query.newTitle;
-
    try {
       const oldCategory = await categoryRepository.searchById(id);
-      const updatedCategory = await categoryRepository.updateTitleById(id, newTitle);
 
       if (oldCategory.length > 0) {
+         const updatedCategory = await categoryRepository.updateCategoryTitleById(id, newTitle);
          const updatedImages = await imageRepository.updateImagesPathByCategory(oldCategory[0].title, newTitle);
-         res.status(200).json({
-            updatedCategory: updatedCategory,
-            updatedImages: updatedImages
-         })
+
+         res.status(201).send({ updatedCategory: updatedCategory, updatedImages: updatedImages });
       } else {
-         res.status(200).json({
-            updatedCategory: updatedCategory,
-            updatedImages: {
-               ok: 0, n: 0, nModified: 0
-            }
-         })
+         throw new Error("Category to be renamed does not exist");
       }
    } catch (error) {
       res.statusMessage = error.message;

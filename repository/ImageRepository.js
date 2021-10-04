@@ -88,18 +88,18 @@ class ImageRepository {
       try {
          const imagesToBeUpdated = await this.findImagesByCategory(oldCategoryName, -1);
          imagesToBeUpdated.forEach(async (image, i) => {
-            image.img.path_original = image.img.path_original.replace(`\\categories\\${oldCategoryName}`, `\\categories\\${newCategoryName}`);
-            image.img.path_resized = image.img.path_resized.replace(`\\categories\\${oldCategoryName}`, `\\categories\\${newCategoryName}`);
+            image.img.path_original = image.img.path_original.replace(oldCategoryName, newCategoryName);
+            image.img.path_resized = image.img.path_resized.replace(oldCategoryName, newCategoryName);
             await image.save();
          });
 
          const filter = { category: oldCategoryName };
-         const updateImage = {
+         const updateImageQuery = {
             $set: {
                category: newCategoryName,
             }
          };
-         return await ImageModel.updateMany(filter, updateImage);
+         return await ImageModel.updateMany(filter, updateImageQuery);
       } catch (error) {
          throw error;
       }
@@ -126,7 +126,7 @@ class ImageRepository {
          } else {
             return await this.updateImageSameCategory(newTitle, newCategory, newDescription, filter);
          }
-         
+
       } catch (error) {
          throw error;
       }

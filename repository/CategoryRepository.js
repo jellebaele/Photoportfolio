@@ -83,18 +83,22 @@ class CategoryRepository {
         }
     }
 
-    async updateTitleById(id, newTitle) {
+    async updateCategoryTitleById(id, newTitle) {
         const filter = { _id: id };
-        const updateCategory = {
+        const updateCategoryQuery = {
             $set: { title: newTitle }
         };
 
         try {
             const oldCategory = await this.searchById(id);
             if (oldCategory.length > 0) {
-                await CategoryModel.updateOne(filter, updateCategory);
+                const updatedCategoryStatus = await CategoryModel.updateOne(filter, updateCategoryQuery);
                 await FileRepository.renameDirectory(oldCategory[0].title, newTitle);
-            }            
+                const updatedCategory = await this.searchById(id);
+                return { status: updatedCategoryStatus, updateCategory: updatedCategory }
+            } else {
+                throw new Error("Category to be renamed does not exist");
+            }
         } catch (error) {
             throw error;
         }
@@ -115,8 +119,6 @@ class CategoryRepository {
             throw error;
         }
     }
-
-    
 }
 
 module.exports = CategoryRepository;
