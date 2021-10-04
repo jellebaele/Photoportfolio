@@ -24,6 +24,18 @@ class FileRepository {
         }
     }
 
+    static async deleteImageInDirectory(pathOriginal, pathResized) {
+        await fs.promises.unlink(pathOriginal, (err) => {
+           if (err) throw err;
+           return;
+        });
+  
+        await fs.promises.unlink(pathResized, (err) => {
+           if (err) throw err;
+           return;
+        });
+     }
+
     static async moveFile(originalPath, newPath) {
         await fs.promises.rename(originalPath, newPath, (err) => {
             if (err){

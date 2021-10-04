@@ -1,4 +1,3 @@
-const fs = require('fs');
 const ImageModel = require("../models/Image");
 const CategoryRepository = require("./CategoryRepository");
 const FileRepository = require('./FileRepository');
@@ -139,7 +138,7 @@ class ImageRepository {
          const category = image.category;
          const index = image.index;
 
-         await this.deleteImageInDirectory(image.img.path_original, image.img.path_resized);
+         await FileRepository.deleteImageInDirectory(image.img.path_original, image.img.path_resized);
          const deletedImage = await ImageModel.deleteOne(image);
 
          return { deletedImage: deletedImage, category: category, index: index }
@@ -157,18 +156,6 @@ class ImageRepository {
       } catch (error) {
          throw error;
       }
-   }
-
-   async deleteImageInDirectory(pathOriginal, pathResized) {
-      fs.unlink(pathOriginal, (err) => {
-         if (err) throw err;
-         return;
-      });
-
-      await fs.unlink(pathResized, (err) => {
-         if (err) throw err;
-         return;
-      });
    }
 
    async updateImageDifferentCategory(originalImage, newCategory, newTitle, newDescription, filter) {
