@@ -266,7 +266,8 @@ class TableCreator {
             method: "PATCH"
         })
             .then(response => {
-                if (response.status !== 200) {
+                if (response.status !== 201 || response.status !== 200) {
+                    console.error(response.statusText);
                     throw new Error(`Er ging iets fout bij het hernoemen van categorie '${oldTitle}'!`);
                 }
                 return response.json();
@@ -276,6 +277,7 @@ class TableCreator {
                 return response;
             })
             .catch(error => {
+                console.error(error);
                 this.title = oldTitle;
                 throw new Error(error.message)
             });
