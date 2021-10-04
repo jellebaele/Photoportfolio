@@ -56,13 +56,25 @@ async function patchImage(req, res) {
 
     try {
         if (id === undefined) throw new Error("No id was specified.");
+        const originalImage = await imageRepository.findImageById(id);
 
-        const updateStatus = await imageRepository.updateImageById(id, newTitle, newCategory, newDescription);
-        const updatedImage = await imageRepository.findImageById(id);
-        res.status(201).send({status: updateStatus, updatedImage: updatedImage});
+        if (originalImage) {
+            const update = await imageRepository.updateImageById(id, newTitle, newCategory, newDescription);
+            let updatedOriginalCategory = undefined;
+            if (newCategory !== originalImage.category) {
+                updatedOriginalCategory = await categoryRepository.adjustAmountOfPicturesByTitle(originalImage.category, -1);
+                await categoryRepository.adjustAmountOfPicturesByTitle(newCategory, +1);
+            }
+
+            res.status(201).send({ status: update, updatedOriginalCategory: updatedOriginalCategory });
+        } else {
+            throw new Error(`Image with id ${id} does not exist!`);
+        }
+
+
     } catch (error) {
         res.statusMessage = error.message;
-        console.error(error.message);
+        console.error(error);
         res.status(501).end();
     }
 }

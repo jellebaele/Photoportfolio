@@ -1,7 +1,5 @@
 const ImageModel = require("../models/Image");
-const CategoryRepository = require("./CategoryRepository");
 const FileRepository = require('./FileRepository');
-const categoryRepository = new CategoryRepository();
 
 class ImageRepository {
    async SaveNewImage(image, resizedImage, categoryTitle, description, newImages) {
@@ -16,22 +14,12 @@ class ImageRepository {
                size_resized: resizedImage.size,
                encoding: image.encoding,
             },
-            category: await this.getCategoryTitleAndUpdate(categoryTitle),
+            category: categoryTitle,
             description: description,
             index: await this.GetNewIndex(categoryTitle),
          });
          newImages.push(newImage);
          await newImage.save();
-      } catch (error) {
-         throw error;
-      }
-
-   }
-
-   async getCategoryTitleAndUpdate(categoryTitle) {
-      try {
-         const result = await categoryRepository.adjustAmountOfPicturesByTitle(categoryTitle, 1);
-         return result.updatedCategory.title;
       } catch (error) {
          throw error;
       }
@@ -122,9 +110,9 @@ class ImageRepository {
          const originalImage = await this.findImageById(id);
 
          if (originalImage.category !== newCategory) {
-            return await this.updateImageDifferentCategory(originalImage, newCategory, newTitle, newDescription, filter);
+            return await this.updateImageDifferentCategory(id, originalImage, newCategory, newTitle, newDescription, filter);
          } else {
-            return await this.updateImageSameCategory(newTitle, newCategory, newDescription, filter);
+            return await this.updateImageSameCategory(id, newTitle, newCategory, newDescription, filter);
          }
 
       } catch (error) {
@@ -158,9 +146,9 @@ class ImageRepository {
       }
    }
 
-   async updateImageDifferentCategory(originalImage, newCategory, newTitle, newDescription, filter) {
+   async updateImageDifferentCategory(id, originalImage, newCategory, newTitle, newDescription, filter) {
       const newPaths = await FileRepository.moveImageToDir(originalImage, newCategory);
-      const updateImageSet = {
+      const updateImageQuery = {
          $set: {
             title: newTitle,
             category: newCategory,
@@ -172,13 +160,12 @@ class ImageRepository {
          }
       };
 
-      const updatedImage = await ImageModel.updateOne(filter, updateImageSet);
-      let updatedOriginalCategory = await categoryRepository.adjustAmountOfPicturesByTitle(originalImage.category, -1);
-      await categoryRepository.adjustAmountOfPicturesByTitle(newCategory, +1);
-      return { status: updatedImage, updatedOriginalCategory: updatedOriginalCategory };
+      const updateStatus = await ImageModel.updateOne(filter, updateImageQuery);
+      const updatedImage = await this.findImageById(id);
+      return { status: updateStatus, updatedImage: updatedImage };
    }
 
-   async updateImageSameCategory(newTitle, newCategory, newDescription, filter) {
+   async updateImageSameCategory(id, newTitle, newCategory, newDescription, filter) {
       const updateImageSet = {
          $set: {
             title: newTitle,
@@ -186,8 +173,9 @@ class ImageRepository {
             description: newDescription,
          }
       };
-      const updatedImage = await ImageModel.updateOne(filter, updateImageSet);
-      return { status: updatedImage, updatedOriginalCategory: undefined };
+      const updateStatus = await ImageModel.updateOne(filter, updateImageSet);
+      const updatedImage = await this.findImageById(id);
+      return { status: updateStatus, updatedImage: updatedImage };
    }
 }
 

@@ -66,6 +66,7 @@ async function saveImagesInDb(images, resizedImages, category, descriptions) {
       let newImages = [];
       for (let i = 0; i < images.length; i++) {
          await imageRepository.SaveNewImage(images[i], resizedImages[i], category, descriptions[i], newImages);
+         await categoryRepository.adjustAmountOfPicturesByTitle(category, 1);
       }
       return newImages;
    } catch (error) {
