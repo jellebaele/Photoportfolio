@@ -16,7 +16,7 @@ class ModalImageEditor extends ModalBase {
         this.container;
         this.headerCreator = new HeaderCreator("header-modal");
         this.bodyCreator = new BodyCreator("modal-body");
-        this.editHandler = new EditHandler(this.bodyCreator, alertHandler);
+        this.editHandler = new EditHandler(this.bodyCreator, alertHandler, this);
     }
 
     createModal() {
@@ -88,6 +88,12 @@ class ModalImageEditor extends ModalBase {
             ["categorySelectArea", categorySelectArea],
             ["descriptionTextArea", descriptionTextArea]
         ]);
+    }
+
+    removeImageContainerFromDOM(id, alertMessage) {
+        const imageContainerToBeRemoved = document.getElementById(id);
+        this.elements.gallery.removeChild(imageContainerToBeRemoved);
+        this.alertHandler.showSucces(alertMessage);
     }
 
     deleteHandler() {

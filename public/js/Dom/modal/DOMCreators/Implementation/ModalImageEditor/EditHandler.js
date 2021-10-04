@@ -4,12 +4,13 @@ import ImageApi from "../../../../../api/ImageApi.js";
 const LIMIT = 5000;
 
 class EditHandler {
-    constructor(bodyCreator, alertHandler) {
-        this.isEditMode = false;
-        this.originalInputValues = {};
-
+    constructor(bodyCreator, alertHandler, modalImageEditor) {
         this.bodyCreator = bodyCreator;
         this.alertHandler = alertHandler;
+        this.modalImageEditor = modalImageEditor;
+
+        this.isEditMode = false;
+        this.originalInputValues = {};
         this.acceptButton;
     }
 
@@ -92,12 +93,12 @@ class EditHandler {
             const inputValues = this.retrieveCurrentValuesFromDOM(inputFields);
             const response = await ImageApi.patchImage(id, inputValues);
 
-            this.alertHandler.showSucces("Succesvol geüpdatet!");
-            this.retrieveOriginalValuesFromDOM(inputFields, this.originalInputValues);           
-
             if (response.updatedImage.image.category !== this.originalInputValues.category) {
-                // console.log("!!");
-                // Close modal and reload page
+                this.modalImageEditor.close();
+                this.modalImageEditor.removeImageContainerFromDOM(id, `Afbeelding succesvol verplaatst naar categorie '${response.updatedImage.image.category}'`);
+            } else {
+                this.retrieveOriginalValuesFromDOM(inputFields, this.originalInputValues); 
+                this.alertHandler.showSucces("Succesvol geüpdatet!");
             }
         } catch (error) {
             this.alertHandler.showWarning(error.message);

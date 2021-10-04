@@ -13,8 +13,8 @@ class FadeCreator {
         this.elements.imageContainers.forEach(imageContainer => {
             const id = imageContainer.id;
             
-            const deleteButton = imageContainer.querySelector(".delete-button");
-            deleteButton.addEventListener('click', () => this.deleteImageHandler(id));
+            // const deleteButton = imageContainer.querySelector(".delete-button");
+            // deleteButton.addEventListener('click', () => this.deleteImageHandler(id));
 
             // const detailsButton = imageContainer.querySelector(".details-button");
             // detailsButton.addEventListener('click', () => this.detailsImageHandler(id));
@@ -33,20 +33,14 @@ class FadeCreator {
                 return response.json();
             })
             .then((response) => {
-                this.removeImageContainerFromDOM(id);
+                this.removeImageContainerFromDOM(id, "Afbeelding verwijderd!");
             })
             .catch((error) => {
                 console.error(error);
                 this.alertHandler.showWarning(`Fout bij het verwijderen van de afbeelding!`);
             })
     }
-
-    removeImageContainerFromDOM(id) {
-        const imageContainerToBeRemoved = document.getElementById(id);
-        this.elements.gallery.removeChild(imageContainerToBeRemoved);
-        this.alertHandler.showSucces("Afbeelding verwijderd!");
-    }
-
+    
     detailsImageHandler(id) {
         console.log(id);
     }
