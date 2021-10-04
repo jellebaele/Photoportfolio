@@ -79,7 +79,6 @@ class ModalImageEditor extends ModalBase {
     }
 
     getInputFieldsToEdit(body) {
-        let fiels = new Map();
         const titleTextArea = body.querySelector("#title");
         const categorySelectArea = body.querySelector("#category");
         const descriptionTextArea = body.querySelector("#description");

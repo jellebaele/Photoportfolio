@@ -66,7 +66,10 @@ async function patchImage(req, res) {
                 await categoryRepository.adjustAmountOfPicturesByTitle(newCategory, +1);
             }
 
-            res.status(201).send({ status: update, updatedOriginalCategory: updatedOriginalCategory });
+            res.status(201).json({
+                updatedImage: update,
+                updatedOriginalCategory: updatedOriginalCategory
+            });
         } else {
             throw new Error(`Image with id ${id} does not exist!`);
         }

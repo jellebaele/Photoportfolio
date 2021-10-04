@@ -162,7 +162,7 @@ class ImageRepository {
 
       const updateStatus = await ImageModel.updateOne(filter, updateImageQuery);
       const updatedImage = await this.findImageById(id);
-      return { status: updateStatus, updatedImage: updatedImage };
+      return { status: updateStatus, image: updatedImage };
    }
 
    async updateImageSameCategory(id, newTitle, newCategory, newDescription, filter) {
@@ -175,7 +175,7 @@ class ImageRepository {
       };
       const updateStatus = await ImageModel.updateOne(filter, updateImageSet);
       const updatedImage = await this.findImageById(id);
-      return { status: updateStatus, updatedImage: updatedImage };
+      return { status: updateStatus, image: updatedImage };
    }
 }
 

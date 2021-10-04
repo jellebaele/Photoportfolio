@@ -93,10 +93,11 @@ class EditHandler {
             const response = await ImageApi.patchImage(id, inputValues);
 
             this.alertHandler.showSucces("Succesvol geüpdatet!");
-            this.retrieveOriginalValuesFromDOM(inputFields, this.originalInputValues);
+            this.retrieveOriginalValuesFromDOM(inputFields, this.originalInputValues);           
 
-            if (response.updatedImage.category !== this.originalInputValues.category) {
-                console.log("!!");
+            if (response.updatedImage.image.category !== this.originalInputValues.category) {
+                // console.log("!!");
+                // Close modal and reload page
             }
         } catch (error) {
             this.alertHandler.showWarning(error.message);
