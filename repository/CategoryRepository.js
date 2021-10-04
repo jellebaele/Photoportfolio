@@ -3,6 +3,7 @@ const fsExtra = require('fs-extra');
 const path = require("path");
 const CategoryModel = require("../models/Category");
 const UploadDirectory = require("../configuration/uploadDirectory");
+const FileRepository = require('./FileRepository');
 
 class CategoryRepository {
     async create(categoryTitle, amountOfPictures = 0) {
@@ -55,7 +56,7 @@ class CategoryRepository {
             });
 
             const newCategorySaved = await newCategory.save();
-            await this.createDirectories(categoryTitle);
+            await FileRepository.createDirectories(categoryTitle);
             return newCategorySaved;
         } catch (error) {
             throw error;
@@ -117,23 +118,6 @@ class CategoryRepository {
         } catch (error) {
             throw error;
         }
-    }
-
-    async createDirectories(categoryTitle) {
-        await fs.mkdir(path.join(UploadDirectory.getRootCategory(categoryTitle)), (err) => {
-            if (err) throw err;
-            return;
-        });
-
-        await fs.mkdir(path.join(UploadDirectory.getOriginalImageDirectory(categoryTitle)), (err) => {
-            if (err) throw err;
-            return;
-        });
-
-        await fs.mkdir(path.join(UploadDirectory.getResizedImageDirectory(categoryTitle)), (err) => {
-            if (err) throw err;
-            return;
-        });
     }
 
     async renameDirectory(oldTitle, newTitle) {

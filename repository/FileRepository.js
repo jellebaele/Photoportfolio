@@ -1,8 +1,27 @@
 const fs = require('fs');
+const path = require("path");
+const UploadDirectory = require("../configuration/uploadDirectory");
 
 class FileRepository {
     constructor() {
 
+    }
+
+    static async createDirectories(categoryTitle) {
+        await fs.promises.mkdir(path.join(UploadDirectory.getRootCategory(categoryTitle)), (err) => {
+            if (err) throw err;
+            return;
+        });
+
+        await fs.promises.mkdir(path.join(UploadDirectory.getOriginalImageDirectory(categoryTitle)), (err) => {
+            if (err) throw err;
+            return;
+        });
+
+        await fs.promises.mkdir(path.join(UploadDirectory.getResizedImageDirectory(categoryTitle)), (err) => {
+            if (err) throw err;
+            return;
+        });
     }
 
     static async moveImageToDir(image, newCategoryName) {
