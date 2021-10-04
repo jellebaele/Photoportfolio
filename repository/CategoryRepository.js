@@ -1,8 +1,4 @@
-const fs = require('fs');
-const fsExtra = require('fs-extra');
-const path = require("path");
 const CategoryModel = require("../models/Category");
-const UploadDirectory = require("../configuration/uploadDirectory");
 const FileRepository = require('./FileRepository');
 
 class CategoryRepository {
@@ -97,7 +93,7 @@ class CategoryRepository {
             const oldCategory = await this.searchById(id);
             if (oldCategory.length > 0) {
                 await CategoryModel.updateOne(filter, updateCategory);
-                this.renameDirectory(oldCategory[0].title, newTitle);
+                await FileRepository.renameDirectory(oldCategory[0].title, newTitle);
             }            
         } catch (error) {
             throw error;
@@ -110,7 +106,7 @@ class CategoryRepository {
 
             if (category.length > 0) {
                 const deletedCategory = await CategoryModel.deleteOne({ _id: id });
-                await this.removeDirectories(category[0].title);;
+                await FileRepository.removeDirectories(category[0].title);;
                 return deletedCategory;
             } else {
                 throw new Error("Category does not exist");
@@ -120,21 +116,7 @@ class CategoryRepository {
         }
     }
 
-    async renameDirectory(oldTitle, newTitle) {
-        const srcPath = UploadDirectory.getRootCategory(oldTitle);
-        const destPath = UploadDirectory.getRootCategory(newTitle);
-
-        await fsExtra.copy(srcPath, destPath, (err) => {
-            if (err) throw err;
-            this.removeDirectories(oldTitle);
-        });
-    }
-
-    removeDirectories(categoryTitle) {
-        fs.rmdir(path.join(UploadDirectory.getRootCategory(categoryTitle)), { recursive: true }, (err) => {
-            if (err) throw (err);
-        })
-    }
+    
 }
 
 module.exports = CategoryRepository;

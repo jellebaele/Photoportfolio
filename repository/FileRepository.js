@@ -1,12 +1,9 @@
 const fs = require('fs');
+const fsExtra = require('fs-extra');
 const path = require("path");
 const UploadDirectory = require("../configuration/uploadDirectory");
 
 class FileRepository {
-    constructor() {
-
-    }
-
     static async createDirectories(categoryTitle) {
         await fs.promises.mkdir(path.join(UploadDirectory.getRootCategory(categoryTitle)), (err) => {
             if (err) throw err;
@@ -22,6 +19,22 @@ class FileRepository {
             if (err) throw err;
             return;
         });
+    }
+
+    static async renameDirectory(oldTitle, newTitle) {
+        const srcPath = UploadDirectory.getRootCategory(oldTitle);
+        const destPath = UploadDirectory.getRootCategory(newTitle);
+
+        fsExtra.copy(srcPath, destPath, (err) => {
+            if (err) throw err;
+            this.removeDirectories(oldTitle);
+        });
+    }
+
+    static removeDirectories(categoryTitle) {
+        fs.promises.rmdir(path.join(UploadDirectory.getRootCategory(categoryTitle)), { recursive: true }, (err) => {
+            if (err) throw (err);
+        })
     }
 
     static async moveImageToDir(image, newCategoryName) {
