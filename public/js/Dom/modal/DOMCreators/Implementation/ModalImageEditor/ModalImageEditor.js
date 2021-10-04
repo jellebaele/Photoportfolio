@@ -1,5 +1,6 @@
 import ModalBase from "../../Base/ModalBase.js"
 import BodyCreator from "./BodyCreator.js";
+import DeleteHandler from "./DeleteHandler.js";
 import EditHandler from "./EditHandler.js";
 import HeaderCreator from "./HeaderCreator.js";
 
@@ -17,6 +18,7 @@ class ModalImageEditor extends ModalBase {
         this.headerCreator = new HeaderCreator("header-modal");
         this.bodyCreator = new BodyCreator("modal-body");
         this.editHandler = new EditHandler(this.bodyCreator, alertHandler, this);
+        this.deleteHandler = new DeleteHandler(alertHandler, this);
     }
 
     createModal() {
@@ -73,7 +75,7 @@ class ModalImageEditor extends ModalBase {
         const inputFields = this.getInputFieldsToEdit(body.mainTag);
 
         body.buttons.editButton.addEventListener("click", () => this.editHandler.handleClickEvent(id, inputFields, body.buttons));
-        body.buttons.deleteButton.addEventListener("click", () => this.deleteHandler());
+        body.buttons.deleteButton.addEventListener("click", () => this.deleteHandler.handleClickEvent(id));
 
         return body.mainTag;
     }
@@ -90,10 +92,9 @@ class ModalImageEditor extends ModalBase {
         ]);
     }
 
-    removeImageContainerFromDOM(id, alertMessage) {
+    removeImageContainerFromDOM(id) {
         const imageContainerToBeRemoved = document.getElementById(id);
         this.elements.gallery.removeChild(imageContainerToBeRemoved);
-        this.alertHandler.showSucces(alertMessage);
     }
 
     deleteHandler() {

@@ -27,6 +27,7 @@ async function deleteImage(req, res) {
         if (id === undefined) throw new Error("No id was specified.");
 
         const deletedImage = await imageRepository.deleteImageById(id);
+        console.log(deletedImage);
         if (deletedImage) {
             updateIndexImagesUponDelete(deletedImage.category, deletedImage.index)
             const updatedCategory = await categoryRepository.adjustAmountOfPicturesByTitle(deletedImage.category, -1);

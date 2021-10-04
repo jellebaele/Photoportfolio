@@ -10,8 +10,6 @@ const alertSuccess = document.getElementById("alertSucces");
 
 function init() {
     const alertHandler = new Alert(alertSuccess, alertWarning, undefined, 0, 0, 7000);
-    let imageFadeCreator = new FadeCreator(url, gallery, alertHandler);
-    // imageFadeCreator.addListeners();
 
     const modalImageEditor = new ModalImageEditor(modalBase, 0, 0, 0.3, gallery, url, alertHandler);
     modalImageEditor.create();

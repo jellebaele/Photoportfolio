@@ -1,7 +1,7 @@
 const BASE_URL = "/api/image"
 
 class ImageApi {
-    static async patchImage(id, data) {        
+    static async patchImage(id, data) {
         try {
             const response = await fetch(`${BASE_URL}?id=${id}`, {
                 method: "PATCH",
@@ -11,11 +11,27 @@ class ImageApi {
                 body: JSON.stringify(data)
             });
 
-            if (response.status === 200 || response.status === 201) 
+            if (response.status === 200 || response.status === 201)
                 return await response.json();
-            else
-                throw new Error (`Something went wrong. Status code: ${response.status}`);
+            else {
+                throw new Error(`Something went wrong. Status code: ${response.status}`);
+            }
+        } catch (error) {
+            throw error;
+        }
+    }
 
+    static async deleteImage(id) {
+        try {
+            const response = await fetch(`${BASE_URL}?id=${id}`, {
+                method: "DELETE",
+            });
+
+            if (response.status == 200) {
+                return await response.json();
+            } else {
+                throw new Error(`Something went wrong. Status code: ${response.status}`);
+            }
         } catch (error) {
             throw error;
         }

@@ -95,7 +95,8 @@ class EditHandler {
 
             if (response.updatedImage.image.category !== this.originalInputValues.category) {
                 this.modalImageEditor.close();
-                this.modalImageEditor.removeImageContainerFromDOM(id, `Afbeelding succesvol verplaatst naar categorie '${response.updatedImage.image.category}'`);
+                this.modalImageEditor.removeImageContainerFromDOM(id);
+                this.alertHandler.showSucces(`Afbeelding succesvol verplaatst naar categorie '${response.updatedImage.image.category}'`);
             } else {
                 this.retrieveOriginalValuesFromDOM(inputFields, this.originalInputValues); 
                 this.alertHandler.showSucces("Succesvol geüpdatet!");
