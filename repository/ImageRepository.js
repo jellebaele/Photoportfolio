@@ -1,6 +1,7 @@
 const fs = require('fs');
 const ImageModel = require("../models/Image");
 const CategoryRepository = require("./CategoryRepository");
+const FileRepository = require('./FileRepository');
 const categoryRepository = new CategoryRepository();
 
 class ImageRepository {
@@ -117,17 +118,16 @@ class ImageRepository {
 
    async updateImageById(id, newTitle, newCategory, newDescription) {
       const filter = { _id: id };
-      const updateImage = {
-         $set: {
-            title: newTitle,
-            category: newCategory,
-            description: newDescription
-         }
-      };
 
       try {
-         const updatedImage = await ImageModel.updateOne(filter, updateImage);
-         return { status: updatedImage }
+         const originalImage = await this.findImageById(id);
+
+         if (originalImage.category !== newCategory) {
+            return await this.updateImageDifferentCategory(originalImage, newCategory, newTitle, newDescription, filter);
+         } else {
+            return await this.updateImageSameCategory(newTitle, newCategory, newDescription, filter);
+         }
+         
       } catch (error) {
          throw error;
       }
@@ -138,8 +138,10 @@ class ImageRepository {
          const image = await ImageModel.findById(id);
          const category = image.category;
          const index = image.index;
+
          await this.deleteImageInDirectory(image.img.path_original, image.img.path_resized);
          const deletedImage = await ImageModel.deleteOne(image);
+
          return { deletedImage: deletedImage, category: category, index: index }
       } catch (error) {
          console.error(error);
@@ -158,7 +160,7 @@ class ImageRepository {
    }
 
    async deleteImageInDirectory(pathOriginal, pathResized) {
-      await fs.unlink(pathOriginal, (err) => {
+      fs.unlink(pathOriginal, (err) => {
          if (err) throw err;
          return;
       });
@@ -167,6 +169,38 @@ class ImageRepository {
          if (err) throw err;
          return;
       });
+   }
+
+   async updateImageDifferentCategory(originalImage, newCategory, newTitle, newDescription, filter) {
+      const newPaths = await FileRepository.moveImageToDir(originalImage, newCategory);
+      const updateImageSet = {
+         $set: {
+            title: newTitle,
+            category: newCategory,
+            description: newDescription,
+            img: {
+               path_original: newPaths.originalSizeNewPath,
+               path_resized: newPaths.smallSizeNewPath
+            }
+         }
+      };
+
+      const updatedImage = await ImageModel.updateOne(filter, updateImageSet);
+      let updatedOriginalCategory = await categoryRepository.adjustAmountOfPicturesByTitle(originalImage.category, -1);
+      await categoryRepository.adjustAmountOfPicturesByTitle(newCategory, +1);
+      return { status: updatedImage, updatedOriginalCategory: updatedOriginalCategory };
+   }
+
+   async updateImageSameCategory(newTitle, newCategory, newDescription, filter) {
+      const updateImageSet = {
+         $set: {
+            title: newTitle,
+            category: newCategory,
+            description: newDescription,
+         }
+      };
+      const updatedImage = await ImageModel.updateOne(filter, updateImageSet);
+      return { status: updatedImage, updatedOriginalCategory: undefined };
    }
 }
 
